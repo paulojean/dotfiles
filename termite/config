@@ -8,77 +8,39 @@
 #clickable_url = true
 #scrollback_lines = 1000
 #search_wrap = true
-#
+
+
 [colors]
-# special
-foreground      = #c5c8c6
-foreground_bold = #c5c8c6
-cursor          = #c5c8c6
-background      = #1d1f21
+# Base16 Railscasts
+# Scheme: Ryan Bates (http://railscasts.com)
 
-# black
-color0  = #1d1f21
-color8  = #969896
+foreground      = #e6e1dc
+foreground_bold = #e6e1dc
+cursor          = #e6e1dc
+background      = #2b2b2b
 
-# red
-color1  = #cc342b
-color9  = #cc342b
+# 16 color space
+color0  = #2b2b2b
+color1  = #da4939
+color2  = #a5c261
+color3  = #ffc66d
+color4  = #6d9cbe
+color5  = #b6b3eb
+color6  = #519f50
+color7  = #e6e1dc
+color8  = #5a647e
+color9  = #da4939
+color10 = #a5c261
+color11 = #ffc66d
+color12 = #6d9cbe
+color13 = #b6b3eb
+color14 = #519f50
+color15 = #f9f7f3
 
-# green
-color2  = #198844
-color10 = #198844
-
-# yellow
-color3  = #fba922
-color11 = #fba922
-
-# blue
-color4  = #3971ed
-color12 = #3971ed
-
-# magenta
-color5  = #a36ac7
-color13 = #a36ac7
-
-# cyan
-color6  = #3971ed
-color14 = #3971ed
-
-# white
-color7  = #c5c8c6
-color15 = #ffffff
-
-#[colors]
-## Base16 Railscasts
-## Scheme: Ryan Bates (http://railscasts.com)
-#
-#foreground      = #e6e1dc
-#foreground_bold = #e6e1dc
-#cursor          = #e6e1dc
-#background      = #2b2b2b
-#
-## 16 color space
-#color0  = #2b2b2b
-#color1  = #da4939
-#color2  = #a5c261
-#color3  = #ffc66d
-#color4  = #6d9cbe
-#color5  = #b6b3eb
-#color6  = #519f50
-#color7  = #e6e1dc
-#color8  = #5a647e
-#color9  = #da4939
-#color10 = #a5c261
-#color11 = #ffc66d
-#color12 = #6d9cbe
-#color13 = #b6b3eb
-#color14 = #519f50
-#color15 = #f9f7f3
-#
-## 256 color space
-#color16 = #cc7833
-#color17 = #bc9458
-#color18 = #272935
-#color19 = #3a4055
-#color20 = #d4cfc9
-#color21 = #f4f1ed
+# 256 color space
+color16 = #cc7833
+color17 = #bc9458
+color18 = #272935
+color19 = #3a4055
+color20 = #d4cfc9
+color21 = #f4f1ed
