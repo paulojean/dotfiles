@@ -1,7 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/paulo'
-let g:netrw_dirhist_2='/home/paulo/.config/termite'
-let g:netrw_dirhist_3='/home/paulo/nu/deploy'
-let g:netrw_dirhist_4='/home/paulo/.lein/self-installs'
-let g:netrw_dirhist_5='/home/paulo/nu/jetty-extensions/build'
