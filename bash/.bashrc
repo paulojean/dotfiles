@@ -26,6 +26,7 @@ export KAFKA_HOME="$HOME/.bin/kafka_2.12-0.10.2.1"
 export PATH="~/.config/tlp:$PATH"
 export PATH="~/watchman:$PATH"
 export VISUAL="vim"
+export EDITOR="nvim"
 export TERM=xterm-color
 
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
