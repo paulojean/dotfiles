@@ -7,9 +7,16 @@ source $HOME/.config/nvim/plugins/iron_nvimux.vim
 " acid tweaking
 source $HOME/.config/nvim/plugins/acid.vim
 
-" vim-sexp mappings
-"source $HOME/.config/nvim/plugins/vim-sexp.vim
 
+source $HOME/.config/nvim/plugins/vimagit.vim
+" vim-sexp mappings
+" source $HOME/.config/nvim/plugins/vim-sexp.vim
+
+" Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " Dev Icons
 let g:webdevicons_enable = 1
@@ -27,6 +34,9 @@ let g:indentLine_char = '│'
 let g:indentLine_first_char = '│'
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_setColors = 0
+
+" vim-javacomplete2
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 " vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)

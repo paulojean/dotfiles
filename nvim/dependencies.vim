@@ -1,5 +1,11 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
+" Dark colors
+Plug 'nanotech/jellybeans.vim'
+Plug 'sjl/badwolf'
+Plug 'joshdick/onedark.vim'
+Plug 'ayu-theme/ayu-vim', { 'frozen': 1 }
+
 Plug 'junegunn/vim-easy-align'
 Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 Plug 'https://github.com/tpope/vim-sexp-mappings-for-regular-people.git'
@@ -9,6 +15,7 @@ Plug 'git://github.com/tpope/vim-surround.git'
 Plug 'git://github.com/tpope/vim-dispatch.git'
 Plug 'git://github.com/tpope/vim-projectionist.git'
 Plug 'git://github.com/tpope/vim-salve.git'
+Plug 'git://github.com/tpope/vim-eunuch.git'
 Plug 'git://github.com/sheerun/vim-polyglot.git'
 Plug 'git://github.com/kien/rainbow_parentheses.vim.git'
 
@@ -28,6 +35,11 @@ Plug 'justinmk/vim-dirvish'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" Git stuff
+Plug 'mhinz/vim-signify'
+Plug 'jreybert/vimagit', { 'branch': 'next' }
+Plug 'lambdalisue/gina.vim'
+
 " Code navigation
 Plug 'unblevable/quick-scope', { 'on': 'QuickScopeToggle' }
 
@@ -42,7 +54,8 @@ Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'clojure-vim/acid.nvim', { 'branch': 'testing' }
 Plug 'clojure-vim/async-clj-omni'
 Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
-Plug 'hkupty/async-clj-highlight',  { 'for': 'clojure', 'branch': 'acid-autocmd' }
+Plug 'clojure-vim/async-clj-highlight',  { 'for': 'clojure' }
+Plug 'gregspurrier/vim-midje'
 
 " Vim - Vader
 Plug 'Shougo/neco-vim', { 'for': 'vim' }
@@ -58,6 +71,11 @@ Plug 'git://github.com/begriffs/haskell-vim-now.git'
 "Plug 'chr4/sslsecure.vim'
 
 Plug 'mhinz/vim-grepper'
+Plug 'ntpeters/vim-better-whitespace'
+
+
+" Java :hue:
+Plug 'artur-shaik/vim-javacomplete2'
 
 " Initialize plugin system
 call plug#end()

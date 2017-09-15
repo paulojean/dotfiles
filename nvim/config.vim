@@ -1,5 +1,13 @@
 set background=dark
 
+set termguicolors
+
+let g:ayucolor = 'dark'
+colors jellybeans
+let g:badwolf_darkgutter = 1
+
+source $HOME/.config/nvim/color.vim
+
 " Better nav
 set number
 set cursorline
