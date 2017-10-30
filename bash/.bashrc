@@ -18,14 +18,11 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.gem/ruby/2.4.0/bin:$PATH"
 export PATH="$HOME/Android/Sdk:$PATH"
-export PATH="$HOME/Users/denis/Library/Android/sdk/platform-tools:$PATH"
-export ANDROID_HOME=/opt/android-sdk
-export ANDROID_SDK_ROOT=$HOME/Android/Sdk
 export KAFKA_HOME="$HOME/.bin/kafka_2.12-0.10.2.1"
 
 export PATH="~/.config/tlp:$PATH"
 export PATH="~/watchman:$PATH"
-export VISUAL="vim"
+export VISUAL="nvim"
 export EDITOR="nvim"
 export TERM=xterm-color
 
@@ -34,6 +31,8 @@ export TERM=xterm-color
 [ -f ~/.bash_aws ] && source ~/.bash_aws
 [ -f ~/.bash_credentials ] && source ~/.bash_credentials
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
