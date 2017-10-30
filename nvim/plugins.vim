@@ -35,11 +35,19 @@ let g:indentLine_first_char = '│'
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_setColors = 0
 
-" vim-javacomplete2
-autocmd FileType java setlocal omnifunc=javacomplete#Complete
-
 " vim-easy-align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+" undotree
+if has("persistent_undo")
+    set undodir=~/.undodir/
+    set undofile
+endif
+
+" ack.vim
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif

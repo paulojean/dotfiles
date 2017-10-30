@@ -17,6 +17,8 @@ set hidden
 " Indent
 set autoindent
 set smartindent
+set textwidth=100
+set colorcolumn=+1
 
 " Base sanity stuff
 set laststatus=2

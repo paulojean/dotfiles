@@ -3,8 +3,8 @@ let mapleader = ","
 let maplocalleader = " "
 
 " rg + fzf ftw
-nmap <leader>/ <plug>Grep
-nmap <leader>? <plug>GrepAll
+nmap <Leader>/ <plug>Grep
+nmap <Leader>? <plug>GrepAll
 
 " magit
 "nnoremap <leader>m :MagitOnly<CR>
@@ -17,12 +17,9 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-"vim-javacomplete2
-nmap <F4> <Plug>(JavaComplete-Imports-AddSmart)
-imap <F4> <Plug>(JavaComplete-Imports-AddSmart)
-nmap <F5> <Plug>(JavaComplete-Imports-Add)
-imap <F5> <Plug>(JavaComplete-Imports-Add)
-nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
-imap <F6> <Plug>(JavaComplete-Imports-AddMissing)
-nmap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
-imap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
+" undotree
+nnoremap ut :UndotreeToggle<cr>
+"
+" ack.vim
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>

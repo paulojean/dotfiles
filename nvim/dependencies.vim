@@ -20,8 +20,7 @@ Plug 'git://github.com/sheerun/vim-polyglot.git'
 Plug 'git://github.com/kien/rainbow_parentheses.vim.git'
 
 " Code Completion
-Plug 'shougo/deoplete.nvim'
-Plug 'Shougo/denite.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Repls
 Plug 'hkupty/iron.nvim', { 'branch': 'testing' }
@@ -30,6 +29,8 @@ Plug 'hkupty/iron.nvim', { 'branch': 'testing' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-dirvish'
+
+Plug 'mbbill/undotree'
 
 " Airline
 Plug 'vim-airline/vim-airline'
@@ -71,11 +72,9 @@ Plug 'git://github.com/begriffs/haskell-vim-now.git'
 "Plug 'chr4/sslsecure.vim'
 
 Plug 'mhinz/vim-grepper'
+Plug 'mileszs/ack.vim'
 Plug 'ntpeters/vim-better-whitespace'
 
-
-" Java :hue:
-Plug 'artur-shaik/vim-javacomplete2'
 
 " Initialize plugin system
 call plug#end()
