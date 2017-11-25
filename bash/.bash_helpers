@@ -14,6 +14,6 @@ function dynamodb_delete_tables() {
 }
 
 function riemann_run() {
-  local riemann_home=~/.bin/riemann
+  local riemann_home=~/.bin/riemann-0.2.14
   $riemann_home/bin/riemann
 }
