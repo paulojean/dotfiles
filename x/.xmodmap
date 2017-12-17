@@ -1,6 +1,5 @@
 clear lock
 clear control
 clear mod1
-keycode 66 = Control_L
 keycode 172 = XF86AudioPause
 add control = Control_L Control_R
