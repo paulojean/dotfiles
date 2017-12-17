@@ -1,14 +1,14 @@
-#[options]
-#scroll_on_output = false
-#scroll_on_keystroke = true
-#mouse_autohide = true
-#allow_bold = true
-#dynamic_title = true
-#urgent_on_bell = true
-#clickable_url = true
-#scrollback_lines = 1000
-#search_wrap = true
-
+[options]
+scroll_on_output = false
+scroll_on_keystroke = true
+mouse_autohide = true
+allow_bold = true
+dynamic_title = true
+urgent_on_bell = true
+clickable_url = true
+font = DejaVu Sans Mono for Powerline
+scrollback_lines = 10000
+search_wrap = true
 
 [colors]
 # Base16 Railscasts
