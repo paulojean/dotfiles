@@ -42,7 +42,9 @@ set inccommand=split
 
 " Make whitespaces visible
 set list listchars=tab:▷⋅,trail:⋅,nbsp:⋅
-"set fillchars=vert:\│,fold:\─<Paste>
+set fillchars=vert:\│,fold:\─
+
+let g:terminal_scrollback_buffer_size=9999999
 
 " Rainbow Parentheses
 au VimEnter * RainbowParenthesesToggle
@@ -56,3 +58,5 @@ let g:loaded_gzip = 1
 let g:loaded_tarPlugin = 1
 let g:loaded_zipPlugin = 1
 let g:loaded_netrwPlugin = 1
+
+let g:is_bash = 1

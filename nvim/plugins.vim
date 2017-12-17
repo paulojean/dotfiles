@@ -1,16 +1,11 @@
 " deoplete tweaking
 source $HOME/.config/nvim/plugins/deoplete.vim
 
-" iron, acid and nvimux tweaking
-source $HOME/.config/nvim/plugins/iron_nvimux.vim
-
 " acid tweaking
 source $HOME/.config/nvim/plugins/acid.vim
 
 
 source $HOME/.config/nvim/plugins/vimagit.vim
-" vim-sexp mappings
-" source $HOME/.config/nvim/plugins/vim-sexp.vim
 
 " Airline
 let g:airline#extensions#tabline#enabled = 1
@@ -51,3 +46,9 @@ endif
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+
+" nvim-completion-manager
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
