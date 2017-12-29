@@ -1,25 +1,26 @@
 [user]
-	name = Paulo Sousa
-	email = pauloj10@gmail.com
+  name = Paulo Sousa
+  email = pauloj10@gmail.com
 
 [core]
-	editor = nvim
+  editor = nvim
+  excludesfile = ~/.gitignore
 
 [push]
-	default = current
+  default = current
 
 [alias]
-	br = branch
-	bd = branch -D
-	df = diff
-	st =status
-	co =checkout
-	cb = checkout -b
-	ci = commit
-	cm = commit -m
-	dc = diff --cached
-	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%an, %cr)%Creset' --abbrev-commit --date=relative
-	aad = add .
-	comend = commit --amend --no-edit
-	please = push --force-with-lease
+  br = branch
+  bd = branch -D
+  df = diff
+  st =status
+  co =checkout
+  cb = checkout -b
+  ci = commit
+  cm = commit -m
+  dc = diff --cached
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%an, %cr)%Creset' --abbrev-commit --date=relative
+  aad = add .
+  comend = commit --amend --no-edit
+  please = push --force-with-lease
   rehead = reset HEAD~
