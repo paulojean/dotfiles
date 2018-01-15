@@ -1,11 +1,14 @@
 " deoplete tweaking
-source $HOME/.config/nvim/plugins/deoplete.vim
+"source $HOME/.config/nvim/plugins/deoplete.vim
 
 " acid tweaking
 source $HOME/.config/nvim/plugins/acid.vim
 
 
 source $HOME/.config/nvim/plugins/vimagit.vim
+
+syntax on
+filetype plugin indent on
 
 " Airline
 let g:airline#extensions#tabline#enabled = 1
@@ -52,3 +55,8 @@ inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+"fzf.vim
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview('right:50%'), <bang>0)
