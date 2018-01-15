@@ -17,8 +17,10 @@ export PATH="$HOME/.bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.gem/ruby/2.4.0/bin:$PATH"
-export PATH="$HOME/AndroidSdk/tools:$PATH"
-export PATH="$HOME/AndroidSdk/platform-tools:$PATH"
+export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
+export ANDROID_HOME=/opt/android-sdk
+export PATH="$ANDROID_HOME/tools:$PATH"
+export PATH="$ANDROID_HOME/platform-tools:$PATH"
 export KAFKA_HOME="$HOME/.bin/kafka_2.12-0.10.2.1"
 
 export PATH="~/.config/tlp:$PATH"
@@ -32,7 +34,6 @@ export TERM=xterm-color
 [ -f ~/.bash_aws ] && source ~/.bash_aws
 [ -f ~/.bash_credentials ] && source ~/.bash_credentials
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 parse_git_branch() {
