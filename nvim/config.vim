@@ -1,10 +1,8 @@
 set background=dark
 
 set termguicolors
-
 let g:ayucolor = 'dark'
-colors jellybeans
-let g:badwolf_darkgutter = 1
+colors ayu
 
 source $HOME/.config/nvim/color.vim
 
@@ -18,6 +16,7 @@ set hidden
 set autoindent
 set smartindent
 set textwidth=100
+au BufReadPost,BufNewFile *.md,*.txt,*.tex set tw=999999999
 set colorcolumn=+1
 
 " Base sanity stuff
@@ -60,3 +59,7 @@ let g:loaded_zipPlugin = 1
 let g:loaded_netrwPlugin = 1
 
 let g:is_bash = 1
+
+" highligh terminal cursor when on normal mode
+hi! link TermCursor Cursor
+hi TermCursorNC ctermfg=235 ctermbg=242 guifg=#002b36 guibg=#586e75 guisp=NONE cterm=NONE gui=NONE

@@ -1,5 +1,5 @@
 " deoplete tweaking
-"source $HOME/.config/nvim/plugins/deoplete.vim
+source $HOME/.config/nvim/plugins/deoplete.vim
 
 " acid tweaking
 source $HOME/.config/nvim/plugins/acid.vim
@@ -8,7 +8,10 @@ source $HOME/.config/nvim/plugins/acid.vim
 source $HOME/.config/nvim/plugins/vimagit.vim
 
 syntax on
+filetype plugin on
 filetype plugin indent on
+"let anyfold_activate=1
+set foldlevel=0
 
 " Airline
 let g:airline#extensions#tabline#enabled = 1
@@ -22,7 +25,7 @@ let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_enable_airline_tabline = 1
 let g:webdevicons_enable_airline_statusline = 1
 
-let g:gutentags_ctags_tagfile = ".tags"
+"let g:gutentags_ctags_tagfile = ".tags"
 
 let g:signify_vcs_list = [ 'git' ]
 
@@ -60,3 +63,10 @@ command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview('right:50%'), <bang>0)
+
+let g:airline#extensions#ale#enabled = 1
+let g:ale_lint_on_text_changed="never"
+let g:ale_lint_on_insert_leave=1
+
+let g:elm_setup_keybindings = 0
+let g:elm_format_autosave = 1

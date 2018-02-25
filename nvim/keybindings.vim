@@ -7,9 +7,11 @@ let maplocalleader = " "
 
 nnoremap <space>f :Files<CR>
 nnoremap <c-[> :noh<return><esc>
-nnoremap <Leader>te :terminal<return><S-a>
-nnoremap <Leader>v :vsp<return>
-nnoremap <Leader>b :sp<return>
+nnoremap <Leader>te :terminal<cr><S-a>
+nnoremap <Leader>v :vsp<cr>
+nnoremap <Leader>b :sp<cr>
+nnoremap <c-s> :w<cr>
+nnoremap <bs> <c-^>
 
 tnoremap <c-h> <c-\><c-n><c-w>h
 tnoremap <c-j> <c-\><c-n><c-w>j
@@ -31,6 +33,9 @@ nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 nnoremap <c-h> <c-w><c-h>
 
+" A-r paste from buffer on terminal in insert mode
+tnoremap <expr> <A-r> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
 " undotree
 nnoremap tt :UndotreeToggle<cr>
 
@@ -39,8 +44,7 @@ cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ag<Space>
 nnoremap <leader>z :Ack --literal "<c-R><c-W>"<CR>
 
-
-nnoremap  <c-n> :NERDTreeToggle<CR>
+nnoremap <F3> :NumbersToggle<CR>
 
 nnoremap <Leader>tt :tab sp<return>:cd<space>
 tnoremap <c-]> <c-\><c-n>
@@ -48,4 +52,3 @@ tnoremap <c-]> <c-\><c-n>
 nnoremap <Leader>sp :source %<CR>
 
 nnoremap <Leader>sq :SortQuire<CR>
-
