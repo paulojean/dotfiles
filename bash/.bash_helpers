@@ -26,3 +26,11 @@ function start_cups() {
   sudo systemctl start org.cups.cupsd
   sudo systemctl enable org.cups.cupsd
 }
+
+function list_screen_savers() {
+  ps -aux | grep 'tmp/screen.png' | grep i3lock
+}
+
+function kill_screen_savers() {
+  list_screen_savers | cut -d ' ' -f 5 | xargs -I{} kill -9 {}
+}
