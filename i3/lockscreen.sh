@@ -6,19 +6,6 @@ PIXELATE="-scale 5% -sample 2000%"
 BLUR="-scale 5% -blur 0x2 -filter lanczos -resize 2000%"
 FILTER=$BLUR
 
-function main {
-  if [[ ! -e $ICON ]]; then
-    download_xkcd &
-  fi
-  getScreenshot &
-  wait
-  embedComic
-  i3lock -u -i $TMPBG -I 5 -d &
-  download_xkcd &
-  wait
-  cleanup
-}
-
 function download_xkcd {
   local NUMCOMICS=$(curl -sL "http://xkcd.com/info.0.json" | grep -oP '(?<=num": )([^,]*)')
   local COMIC=404
@@ -27,6 +14,21 @@ function download_xkcd {
   done
   local URL=$(curl -sL "http://xkcd.com/$COMIC/info.0.json" | grep -oP '(?<=img": ")([^"]*)' | tr -d '\\')
   curl -sL "$URL" -o $ICON
+}
+
+export -f download_xkcd
+
+function main {
+  getScreenshot &
+  if [[ ! -e $ICON ]]; then
+    timeout 5 bash -c "ICON=$ICON download_xkcd"
+  fi
+  wait
+  embedComic
+  i3lock -u -i $TMPBG -I 5 -d &
+  timeout 5 bash -c "ICON=$ICON download_xkcd"
+  wait
+  cleanup
 }
 
 function getScreenshot {
