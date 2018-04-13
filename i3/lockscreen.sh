@@ -25,7 +25,7 @@ function main {
   fi
   wait
   embedComic
-  i3lock -u -i $TMPBG -I 5 -d &
+  i3lock -i $TMPBG -I 5 -d &
   timeout 5 bash -c "ICON=$ICON download_xkcd"
   wait
   cleanup
