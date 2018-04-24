@@ -1,5 +1,5 @@
 " deoplete tweaking
-source $HOME/.config/nvim/plugins/deoplete.vim
+"source $HOME/.config/nvim/plugins/deoplete.vim
 
 " acid tweaking
 source $HOME/.config/nvim/plugins/acid.vim
@@ -7,7 +7,7 @@ source $HOME/.config/nvim/plugins/acid.vim
 
 source $HOME/.config/nvim/plugins/vimagit.vim
 
-syntax on
+syntax enable
 filetype plugin on
 filetype plugin indent on
 "let anyfold_activate=1
@@ -64,9 +64,9 @@ command! -bang -nargs=? -complete=dir Files
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview('right:50%'), <bang>0)
 
-let g:airline#extensions#ale#enabled = 1
-let g:ale_lint_on_text_changed="never"
-let g:ale_lint_on_insert_leave=1
+"let g:airline#extensions#ale#enabled = 1
+"let g:ale_lint_on_text_changed="never"
+"let g:ale_lint_on_insert_leave=1
 
 let g:elm_setup_keybindings = 0
 let g:elm_format_autosave = 1
