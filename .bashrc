@@ -19,12 +19,14 @@ export PATH="$PATH:$ANDROID_HOME/tools"
 export PATH="$PATH:$ANDROID_HOME/platform-tools"
 export PATH="~/.config/tlp:$PATH"
 export PATH="~/watchman:$PATH"
-export PATH="$PATH:/opt/anaconda/bin"
+export PATH="$PATH:~/proj"
 export KAFKA_HOME="$HOME/.bin/kafka_2.12-0.10.2.1"
 export ANDROID_SDK_HOME=/opt/android-sdk
 export VISUAL="nvim"
 export EDITOR="nvim"
 export TERM=xterm-color
+export GOPATH="/home/paulo/.go"
+export PATH="$PATH:$GOPATH/bin"
 
 if [[ -z "$(ps -aux | grep 'Caps_Lock Escape' | grep xcape)" ]];
 then
@@ -37,6 +39,7 @@ fi
 [ -f ~/.bash_aws ] && source ~/.bash_aws
 [ -f ~/.bash_credentials ] && source ~/.bash_credentials
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.suggestions.sh ] && source ~/.suggestions.sh
 [ -f ~/.nurc ] && source ~/.nurc
 
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
