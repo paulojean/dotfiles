@@ -42,6 +42,11 @@ fi
 [ -f ~/.suggestions.sh ] && source ~/.suggestions.sh
 [ -f ~/.nurc ] && source ~/.nurc
 
+__clear_screen__() {
+  clear && printf '\e[3J'
+}
+bind -x '"\C-l":__clear_screen__'
+
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
 parse_git_branch() {
