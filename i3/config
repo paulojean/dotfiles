@@ -38,7 +38,7 @@ set $right l
 floating_modifier Mod1
 
 # start a terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec alacritty --command bash -c 'tmux new-session -A -s stuffs'
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -189,8 +189,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 1%- && killa
 bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle && killall -SIGUSR1 i3status
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 2 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 2 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec light -A 1 # increase screen brightness
+bindsym XF86MonBrightnessDown exec light -U 1 # decrease screen brightness
 
 # Touchpad controls
 bindsym XF86TouchpadToggle exec /home/paulo/.config/i3/toggletouchpad.sh # toggle touchpad
