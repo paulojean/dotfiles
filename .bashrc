@@ -24,9 +24,15 @@ export KAFKA_HOME="$HOME/.bin/kafka_2.12-0.10.2.1"
 export ANDROID_SDK_HOME=/opt/android-sdk
 export VISUAL="nvim"
 export EDITOR="nvim"
-export TERM=xterm-color
 export GOPATH="/home/paulo/.go"
+export LEIN_SUPPRESS_USER_LEVEL_REPO_WARNINGS="TRUE"
 export PATH="$PATH:$GOPATH/bin"
+if [ -e /usr/share/terminfo/x/xterm-256color ]; then
+  export TERM='xterm-256color'
+else
+  export TERM='xterm-color'
+fi
+
 
 if [[ -z "$(ps -aux | grep 'Caps_Lock Escape' | grep xcape)" ]];
 then
