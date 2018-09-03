@@ -2,14 +2,12 @@
 let mapleader = ","
 let maplocalleader = " "
 
-" magit
-"nnoremap <leader>m :MagitOnly<CR>
-
 nnoremap <space><space> :Files<CR>
 nnoremap <c-[> :noh<return><esc>
 nnoremap <Leader>te :terminal<cr><S-a>
 nnoremap <Leader>v :vsp<cr>
 nnoremap <Leader>b :sp<cr>
+nnoremap <Leader>g :Gina
 nnoremap <Leader>gp :!git pull<cr>
 nnoremap <c-q> :q<cr>
 nnoremap <c-s> :w<cr>

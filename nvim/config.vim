@@ -1,7 +1,10 @@
+set t_Co=256
+set t_AB=^[[48;5;%dm
+set t_AF=^[[38;5;%dm
 set background=dark
 set termguicolors
 
-source $HOME/.config/nvim/color.vim
+" source $HOME/.config/nvim/color.vim
 
 " Better nav
 set number
@@ -77,6 +80,7 @@ let g:airline#extensions#tabline#show_buffers = 0
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'haskell': ['hie', '--lsp'],
+    \ 'go': ['go-langserver'],
     \ }
 
 let g:LanguageClient_autoStart = 1
@@ -86,7 +90,9 @@ au FileType haskell,rust source ~/.config/nvim/lsp.vim
 let g:contabs#project#locations = [
   \ { 'path': '~/nu', 'depth': 1, 'git_only': 1 },
   \ { 'path': '~/.config', 'depth': 1, 'git_only': 0 },
-  \ { 'path': '~/proj', 'depth': 1, 'git_only': 1 }
+  \ { 'path': '~/proj', 'depth': 1, 'git_only': 1 },
+  \ { 'path': '$GOPATH/src', 'depth': 1, 'git_only': 1 }
   \]
 command! -nargs=1 -complete=dir EP call contabs#project#edit(<q-args>)
 command! -nargs=1 -complete=dir TP call contabs#project#tabedit(<q-args>)
+

@@ -1,9 +1,8 @@
 " deoplete tweaking
-"source $HOME/.config/nvim/plugins/deoplete.vim
+source $HOME/.config/nvim/plugins/deoplete.vim
 
 " acid tweaking
 source $HOME/.config/nvim/plugins/acid.vim
-
 
 source $HOME/.config/nvim/plugins/vimagit.vim
 

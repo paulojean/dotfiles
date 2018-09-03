@@ -10,7 +10,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'kien/rainbow_parentheses.vim'
 
 " Repls
-Plug 'BurningEther/iron.nvim'
+Plug 'Vigemus/iron.nvim'
 
 " Filesystem tinkering
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -30,16 +30,18 @@ Plug 'mhinz/vim-signify'
 Plug 'jreybert/vimagit', { 'branch': 'next' }
 Plug 'lambdalisue/gina.vim'
 Plug 'rhysd/committia.vim'
+Plug 'Vigemus/pointer.nvim'
 
 " Eyecandy
 Plug 'ryanoasis/vim-devicons'
 
 " Code Completion
-Plug 'roxma/nvim-completion-manager'
+Plug 'ncm2/ncm2'
 
 " Clojure
 Plug 'guns/vim-sexp', { 'for': 'clojure' }
 Plug 'clojure-vim/acid.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'fholiveira/vim-clojure-static', { 'for': 'clojure', 'branch': 'hack-update'}
 Plug 'clojure-vim/async-clj-omni'
 Plug 'fuadsaud/vim-midje', { 'branch': 'fix-contains' }
@@ -48,10 +50,6 @@ Plug 'paulojean/sort-quire.vim'
 " Scala
 Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
 Plug 'derekwyatt/vim-scala'
-
-" Elm
-Plug 'ElmCast/elm-vim'
-Plug 'avh4/elm-format'
 
 Plug 'w0rp/ale'
 

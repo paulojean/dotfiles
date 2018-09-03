@@ -9,3 +9,5 @@ source $HOME/.config/nvim/config.vim
 
 " Keyboard stuff
 source $HOME/.config/nvim/keybindings.vim
+
+luafile $HOME/.config/nvim/pointer.lua
