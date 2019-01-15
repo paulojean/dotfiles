@@ -3,46 +3,46 @@
 (setq package-enable-at-startup nil)
 
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
-			 ("org" . "http://orgmode.org/elpa/")
-			 ("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa-stable" . "http://stable.melpa.org/packages/")))
+                         ("org" . "http://orgmode.org/elpa/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa-stable" . "http://stable.melpa.org/packages/")))
 
 (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 (add-to-list 'package-pinned-packages '(magit . "melpa-stable") t)
 
 (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
 (unless package-archive-contents
   (package-refresh-contents))
 
 (require 'use-package)
 
 (use-package evil-leader
-      :commands (evil-leader-mode)
-      :ensure t
-      :demand evil-leader
-      :init
-      (global-evil-leader-mode)
-      :config
-      (progn
-	(evil-leader/set-leader "SPC")
-	;; bindings from earlier
-	(evil-leader/set-key
-	  "," 'other-window
-	  "a" 'helm-projectile-ag
-	  "b" 'helm-buffers-list
-	  "d" 'ranger
-	  "e" 'pp-eval-last-sexp
-	  "f" 'helm-projectile-find-file
-	  "h" 'split-window-below
-	  "o" 'delete-other-windows
-	  "p" 'projectile-switch-project
-	  "q" 'delete-window
-	  "v" 'split-window-right
-	  "s" 'save-buffer
-	  "SPC" 'helm-M-x
-	  )))
+  :commands (evil-leader-mode)
+  :ensure t
+  :demand evil-leader
+  :init
+  (global-evil-leader-mode)
+  :config
+  (progn
+    (evil-leader/set-leader "SPC")
+    ;; bindings from earlier
+    (evil-leader/set-key
+      "," 'other-window
+      "a" 'helm-projectile-ag
+      "b" 'helm-buffers-list
+      "d" 'ranger
+      "e" 'pp-eval-last-sexp
+      "f" 'helm-projectile-find-file
+      "h" 'split-window-below
+      "o" 'delete-other-windows
+      "p" 'projectile-switch-project
+      "q" 'delete-window
+      "v" 'split-window-right
+      "s" 'save-buffer
+      "SPC" 'helm-M-x
+      )))
 
 (setq gc-cons-threshold 100000000)
 
@@ -70,8 +70,8 @@
        "Take dired up one directory, but behave like dired-find-alternate-file"
        (interactive)
        (let ((old (current-buffer)))
-	 (dired-up-directory)
-	 (kill-buffer old)))
+         (dired-up-directory)
+         (kill-buffer old)))
      (evil-define-key 'normal dired-mode-map
        "h" 'my-dired-up-directory
        "l" 'dired-find-alternate-file
@@ -175,8 +175,7 @@
 (use-package rainbow-delimiters
   :ensure t)
 (use-package spacemacs-theme
-  :defer t
-  :init (load-theme 'spacemacs-dark t))
+  :defer t)
 (use-package tagedit
   :ensure t)
 (use-package ranger
