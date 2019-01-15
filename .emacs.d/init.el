@@ -37,6 +37,7 @@
       "f" 'helm-projectile-find-file
       "h" 'split-window-below
       "o" 'delete-other-windows
+      "n" 'ibuffer
       "p" 'projectile-switch-project
       "q" 'delete-window
       "v" 'split-window-right
@@ -58,9 +59,21 @@
   :ensure t
   :config
   (evil-mode 1))
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
 (add-to-list 'load-path (concat user-emacs-directory "config"))
 (require 'my-ibuffer)
+(use-package ibuffer-projectile
+  :ensure t
+  :config (progn
+            (add-hook 'ibuffer-hook
+                      (lambda ()
+                        (ibuffer-projectile-set-filter-groups)
+                        (unless (eq ibuffer-sorting-mode 'alphabetic)
+                          (ibuffer-do-sort-by-alphabetic))))))
 
 ;; dired
 (eval-after-load 'dired
@@ -174,8 +187,6 @@
   :ensure t)
 (use-package rainbow-delimiters
   :ensure t)
-(use-package spacemacs-theme
-  :defer t)
 (use-package tagedit
   :ensure t)
 (use-package ranger
