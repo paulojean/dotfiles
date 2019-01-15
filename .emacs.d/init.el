@@ -172,8 +172,6 @@
   :ensure t)
 (use-package flx-ido
   :ensure t)
-(use-package smex
-  :ensure t)
 (use-package rainbow-delimiters
   :ensure t)
 (use-package spacemacs-theme
