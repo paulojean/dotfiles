@@ -2,7 +2,7 @@
 
 ;; Key binding to use "hippie expand" for text autocompletion
 ;; http://www.emacswiki.org/emacs/HippieExpand
-(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-;") 'hippie-expand)
 
 ;; Lisp-friendly hippie expand
 (setq hippie-expand-try-functions-list
@@ -65,5 +65,27 @@
   (condition-case nil
       (ns-get-selection-internal 'CLIPBOARD)
     (quit nil)))
+
+(progn
+  (defun my-pbcopy ()
+    (interactive)
+    (let ((deactivate-mark t))
+      (call-process-region (point) (mark) "pbcopy")))
+
+  (defun my-pbpaste ()
+    (interactive)
+    (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+
+  (defun my-pbcut ()
+    (interactive)
+    (pbcopy)
+    (delete-region (region-beginning) (region-end)))
+
+  (require 'evil)
+
+  (define-key evil-visual-state-map (kbd "SPC c y") 'my-pbcopy)
+  (define-key evil-visual-state-map (kbd "SPC c p") 'my-pbpaste)
+  (define-key evil-normal-state-map (kbd "SPC c p") 'my-pbpaste)
+  (define-key evil-visual-state-map (kbd "SPC c c") 'my-pbcut))
 
 (setq electric-indent-mode nil)

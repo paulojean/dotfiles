@@ -90,10 +90,11 @@
 
 (add-hook 'clojure-mode-hook
           (lambda ()
-            (define-key clojure-mode-map (kbd "' '") 'cider-jack-in)
-            (define-key clojure-mode-map (kbd "' s s") 'cider-switch-to-repl-buffer)
-            (define-key clojure-mode-map (kbd "' e") 'cider-eval-last-sexp)
-            (define-key clojure-mode-map (kbd "' b") 'cider-eval-buffer)
-            (define-key clojure-mode-map (kbd "' s n") 'cider-repl-set-ns)
-            (define-key clojure-mode-map (kbd "' n r") 'cider-ns-refresh)
+            (require 'evil)
+            (define-key evil-normal-state-map (kbd "' '") 'cider-jack-in)
+            (define-key evil-normal-state-map (kbd "' s s") 'cider-switch-to-repl-buffer)
+            (define-key evil-normal-state-map (kbd "' e") 'cider-eval-last-sexp)
+            (define-key evil-normal-state-map (kbd "' b") 'cider-eval-buffer)
+            (define-key evil-normal-state-map (kbd "' s n") 'cider-repl-set-ns)
+            (define-key evil-normal-state-map (kbd "' n r") 'cider-ns-refresh)
             ))

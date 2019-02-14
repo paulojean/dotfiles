@@ -19,6 +19,10 @@
 (recentf-mode 1)
 (setq recentf-max-menu-items 40)
 
+;;; those three lines are meant to disable auto-recentering
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+(setq auto-window-vscroll nil)
 
 (require 'flx-ido)
 (ido-mode t)
@@ -53,14 +57,25 @@
 ;; projectile everywhere!
 (projectile-global-mode)
 
-(define-key evil-normal-state-map (kbd "SPC w h") 'evil-window-left)
-(define-key evil-normal-state-map (kbd "SPC w j") 'evil-window-down)
-(define-key evil-normal-state-map (kbd "SPC w k") 'evil-window-up)
-(define-key evil-normal-state-map (kbd "SPC w l") 'evil-window-right)
-(define-key evil-normal-state-map (kbd "SPC t c") 'make-frame-command)
-(define-key evil-normal-state-map (kbd "SPC t d") 'delete-frame)
-(define-key evil-normal-state-map (kbd "SPC t o") 'delete-other-frames)
+(add-to-list 'load-path "~/code/framecs")
+(require 'framecs)
+(framecs/start-framecs)
+
 (progn
   (global-unset-key (kbd "C-l"))
-  (define-key evil-normal-state-map (kbd "C-l") 'other-frame))
+  (global-unset-key (kbd "C-h")))
+
+(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+(define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+(define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+(define-key evil-normal-state-map (kbd "SPC f c") 'framecs/new-frame)
+(define-key evil-normal-state-map (kbd "SPC f d") 'framecs/delete-frame)
+(define-key evil-normal-state-map (kbd "SPC f w") 'framecs/new-workspace)
+(define-key evil-normal-state-map (kbd "SPC f q") 'framecs/delete-current-workspace)
+(define-key evil-normal-state-map (kbd "SPC f k") 'framecs/go-to-previous-workspace)
+(define-key evil-normal-state-map (kbd "SPC f j") 'framecs/go-to-next-workspace)
+(define-key evil-normal-state-map (kbd "SPC f h") 'framecs/go-to-previous-frame)
+(define-key evil-normal-state-map (kbd "SPC f l") 'framecs/go-to-next-frame)
+
 

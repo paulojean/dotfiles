@@ -1,6 +1,6 @@
 
 (menu-bar-mode -1) ; dont show menu bar
-(global-display-line-numbers-mode)
+;(global-display-line-numbers-mode)
 
 ;; remove the graphical toolbar at the top
 (when (fboundp 'tool-bar-mode)
@@ -11,6 +11,7 @@
   (scroll-bar-mode -1))
 
 (blink-cursor-mode 0)
+(setq-default tab-width 4)
 
 ;; full path in title bar
 (setq-default frame-title-format "%b (%f)")
@@ -33,3 +34,5 @@
     (set-face-background 'default "unspecified-bg" (selected-frame))))
 
 (add-hook 'window-setup-hook 'on-after-init)
+
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
