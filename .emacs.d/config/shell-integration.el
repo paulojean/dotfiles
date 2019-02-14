@@ -7,7 +7,7 @@
 
 (progn
   (add-to-list 'load-path "~/code/shutils.el")
-  (require 'shutils.el)
+  (require 'shutils-history-helm)
   (shutils-history/start-auto-update))
 
 (progn

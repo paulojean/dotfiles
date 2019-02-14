@@ -101,9 +101,9 @@
 (eval-after-load 'shell
   (progn
     (evil-define-key 'normal shell-mode-map
-      (kbd "C-r") 'shutils-history/show-history)
+      (kbd "C-r") 'shutils-history-helm/show-history)
     (evil-define-key 'insert shell-mode-map
-      (kbd "C-r") 'shutils-history/show-history)))
+      (kbd "C-r") 'shutils-history-helm/show-history)))
 
 (add-to-list 'load-path (concat user-emacs-directory "config"))
 (require 'my-ibuffer)
