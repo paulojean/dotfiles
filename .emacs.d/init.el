@@ -12,7 +12,7 @@
     ("946e871c780b159c4bb9f580537e5d2f7dba1411143194447604ecbaf01bd90c" "8d5f22f7dfd3b2e4fc2f2da46ee71065a9474d0ac726b98f647bc3c7e39f2819" "73a13a70fd111a6cd47f3d4be2260b1e4b717dbf635a9caee6442c949fad41cd" "721bb3cb432bb6be7c58be27d583814e9c56806c06b4077797074b009f322509" "b59d7adea7873d58160d368d42828e7ac670340f11f36f67fa8071dbf957236a" default)))
  '(package-selected-packages
    (quote
-    (company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete helm-ag ag paredit projectile evil-leader ## evil)))
+    (company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -61,10 +61,10 @@
       "'" 'linum-mode
       "," 'other-window
       ";" 'linum-relative-toggle
-      "SPC" 'helm-M-x
+      "SPC" 'counsel-M-x
       "TAB" 'switch-to-prev-buffer
-      "a" 'helm-projectile-ag
-      "b" 'helm-buffers-list
+      "a" 'counsel-projectile-ag
+      "b" 'counsel-ibuffer
       "d d" 'ranger
       "d o" 'delete-other-windows
       "d p" 'pwd
@@ -76,8 +76,8 @@
       "o c a" 'origami-close-all-nodes
       "o n" 'origami-toggle-node
       "o o a" 'origami-open-all-nodes
-      "p f" 'helm-projectile-find-file-dwim
-      "p p" 'helm-projectile-switch-project
+      "p f" 'counsel-projectile-find-file-dwim
+      "p p" 'counsel-projectile-switch-project
       "q" 'delete-window
       "s" 'save-buffer
       "t g" 'golden-ratio-mode
@@ -101,9 +101,9 @@
 (eval-after-load 'shell
   (progn
     (evil-define-key 'normal shell-mode-map
-      (kbd "C-r") 'shutils-history-helm/show-history)
+      (kbd "C-r") 'shutils-history-counsel/show-history)
     (evil-define-key 'insert shell-mode-map
-      (kbd "C-r") 'shutils-history-helm/show-history)))
+      (kbd "C-r") 'shutils-history-counsel/show-history)))
 
 (add-to-list 'load-path (concat user-emacs-directory "config"))
 (require 'my-ibuffer)
@@ -143,7 +143,14 @@
 (use-package projectile
   :ensure t
   :config (progn
-            (projectile-mode +1)))
+            (projectile-mode +1)
+            (setq projectile-completion-system 'ivy)))
+
+(use-package counsel-projectile
+  :ensure t
+  ;; :config
+  ;; (counsel-projectile-on)
+  )
 
 (use-package magit
   :ensure t)
@@ -158,9 +165,15 @@
     (use-package exec-path-from-shell
       :ensure t))
 
-(use-package helm
+(use-package ivy
   :ensure t
-  :config (require 'helm-config))
+  :config (progn
+            (ivy-mode 1)
+            (setq ivy-re-builders-alist
+                  '((swiper . ivy--regex-plus)
+                    (t      . ivy--regex-fuzzy)))
+            (setq ivy-use-virtual-buffers t)
+            (setq enable-recursive-minibuffers t)))
 
 (use-package flx
   :ensure t)
@@ -177,12 +190,6 @@
   :ensure t)
 (use-package ag
   :ensure t)
-(use-package helm-ag
-  :ensure t)
-(use-package helm-projectile
-  :ensure t
-  :config (progn
-            (helm-projectile-on)))
 
 (use-package origami
   :ensure t
@@ -232,23 +239,28 @@
 (use-package markdown-mode
   :ensure t)
 
-(use-package auto-complete ;;autocompletion on tab
+(use-package company
   :ensure t
-  :diminish auto-complete-mode
-  :init
-  (progn
-    (global-auto-complete-mode t))
-  :bind (:map ac-completing-map
-              ("C-j" . ac-next)
-              ("C-k" . ac-previous))
-  :config
-  (progn
-    (use-package auto-complete-config)
-    (ac-config-default)
-    (setq ac-delay 0)
-    (setq ac-use-menu-map t)
-    (setq ac-dwim t)
-    (setq ac-use-fuzzy t)))
+  :config (progn
+            (add-hook 'after-init-hook 'global-company-mode)))
+
+; (use-package auto-complete ;;autocompletion on tab
+;;   :ensure t
+;;   :diminish auto-complete-mode
+;;   :init
+;;   (progn
+;;     (global-auto-complete-mode t))
+;;   :bind (:map ac-completing-map
+;;               ("C-j" . ac-next)
+;;               ("C-k" . ac-previous))
+;;   :config
+;;   (progn
+;;     (use-package auto-complete-config)
+;;     (ac-config-default)
+;;     (setq ac-delay 0)
+;;     (setq ac-use-menu-map t)
+;;     (setq ac-dwim t)
+;;     (setq ac-use-fuzzy t)))
 
 (use-package flycheck
   :ensure t
@@ -282,7 +294,6 @@
             (require 'spaceline)
             (require 'spaceline-config)
             (spaceline-spacemacs-theme)
-            (spaceline-helm-mode)
             (setq spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)))
 
 (use-package golden-ratio
