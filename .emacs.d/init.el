@@ -12,7 +12,7 @@
     ("946e871c780b159c4bb9f580537e5d2f7dba1411143194447604ecbaf01bd90c" "8d5f22f7dfd3b2e4fc2f2da46ee71065a9474d0ac726b98f647bc3c7e39f2819" "73a13a70fd111a6cd47f3d4be2260b1e4b717dbf635a9caee6442c949fad41cd" "721bb3cb432bb6be7c58be27d583814e9c56806c06b4077797074b009f322509" "b59d7adea7873d58160d368d42828e7ac670340f11f36f67fa8071dbf957236a" default)))
  '(package-selected-packages
    (quote
-    (company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -22,24 +22,27 @@
             (projectile-project-root)
             "cask exec buttercup -L ." projectile-test-cmd-map))))))
 
-(setq package-archives '(("org"   . "http://orgmode.org/elpa/")
-                         ("gnu"   . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 (unless package-archive-contents
   (package-refresh-contents))
-
 (require 'use-package)
 
 ;; evil sutffs
 (use-package evil
   :ensure t
   :init (progn
+          (require 'evil-search)
+          (evil-select-search-module 'evil-search-module 'evil-search)
+
           (setq evil-want-integration t)
           (setq evil-want-keybinding nil)
+
+          (require 'evil)
+          (define-key evil-normal-state-map (kbd "<escape>") 'evil-ex-nohighlight)
           )
   :config (evil-mode 1))
 
@@ -64,8 +67,8 @@
       "SPC" 'counsel-M-x
       "TAB" 'switch-to-prev-buffer
       "a" 'counsel-projectile-ag
-      "b" 'counsel-ibuffer
-      "d d" 'ranger
+      "b" 'counsel-switch-buffer
+      "d d" 'neotree-projectile-action
       "d o" 'delete-other-windows
       "d p" 'pwd
       "e" 'pp-eval-last-sexp
@@ -73,9 +76,9 @@
       "m" 'magit
       "n" 'ibuffer
       "l e" 'flycheck-list-errors
-      "o c a" 'origami-close-all-nodes
-      "o n" 'origami-toggle-node
-      "o o a" 'origami-open-all-nodes
+      "o c a" 'hs-hide-all
+      "o n" 'hs-toggle-hiding
+      "o o a" 'hs-show-all
       "p f" 'counsel-projectile-find-file-dwim
       "p p" 'counsel-projectile-switch-project
       "q" 'delete-window
@@ -101,9 +104,9 @@
 (eval-after-load 'shell
   (progn
     (evil-define-key 'normal shell-mode-map
-      (kbd "C-r") 'shutils-history-counsel/show-history)
+      (kbd "C-r") 'shutils-history-ivy/show-history)
     (evil-define-key 'insert shell-mode-map
-      (kbd "C-r") 'shutils-history-counsel/show-history)))
+      (kbd "C-r") 'shutils-history-ivy/show-history)))
 
 (add-to-list 'load-path (concat user-emacs-directory "config"))
 (require 'my-ibuffer)
@@ -148,12 +151,23 @@
 
 (use-package counsel-projectile
   :ensure t
-  ;; :config
-  ;; (counsel-projectile-on)
-  )
+  :after projectile ivy)
 
 (use-package magit
-  :ensure t)
+  :ensure t
+  :config (progn
+            (setq magit-display-buffer-function
+                  (lambda (buffer)
+                    (display-buffer
+                     buffer (if (and (derived-mode-p 'magit-mode)
+                                     (memq (with-current-buffer buffer major-mode)
+                                           '(magit-process-mode
+                                             magit-revision-mode
+                                             magit-diff-mode
+                                             magit-stash-mode
+                                             magit-status-mode)))
+                                nil
+                              '(display-buffer-same-window)))))))
 
 (use-package evil-magit
   :ensure t
@@ -169,6 +183,7 @@
   :ensure t
   :config (progn
             (ivy-mode 1)
+            (setq ivy-initial-inputs-alist ())
             (setq ivy-re-builders-alist
                   '((swiper . ivy--regex-plus)
                     (t      . ivy--regex-fuzzy)))
@@ -189,13 +204,10 @@
 (use-package s
   :ensure t)
 (use-package ag
-  :ensure t)
-
-(use-package origami
   :ensure t
-  :init (progn
-          (require 'origami)
-          (global-origami-mode t)))
+  :config (progn
+            (setq ag-highlight-search t)))
+
 (use-package paredit
   :ensure t)
 (use-package clojure-mode
@@ -244,23 +256,25 @@
   :config (progn
             (add-hook 'after-init-hook 'global-company-mode)))
 
-; (use-package auto-complete ;;autocompletion on tab
-;;   :ensure t
-;;   :diminish auto-complete-mode
-;;   :init
-;;   (progn
-;;     (global-auto-complete-mode t))
-;;   :bind (:map ac-completing-map
-;;               ("C-j" . ac-next)
-;;               ("C-k" . ac-previous))
-;;   :config
-;;   (progn
-;;     (use-package auto-complete-config)
-;;     (ac-config-default)
-;;     (setq ac-delay 0)
-;;     (setq ac-use-menu-map t)
-;;     (setq ac-dwim t)
-;;     (setq ac-use-fuzzy t)))
+(use-package posframe
+  :ensure t)
+(use-package ivy-posframe
+  :ensure t
+  :after ivy
+  :config (progn
+            ;; (setq ivy-display-function #'ivy-posframe-display-at-window-center)
+            ;; (ivy-posframe-enable)
+
+            (push '(counsel-M-x . ivy-posframe-display-at-window-bottom-left) ivy-display-functions-alist)
+            (push '(complete-symbol . ivy-posframe-display-at-point) ivy-display-functions-alist)
+            (push '(swiper . ivy-posframe-display-at-point) ivy-display-functions-alist)
+            (ivy-posframe-enable)))
+
+(use-package company-posframe
+  :ensure t
+  :after company posframe
+  :config (progn
+            (company-posframe-mode 1)))
 
 (use-package flycheck
   :ensure t
@@ -274,10 +288,16 @@
                          (reusable-frames . visible)
                          (window-height   . 0.3)))
           (global-flycheck-mode)))
-(use-package flycheck-posframe
+
+(use-package flycheck-popup-tip
   :ensure t
   :after flycheck
-  :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
+  :config (progn
+            (add-hook 'flycheck-mode-hook 'flycheck-popup-tip-mode)))
+
+(use-package flycheck-joker
+  :ensure t
+  :after flycheck)
 
 (use-package ido-completing-read+
   :ensure t)
@@ -286,6 +306,13 @@
 (use-package tagedit
   :ensure t)
 (use-package ranger
+  :ensure t
+  :config (progn
+            (setq ranger-parent-depth 3)))
+(use-package neotree
+  :ensure t)
+
+(use-package buffer-move
   :ensure t)
 
 (use-package spaceline
@@ -293,13 +320,12 @@
   :config (progn
             (require 'spaceline)
             (require 'spaceline-config)
-            (spaceline-spacemacs-theme)
+            (spaceline-emacs-theme)
             (setq spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)))
 
 (use-package golden-ratio
   :ensure t
   :config (progn
-            (golden-ratio-mode)
             (setq golden-ratio-extra-commands
                   (append golden-ratio-extra-commands
                           '(evil-window-left
@@ -330,7 +356,9 @@
             (require 'which-key)
             (which-key-mode)))
 (use-package all-the-icons
-  :ensure t)
+  :ensure t
+  :config (progn
+            (setq neo-theme (if (display-graphic-p) 'icons 'arrow))))
 (use-package all-the-icons-dired
   :ensure t
   :diminish all-the-icons-dired-mode

@@ -43,6 +43,7 @@
                                                "backups"))))
 (setq auto-save-default nil)
 
+(require 'iso-transl)
 
 ;; comments
 (defun toggle-comment-on-line ()
@@ -67,6 +68,10 @@
     (quit nil)))
 
 (progn
+  (when (memq window-system '(mac ns))
+    (setq interprogram-cut-function nil)
+    (setq interprogram-paste-function nil))
+
   (defun my-pbcopy ()
     (interactive)
     (let ((deactivate-mark t))

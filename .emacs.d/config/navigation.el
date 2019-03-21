@@ -58,17 +58,23 @@
 (projectile-global-mode)
 
 (add-to-list 'load-path "~/code/framecs")
+(require 'framecs-ivy)
 (require 'framecs)
 (framecs/start-framecs)
 
 (progn
   (global-unset-key (kbd "C-l"))
-  (global-unset-key (kbd "C-h")))
+  (global-unset-key (kbd "C-h"))
+  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "C-S-k") 'buf-move-up)
+  (define-key evil-normal-state-map (kbd "C-S-j") 'buf-move-down)
+  (define-key evil-normal-state-map (kbd "C-S-h") 'buf-move-left)
+  (define-key evil-normal-state-map (kbd "C-S-l") 'buf-move-right)
+  )
 
-(define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-(define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-(define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-(define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 (define-key evil-normal-state-map (kbd "SPC f c") 'framecs/new-frame)
 (define-key evil-normal-state-map (kbd "SPC f d") 'framecs/delete-frame)
 (define-key evil-normal-state-map (kbd "SPC f w") 'framecs/new-workspace)
@@ -77,5 +83,16 @@
 (define-key evil-normal-state-map (kbd "SPC f j") 'framecs/go-to-next-workspace)
 (define-key evil-normal-state-map (kbd "SPC f h") 'framecs/go-to-previous-frame)
 (define-key evil-normal-state-map (kbd "SPC f l") 'framecs/go-to-next-frame)
+(define-key evil-normal-state-map (kbd "SPC f f l") 'framecs/select-frame-from-current-workspace)
+(define-key evil-normal-state-map (kbd "SPC f f w") 'framecs/select-workspace)
+
+(evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
 
 
+(progn
+  (define-key evil-normal-state-map "m" nil)
+  (define-key evil-normal-state-map (kbd "m m") 'magit)
+  (define-key evil-normal-state-map (kbd "m f") 'magit-file-popup)
+  )
+
+;;; navigation.el ends here

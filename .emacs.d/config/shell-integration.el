@@ -7,7 +7,7 @@
 
 (progn
   (add-to-list 'load-path "~/code/shutils.el")
-  (require 'shutils-history-helm)
+  (require 'shutils-history-ivy)
   (shutils-history/start-auto-update))
 
 (progn
@@ -20,9 +20,9 @@
 
   (define-key evil-insert-state-map (kbd "C-l") 'my-shell/clear))
 
-;; (progn
-;;   (add-to-list 'load-path "~/.emacs.d/vendor/emacs-libvterm")
-;;   (require 'shutils.el)
-;;   (shutils-history/start-auto-update))
+(progn
+  (require 'bash-completion)
+  (bash-completion-setup)
+  )
 
 ;;; shell-integration.el ends here

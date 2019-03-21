@@ -19,8 +19,6 @@
 ;; no bell
 (setq ring-bell-function 'ignore)
 
-(add-to-list 'custom-theme-load-path (concat user-emacs-directory "themes"))
-(add-to-list 'load-path (concat user-emacs-directory "themes"))
 (load-theme 'spacemacs-dark t)
 
 (defun on-frame-open (frame)
@@ -36,3 +34,9 @@
 (add-hook 'window-setup-hook 'on-after-init)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; https://signalnoise.com/praise-the-sun
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "C-=") 'text-scale-adjust)
+
+(add-hook 'prog-mode-hook 'hs-minor-mode)
