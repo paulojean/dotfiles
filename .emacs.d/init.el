@@ -12,7 +12,7 @@
     ("946e871c780b159c4bb9f580537e5d2f7dba1411143194447604ecbaf01bd90c" "8d5f22f7dfd3b2e4fc2f2da46ee71065a9474d0ac726b98f647bc3c7e39f2819" "73a13a70fd111a6cd47f3d4be2260b1e4b717dbf635a9caee6442c949fad41cd" "721bb3cb432bb6be7c58be27d583814e9c56806c06b4077797074b009f322509" "b59d7adea7873d58160d368d42828e7ac670340f11f36f67fa8071dbf957236a" default)))
  '(package-selected-packages
    (quote
-    (flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((eval progn
@@ -24,12 +24,21 @@
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")))
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(unless package-archive-contents
-  (package-refresh-contents))
-(require 'use-package)
+(package-initialize)
+(unless (require 'quelpa nil t)
+  (with-temp-buffer
+    (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
+    (eval-buffer)))
+
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://framagit.org/steckerhalter/quelpa-use-package.git"))
+(require 'quelpa-use-package)
+(setq use-package-ensure-function 'quelpa)
+
+(use-package quelpa
+  :ensure t)
 
 ;; evil sutffs
 (use-package evil
@@ -50,6 +59,11 @@
   :after evil
   :ensure t
   :config (evil-collection-init))
+
+(defun my/remove-trailing-whitespace-and-sabe ()
+  (interactive)
+  (whitespace-cleanup)
+  (save-buffer))
 
 (use-package evil-leader
   :commands (evil-leader-mode)
@@ -73,7 +87,7 @@
       "d p" 'pwd
       "e" 'pp-eval-last-sexp
       "h" 'split-window-below
-      "m" 'magit
+      ;; "m" 'magit
       "n" 'ibuffer
       "l e" 'flycheck-list-errors
       "o c a" 'hs-hide-all
@@ -82,7 +96,9 @@
       "p f" 'counsel-projectile-find-file-dwim
       "p p" 'counsel-projectile-switch-project
       "q" 'delete-window
-      "s" 'save-buffer
+      "q" 'delete-window
+      "r" 'ranger
+      "s" 'my/remove-trailing-whitespace-and-sabe
       "t g" 'golden-ratio-mode
       "v" 'split-window-right
       )))
@@ -189,6 +205,10 @@
                     (t      . ivy--regex-fuzzy)))
             (setq ivy-use-virtual-buffers t)
             (setq enable-recursive-minibuffers t)))
+
+(use-package flyspell-correct-ivy
+  :ensure t
+  :init (setq flyspell-correct-interface #'flyspell-correct-ivy))
 
 (use-package flx
   :ensure t)
@@ -299,6 +319,12 @@
   :ensure t
   :after flycheck)
 
+(use-package flycheck-checkbashisms
+  :ensure t
+  :after flycheck
+  :config
+  (flycheck-checkbashisms-setup))
+
 (use-package ido-completing-read+
   :ensure t)
 (use-package rainbow-delimiters
@@ -308,7 +334,9 @@
 (use-package ranger
   :ensure t
   :config (progn
+            (ranger-override-dired-mode t)
             (setq ranger-parent-depth 3)))
+
 (use-package neotree
   :ensure t)
 
@@ -350,22 +378,31 @@
 
 (use-package linum-relative
   :ensure t)
+
 (use-package which-key
   :ensure t
   :config (progn
             (require 'which-key)
             (which-key-mode)))
+
 (use-package all-the-icons
   :ensure t
   :config (progn
             (setq neo-theme (if (display-graphic-p) 'icons 'arrow))))
+
 (use-package all-the-icons-dired
   :ensure t
   :diminish all-the-icons-dired-mode
   :init
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-(ranger-override-dired-mode t)
+(use-package google-translate
+  :ensure t
+  :init (progn
+          (require 'google-translate)
+          (require 'google-translate-default-ui)
+          (global-set-key "\C-ct" 'google-translate-at-point)
+          (global-set-key "\C-cT" 'google-translate-query-translate)))
 
 (add-to-list 'load-path (concat user-emacs-directory "vendor"))
 

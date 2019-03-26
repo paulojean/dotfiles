@@ -93,4 +93,17 @@
   (define-key evil-normal-state-map (kbd "SPC c p") 'my-pbpaste)
   (define-key evil-visual-state-map (kbd "SPC c c") 'my-pbcut))
 
+(defun my-flyspell/clean-overlays ()
+  "Remove all overlays displayed by flyspell."
+  (interactive)
+  (flyspell-mode-off)
+  (flyspell-mode-on))
+
+(define-key evil-normal-state-map (kbd "z s") 'flyspell-buffer)
+(define-key evil-normal-state-map (kbd "z f") 'flyspell-correct-wrapper)
+(define-key evil-normal-state-map (kbd "z c") 'my-flyspell/clean-overlays)
+
+(setq ispell-list-command "--list")
+(setq ispell-program-name "aspell")
+
 (setq electric-indent-mode nil)

@@ -4,6 +4,7 @@ auto-save-list
 backups
 cider-history
 elpa
+quelpa
 ido.last
 .recentf
 projectile-bookmarks.eld

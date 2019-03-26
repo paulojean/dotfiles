@@ -20,6 +20,11 @@
 
   (define-key evil-insert-state-map (kbd "C-l") 'my-shell/clear))
 
+(use-package bash-completion
+  :ensure t
+  :quelpa
+  (bash-completion :repo "szermatt/emacs-bash-completion" :fetcher github))
+
 (progn
   (require 'bash-completion)
   (bash-completion-setup)

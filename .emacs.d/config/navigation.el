@@ -73,6 +73,11 @@
   (define-key evil-normal-state-map (kbd "C-S-j") 'buf-move-down)
   (define-key evil-normal-state-map (kbd "C-S-h") 'buf-move-left)
   (define-key evil-normal-state-map (kbd "C-S-l") 'buf-move-right)
+
+  (define-key evil-normal-state-map (kbd "C-w k") 'buf-move-up)
+  (define-key evil-normal-state-map (kbd "C-w j") 'buf-move-down)
+  (define-key evil-normal-state-map (kbd "C-w h") 'buf-move-left)
+  (define-key evil-normal-state-map (kbd "C-w l") 'buf-move-right)
   )
 
 (define-key evil-normal-state-map (kbd "SPC f c") 'framecs/new-frame)

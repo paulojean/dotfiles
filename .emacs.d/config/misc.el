@@ -12,3 +12,8 @@
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
 (setq default-directory "~")
+
+(defun my/magit-kill-buffers ()
+  "Restore previous window configuration and cleanup buffers."
+  (interactive)
+  (kill-matching-buffers "^magit*:*" :no-ask t))
