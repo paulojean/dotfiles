@@ -93,11 +93,17 @@
 
 (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
 
+(progn
+  (define-key evil-normal-state-map (kbd "TAB") 'switch-to-prev-buffer)
+  (define-key evil-normal-state-map (kbd "SPC TAB") 'switch-to-next-buffer))
 
 (progn
   (define-key evil-normal-state-map "m" nil)
   (define-key evil-normal-state-map (kbd "m m") 'magit)
-  (define-key evil-normal-state-map (kbd "m f") 'magit-file-popup)
+  (define-key evil-normal-state-map (kbd "m d") 'magit-dispatch)
+  (define-key evil-normal-state-map (kbd "m f") 'magit-file-dispatch)
   )
+
+(define-key evil-normal-state-map (kbd "/") 'swiper)
 
 ;;; navigation.el ends here

@@ -87,6 +87,10 @@
                  evil-emacs-state-map))
     (define-key (eval map) "'" nil)))
 
+(defun my/cider-insert-last-sexp-in-repl ()
+  (interactive)
+  (cider-insert-last-sexp-in-repl t))
+
 (add-hook 'clojure-mode-hook
           (lambda ()
             (require 'evil)
@@ -94,7 +98,7 @@
             (define-key evil-normal-state-map (kbd "' s s") 'cider-switch-to-repl-buffer)
             (define-key evil-normal-state-map (kbd "' s n") 'cider-repl-set-ns)
             (define-key evil-normal-state-map (kbd "' e") 'cider-eval-last-sexp)
-            (define-key evil-normal-state-map (kbd "' r") 'cider-insert-last-sexp-in-repl)
+            (define-key evil-normal-state-map (kbd "' r") 'my/cider-insert-last-sexp-in-repl)
             (define-key evil-normal-state-map (kbd "' b") 'cider-eval-buffer)
             (define-key evil-normal-state-map (kbd "' n r") 'cider-ns-refresh)
 

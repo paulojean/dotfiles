@@ -10,12 +10,31 @@
  '(custom-safe-themes
    (quote
     ("946e871c780b159c4bb9f580537e5d2f7dba1411143194447604ecbaf01bd90c" "8d5f22f7dfd3b2e4fc2f2da46ee71065a9474d0ac726b98f647bc3c7e39f2819" "73a13a70fd111a6cd47f3d4be2260b1e4b717dbf635a9caee6442c949fad41cd" "721bb3cb432bb6be7c58be27d583814e9c56806c06b4077797074b009f322509" "b59d7adea7873d58160d368d42828e7ac670340f11f36f67fa8071dbf957236a" default)))
+ '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
-    ((eval progn
+    ((elisp-lint-indent-specs
+      (if-let* . 2)
+      (when-let* . 1)
+      (let* . defun)
+      (nrepl-dbind-response . 2)
+      (cider-save-marker . 1)
+      (cider-propertize-region . 1)
+      (cider-map-repls . 1)
+      (cider--jack-in . 1)
+      (cider--make-result-overlay . 1)
+      (insert-label . defun)
+      (insert-align-label . defun)
+      (insert-rect . defun)
+      (cl-defun . 2)
+      (with-parsed-tramp-file-name . 2)
+      (thread-first . 1)
+      (thread-last . 1))
+     (checkdoc-package-keywords-flag)
+     (eval progn
            (require
             (quote projectile))
            (puthash
@@ -79,7 +98,6 @@
       "," 'other-window
       ";" 'linum-relative-toggle
       "SPC" 'counsel-M-x
-      "TAB" 'switch-to-prev-buffer
       "a" 'counsel-projectile-ag
       "b" 'counsel-switch-buffer
       "d d" 'neotree-projectile-action
@@ -87,7 +105,6 @@
       "d p" 'pwd
       "e" 'pp-eval-last-sexp
       "h" 'split-window-below
-      ;; "m" 'magit
       "n" 'ibuffer
       "l e" 'flycheck-list-errors
       "o c a" 'hs-hide-all
@@ -243,7 +260,9 @@
 (use-package go-mode
   :ensure t)
 (use-package nix-mode
-  :ensure t)
+  :ensure t
+  :mode "\\.nix\\'"
+  :custom (nix-indent-function #'nix-indent-line))
 (use-package haskell-mode
   :ensure t)
 (use-package psc-ide
