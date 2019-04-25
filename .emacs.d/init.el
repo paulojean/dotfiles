@@ -13,7 +13,7 @@
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy golden-ratio treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((elisp-lint-indent-specs
@@ -41,7 +41,8 @@
             (projectile-project-root)
             "cask exec buttercup -L ." projectile-test-cmd-map))))))
 
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")))
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
 
 (package-initialize)
 (unless (require 'quelpa nil t)
@@ -69,20 +70,13 @@
           (setq evil-want-integration t)
           (setq evil-want-keybinding nil)
 
-          (require 'evil)
-          (define-key evil-normal-state-map (kbd "<escape>") 'evil-ex-nohighlight)
-          )
+          (define-key evil-normal-state-map (kbd "<escape>") 'evil-ex-nohighlight))
   :config (evil-mode 1))
 
 (use-package evil-collection
   :after evil
   :ensure t
   :config (evil-collection-init))
-
-(defun my/remove-trailing-whitespace-and-sabe ()
-  (interactive)
-  (whitespace-cleanup)
-  (save-buffer))
 
 (use-package evil-leader
   :commands (evil-leader-mode)
@@ -92,13 +86,18 @@
   (global-evil-leader-mode)
   :config
   (progn
+    (defun my/remove-trailing-whitespace-and-sabe ()
+      (interactive)
+      (whitespace-cleanup)
+      (save-buffer))
+
     (evil-leader/set-leader "SPC")
     (evil-leader/set-key
       "'" 'linum-mode
       "," 'other-window
       ";" 'linum-relative-toggle
       "SPC" 'counsel-M-x
-      "a" 'counsel-projectile-ag
+      "a" 'ag
       "b" 'counsel-switch-buffer
       "d d" 'neotree-projectile-action
       "d o" 'delete-other-windows
@@ -116,7 +115,6 @@
       "q" 'delete-window
       "r" 'ranger
       "s" 'my/remove-trailing-whitespace-and-sabe
-      "t g" 'golden-ratio-mode
       "v" 'split-window-right
       )))
 
@@ -133,13 +131,6 @@
   :ensure t
   :config
   (global-evil-surround-mode 1))
-
-(eval-after-load 'shell
-  (progn
-    (evil-define-key 'normal shell-mode-map
-      (kbd "C-r") 'shutils-history-ivy/show-history)
-    (evil-define-key 'insert shell-mode-map
-      (kbd "C-r") 'shutils-history-ivy/show-history)))
 
 (add-to-list 'load-path (concat user-emacs-directory "config"))
 (require 'my-ibuffer)
@@ -187,6 +178,7 @@
   :after projectile ivy)
 
 (use-package magit
+  :quelpa (magit :repo "magit/magit" :fetcher github)
   :ensure t
   :config (progn
             (setq magit-display-buffer-function
@@ -216,6 +208,10 @@
   :ensure t
   :config (progn
             (ivy-mode 1)
+            (define-key ivy-minibuffer-map (kbd "C-h") 'ivy-alt-done)
+            (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
+            (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+            (setq ivy-on-del-error-function #'ignore)
             (setq ivy-initial-inputs-alist ())
             (setq ivy-re-builders-alist
                   '((swiper . ivy--regex-plus)
@@ -226,11 +222,6 @@
 (use-package flyspell-correct-ivy
   :ensure t
   :init (setq flyspell-correct-interface #'flyspell-correct-ivy))
-
-(use-package flx
-  :ensure t)
-(use-package flx-ido
-  :ensure t)
 
 (use-package evil-commentary
   :ensure t
@@ -251,7 +242,10 @@
   :ensure t)
 (use-package clojure-mode-extra-font-locking
   :ensure t)
+(use-package queue
+  :ensure t)
 (use-package cider
+  :after queue
   :ensure t)
 (use-package clomacs
   :ensure t)
@@ -301,12 +295,9 @@
   :ensure t
   :after ivy
   :config (progn
-            ;; (setq ivy-display-function #'ivy-posframe-display-at-window-center)
-            ;; (ivy-posframe-enable)
-
             (push '(counsel-M-x . ivy-posframe-display-at-window-bottom-left) ivy-display-functions-alist)
             (push '(complete-symbol . ivy-posframe-display-at-point) ivy-display-functions-alist)
-            (push '(swiper . ivy-posframe-display-at-point) ivy-display-functions-alist)
+            (push '(swiper . ivy-posframe-display-at-window-bottom-left) ivy-display-functions-alist)
             (ivy-posframe-enable)))
 
 (use-package company-posframe
@@ -362,38 +353,16 @@
 (use-package buffer-move
   :ensure t)
 
+(use-package spacemacs-theme
+  :ensure t)
 (use-package spaceline
   :ensure t
   :config (progn
             (require 'spaceline)
             (require 'spaceline-config)
+            (spaceline-toggle-minor-modes-off)
             (spaceline-emacs-theme)
             (setq spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)))
-
-(use-package golden-ratio
-  :ensure t
-  :config (progn
-            (setq golden-ratio-extra-commands
-                  (append golden-ratio-extra-commands
-                          '(evil-window-left
-                            evil-window-right
-                            evil-window-up
-                            evil-window-down
-                            buf-move-left
-                            buf-move-right
-                            buf-move-up
-                            buf-move-down
-                            window-number-select
-                            select-window
-                            select-window-1
-                            select-window-2
-                            select-window-3
-                            select-window-4
-                            select-window-5
-                            select-window-6
-                            select-window-7
-                            select-window-8
-                            select-window-9)))))
 
 (use-package linum-relative
   :ensure t)

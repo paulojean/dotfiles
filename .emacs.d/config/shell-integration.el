@@ -27,7 +27,16 @@
 
 (progn
   (require 'bash-completion)
-  (bash-completion-setup)
-  )
+  (bash-completion-setup))
+
+(eval-after-load 'shell
+  (progn
+    (evil-define-key 'normal shell-mode-map
+      (kbd "C-r") 'shutils-history-ivy/show-history)
+    (evil-define-key 'insert shell-mode-map
+      (kbd "C-r") 'shutils-history-ivy/show-history)
+    (evil-define-key 'normal shell-mode-map
+      (kbd "TAB") 'switch-to-prev-buffer)))
+
 
 ;;; shell-integration.el ends here

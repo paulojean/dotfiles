@@ -13,7 +13,13 @@
 (setq initial-scratch-message "")
 (setq default-directory "~")
 
-(defun my/magit-kill-buffers ()
+(defun my/kill-buffers-magit ()
   "Restore previous window configuration and cleanup buffers."
   (interactive)
   (kill-matching-buffers "^magit*:*" :no-ask t))
+
+(defun my/kill-buffers-with-prefix (prefix)
+  (interactive "sPrefix name:")
+  (kill-matching-buffers (format "\*%s*:*" prefix) :no-ask t))
+
+(define-key evil-normal-state-map (kbd "SPC k b") 'my/kill-buffers-with-prefix)
