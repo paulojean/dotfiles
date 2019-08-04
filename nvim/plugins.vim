@@ -1,8 +1,10 @@
 " deoplete tweaking
-source $HOME/.config/nvim/plugins/deoplete.vim
+" source $HOME/.config/nvim/plugins/deoplete.vim
+
+" source $HOME/.config/nvim/plugins/iron_nvimux.vim
 
 " acid tweaking
-source $HOME/.config/nvim/plugins/acid.vim
+" source $HOME/.config/nvim/plugins/acid.vim
 
 source $HOME/.config/nvim/plugins/vimagit.vim
 
@@ -24,11 +26,9 @@ let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_enable_airline_tabline = 1
 let g:webdevicons_enable_airline_statusline = 1
 
-"let g:gutentags_ctags_tagfile = ".tags"
+" let g:signify_vcs_list = [ 'git' ]
 
-let g:signify_vcs_list = [ 'git' ]
-
-let g:python3_host_prog = '/usr/bin/python3'
+" let g:python3_host_prog = '/usr/local/bin/python3'
 
 let g:indentLine_char = '│'
 let g:indentLine_first_char = '│'
@@ -49,7 +49,7 @@ endif
 
 " ack.vim
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+  let g:ackprg = 'ag --vimgrep -s'
 endif
 
 " nvim-completion-manager
@@ -66,6 +66,3 @@ command! -bang -nargs=* Ag
 "let g:airline#extensions#ale#enabled = 1
 "let g:ale_lint_on_text_changed="never"
 "let g:ale_lint_on_insert_leave=1
-
-let g:elm_setup_keybindings = 0
-let g:elm_format_autosave = 1

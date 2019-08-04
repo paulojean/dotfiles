@@ -38,16 +38,23 @@ nnoremap <c-h> <c-w><c-h>
 " A-r paste from buffer on terminal in insert mode
 tnoremap <expr> <A-r> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
+" Move cursor by visual lines
+noremap <silent> k gk
+noremap <silent> j gj
+noremap <silent> 0 g0
+noremap <silent> $ g$
+
 " undotree
 nnoremap tt :UndotreeToggle<cr>
 
 " ack.vim
 cnoreabbrev Ack Ack!
-noremap <silent><C-F> :Ag<CR>
+noremap <silent><C-a> :Ag<CR>
 nnoremap <Leader>a :Ag<space>
 nnoremap <Leader>z :Ack --literal "<c-R><c-W>"<CR>
 
-nnoremap <F3> :NumbersToggle<CR>
+nnoremap <space>a :ALEToggle<CR>
+nnoremap <space>n :NumbersToggle<CR>
 
 nnoremap <Leader>sp :source %<CR>
 
@@ -56,3 +63,8 @@ nnoremap <Leader>sq :SortQuire<CR>
 nnoremap <Leader>tt :tab sp<cr>:call contabs#project#select()<cr>
 nnoremap <silent> <c-p> :call contabs#project#select()<CR>
 nnoremap <silent> <c-b> :call contabs#buffer#select()<CR>
+nnoremap <Leader>fj :%!jq '.'<CR>
+
+nnoremap <Leader>n :set invnumber invrelativenumber<CR>
+
+" nnoremap / :LinesWithPreview<CR>
