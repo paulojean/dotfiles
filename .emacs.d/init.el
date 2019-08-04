@@ -13,7 +13,7 @@
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (evil-org tmux-pane names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((elisp-lint-indent-specs
@@ -60,18 +60,40 @@
 (use-package quelpa
   :ensure t)
 
-;; evil sutffs
+;;; evil sutffs
+;; next two imports are needed to make evil's import to work.
+;; goto-chg is refering to a undo-tree version that does not exist.
+;; It should be possible to remove them in the future.
+(use-package undo-tree
+  :ensure t)
+(use-package goto-chg
+  :ensure t)
+
+(use-package key-chord
+  :ensure t
+  :config (key-chord-mode 1))
 (use-package evil
   :ensure t
   :init (progn
           (require 'evil-search)
           (evil-select-search-module 'evil-search-module 'evil-search)
 
+          (setq evil-want-C-i-jump nil)
+          (setq evil-want-C-u-scroll t)
           (setq evil-want-integration t)
-          (setq evil-want-keybinding nil)
+          (setq evil-want-keybinding nil))
 
-          (define-key evil-normal-state-map (kbd "<escape>") 'evil-ex-nohighlight))
-  :config (evil-mode 1))
+  :config (progn
+            (evil-mode 1)
+
+            (defun my/evil-delete (orig-fn beg end &optional type _ &rest args)
+              (apply orig-fn beg end type ?_ args))
+            (advice-add 'evil-delete :around 'my/evil-delete)
+
+            (setq evil-kill-on-visual-paste nil)
+            (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+            (key-chord-define evil-insert-state-map "jk" 'evil-execute-in-normal-state)
+            (define-key evil-normal-state-map (kbd "<escape>") 'evil-ex-nohighlight)))
 
 (use-package evil-collection
   :after evil
@@ -86,11 +108,6 @@
   (global-evil-leader-mode)
   :config
   (progn
-    (defun my/remove-trailing-whitespace-and-sabe ()
-      (interactive)
-      (whitespace-cleanup)
-      (save-buffer))
-
     (evil-leader/set-leader "SPC")
     (evil-leader/set-key
       "'" 'linum-mode
@@ -114,7 +131,6 @@
       "q" 'delete-window
       "q" 'delete-window
       "r" 'ranger
-      "s" 'my/remove-trailing-whitespace-and-sabe
       "v" 'split-window-right
       )))
 
@@ -207,10 +223,14 @@
 (use-package ivy
   :ensure t
   :config (progn
+            (defun my-ivy/alt-done ()
+              (interactive)
+              (ivy-alt-done t))
+
             (ivy-mode 1)
-            (define-key ivy-minibuffer-map (kbd "C-h") 'ivy-alt-done)
-            (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
-            (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+            (define-key ivy-minibuffer-map (kbd "C-h") 'my-ivy/alt-done)
+            (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-line)
+            (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-line)
             (setq ivy-on-del-error-function #'ignore)
             (setq ivy-initial-inputs-alist ())
             (setq ivy-re-builders-alist
@@ -234,6 +254,7 @@
 (use-package ag
   :ensure t
   :config (progn
+            (setq ag-reuse-buffers t)
             (setq ag-highlight-search t)))
 
 (use-package paredit
@@ -242,11 +263,13 @@
   :ensure t)
 (use-package clojure-mode-extra-font-locking
   :ensure t)
+
 (use-package queue
   :ensure t)
 (use-package cider
   :after queue
   :ensure t)
+
 (use-package clomacs
   :ensure t)
 (use-package yaml-mode
@@ -268,14 +291,13 @@
                       (company-mode)
                       (flycheck-mode)
                       (turn-on-purescript-indentation)))))
-
-(use-package lua-mode
-  :ensure t)
-
 (use-package psci
   :ensure t
   :init (progn
           (add-hook 'purescript-mode-hook 'inferior-psci-mode)))
+
+(use-package lua-mode
+  :ensure t)
 
 (use-package feature-mode
   :ensure t
@@ -284,27 +306,39 @@
 (use-package markdown-mode
   :ensure t)
 
+(use-package groovy-mode
+  :ensure t)
+
+(use-package dockerfile-mode
+  :ensure t)
+
 (use-package company
   :ensure t
   :config (progn
-            (add-hook 'after-init-hook 'global-company-mode)))
+            (add-hook 'after-init-hook 'global-company-mode)
+            (define-key company-active-map (kbd "RET") #'company-complete-selection)
+            (define-key company-active-map (kbd "C-n") #'company-select-next)
+            (define-key company-active-map (kbd "C-p") #'company-select-previous)))
 
-(use-package posframe
-  :ensure t)
-(use-package ivy-posframe
+(use-package comment-tags
   :ensure t
-  :after ivy
-  :config (progn
-            (push '(counsel-M-x . ivy-posframe-display-at-window-bottom-left) ivy-display-functions-alist)
-            (push '(complete-symbol . ivy-posframe-display-at-point) ivy-display-functions-alist)
-            (push '(swiper . ivy-posframe-display-at-window-bottom-left) ivy-display-functions-alist)
-            (ivy-posframe-enable)))
-
-(use-package company-posframe
-  :ensure t
-  :after company posframe
-  :config (progn
-            (company-posframe-mode 1)))
+  :init (progn
+          (autoload 'comment-tags-mode "comment-tags-mode")
+          (setq comment-tags-keymap-prefix (kbd "C-c c"))
+          (with-eval-after-load "comment-tags"
+            (setq comment-tags-keyword-faces
+                  `(("TODO" . ,(list :weight 'bold :foreground "#28ABE3"))
+                    ("FIXME" . ,(list :weight 'bold :foreground "#DB3340"))
+                    ("BUG" . ,(list :weight 'bold :foreground "#DB3340"))
+                    ("HACK" . ,(list :weight 'bold :foreground "#E8B71A"))
+                    ("INFO" . ,(list :weight 'bold :foreground "#F7EAC8"))
+                    ("DONE" . ,(list :weight 'bold :foreground "#1FDA9A")))))
+          (setq comment-tags-comment-start-only t
+                comment-tags-require-colon nil
+                comment-tags-case-sensitive nil
+                comment-tags-show-faces t
+                comment-tags-lighter nil)
+          (add-hook 'prog-mode-hook 'comment-tags-mode)))
 
 (use-package flycheck
   :ensure t
@@ -334,6 +368,11 @@
   :after flycheck
   :config
   (flycheck-checkbashisms-setup))
+
+(use-package flx
+  :ensure t)
+(use-package flx-ido
+  :ensure t)
 
 (use-package ido-completing-read+
   :ensure t)
@@ -384,13 +423,10 @@
   :init
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-(use-package google-translate
+(use-package tmux-pane
   :ensure t
-  :init (progn
-          (require 'google-translate)
-          (require 'google-translate-default-ui)
-          (global-set-key "\C-ct" 'google-translate-at-point)
-          (global-set-key "\C-cT" 'google-translate-query-translate)))
+  :config (tmux-pane-mode 1))
+
 
 (add-to-list 'load-path (concat user-emacs-directory "vendor"))
 

@@ -18,6 +18,8 @@
 ;; no bell
 (setq ring-bell-function 'ignore)
 
+(set-face-attribute 'lazy-highlight nil :foreground "#262626" :background "#86dc2f")
+
 (load-theme 'spacemacs-dark t)
 
 (defun on-frame-open (frame)

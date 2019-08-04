@@ -18,13 +18,6 @@
 ;; Highlight current line
 (global-hl-line-mode 1)
 
-;; Interactive search key bindings. By default, C-s runs
-;; isearch-forward, so this swaps the bindings.
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
-
 ;; Don't use hard tabs
 (setq-default indent-tabs-mode nil)
 
@@ -93,6 +86,13 @@
   (define-key evil-normal-state-map (kbd "SPC c p") 'my-pbpaste)
   (define-key evil-visual-state-map (kbd "SPC c c") 'my-pbcut))
 
+(defun my/remove-trailing-whitespace-and-save ()
+  (interactive)
+  (whitespace-cleanup)
+  (save-buffer))
+(global-unset-key (kbd "C-s"))
+(define-key evil-normal-state-map (kbd "C-s") 'my/remove-trailing-whitespace-and-save)
+
 (defun my-flyspell/clean-overlays ()
   "Remove all overlays displayed by flyspell."
   (interactive)
@@ -107,3 +107,5 @@
 (setq ispell-program-name "aspell")
 
 (setq electric-indent-mode nil)
+
+(setq standard-indent 2)

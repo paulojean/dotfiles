@@ -43,17 +43,6 @@
 ;; open now
 (setq ido-use-virtual-buffers t)
 
-(setq helm-recentf-fuzzy-match t)
-(setq helm-buffers-fuzzy-matching t)
-(setq helm-buffers-fuzzy-match t)
-(setq helm-buffers-fuzzy-matching t)
-(setq helm-M-x-fuzzy-match t)
-(setq helm-imenu-fuzzy-match t)
-(setq helm-apropos-fuzzy-match t)
-(setq helm-lisp-fuzzy-completion t)
-(setq helm-session-fuzzy-match t)
-(setq helm-etags-fuzzy-match t)
-
 ;; projectile everywhere!
 (projectile-global-mode)
 
@@ -63,22 +52,10 @@
 (framecs/start-framecs)
 
 (progn
-  (global-unset-key (kbd "C-l"))
-  (global-unset-key (kbd "C-h"))
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "C-S-k") 'buf-move-up)
-  (define-key evil-normal-state-map (kbd "C-S-j") 'buf-move-down)
-  (define-key evil-normal-state-map (kbd "C-S-h") 'buf-move-left)
-  (define-key evil-normal-state-map (kbd "C-S-l") 'buf-move-right)
-
   (define-key evil-normal-state-map (kbd "C-w k") 'buf-move-up)
   (define-key evil-normal-state-map (kbd "C-w j") 'buf-move-down)
   (define-key evil-normal-state-map (kbd "C-w h") 'buf-move-left)
-  (define-key evil-normal-state-map (kbd "C-w l") 'buf-move-right)
-  )
+  (define-key evil-normal-state-map (kbd "C-w l") 'buf-move-right))
 
 (define-key evil-normal-state-map (kbd "SPC f c") 'framecs/new-frame)
 (define-key evil-normal-state-map (kbd "SPC f d") 'framecs/delete-frame)
@@ -102,6 +79,21 @@
   (define-key evil-normal-state-map (kbd "m m") 'magit)
   (define-key evil-normal-state-map (kbd "m d") 'magit-dispatch)
   (define-key evil-normal-state-map (kbd "m f") 'magit-file-dispatch)
+  )
+
+(progn
+  (defun my/scroll-up ()
+    (interactive)
+    (evil-scroll-up nil)
+    (evil-scroll-line-to-center (line-number-at-pos)))
+
+  (defun my/scroll-down ()
+    (interactive)
+    (evil-scroll-down nil)
+    (evil-scroll-line-to-center (line-number-at-pos)))
+
+  (define-key evil-normal-state-map (kbd "C-b") 'my/scroll-up)
+  (define-key evil-normal-state-map (kbd "C-d") 'my/scroll-down)
   )
 
 (define-key evil-normal-state-map (kbd "/") 'swiper)

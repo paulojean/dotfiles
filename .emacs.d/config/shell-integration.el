@@ -23,11 +23,8 @@
 (use-package bash-completion
   :ensure t
   :quelpa
-  (bash-completion :repo "szermatt/emacs-bash-completion" :fetcher github))
-
-(progn
-  (require 'bash-completion)
-  (bash-completion-setup))
+  (bash-completion :repo "szermatt/emacs-bash-completion" :fetcher github)
+  :init (bash-completion-setup))
 
 (eval-after-load 'shell
   (progn
