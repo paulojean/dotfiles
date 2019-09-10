@@ -1,1 +1,13 @@
+*.elc
+.cache/
+.cask/
+.emacs.d/bookmarks
+.emacs.d/forge-database.sqlite
+.emacs.d/recentf
+.emacs.d/transient
+.emacs.d/url
+.netrwhist
 .tags
+eshell/
+fonts/
+projectile.cache
