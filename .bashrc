@@ -5,6 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 export HISTCONTROL=ignoreboth:erasedups
+export HISTSIZE=50000
+export HISTFILESIZE=500000
+export HISTIGNORE='?:??:git co -:cd -:git ??:git stash:git stash pop'
 export LANG=en_US.UTF-8
 
 export HOME=~
@@ -13,51 +16,61 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$PATH:$HOME/.gem/ruby/2.4.0/bin"
 export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"
-export ANDROID_HOME=/opt/android-sdk
 export PATH="$PATH:$ANDROID_HOME/tools/emulator"
 export PATH="$PATH:$ANDROID_HOME/tools"
 export PATH="$PATH:$ANDROID_HOME/platform-tools"
+export PATH="$PATH:~/Library/Python/2.7/bin"
 export PATH="~/.config/tlp:$PATH"
 export PATH="~/watchman:$PATH"
 export PATH="$PATH:~/proj"
-export KAFKA_HOME="$HOME/.bin/kafka_2.12-0.10.2.1"
-export ANDROID_SDK_HOME=/opt/android-sdk
-export VISUAL="nvim"
-export EDITOR="nvim"
-export GOPATH="/home/paulo/.go"
+export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH"
+export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+export KAFKA_HOME="$HOME/.bin/kafka_2.11-2.0.0"
+export GOPATH=~/.go
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/"
+PATH=$PATH:$JAVA_HOME/bin
 export LEIN_SUPPRESS_USER_LEVEL_REPO_WARNINGS="TRUE"
 export PATH="$PATH:$GOPATH/bin"
-if [ -e /usr/share/terminfo/x/xterm-256color ]; then
-  export TERM='xterm-256color'
-else
-  export TERM='xterm-color'
-fi
 
+__clear_screen__() {
+  clear && printf '\e[3J'
+}
 
-if [[ -z "$(ps -aux | grep 'Caps_Lock Escape' | grep xcape)" ]];
-then
-  setxkbmap -option 'caps:ctrl_modifier'
-  xcape -e 'Caps_Lock=Escape'
-fi
+export TERM='xterm-256color'
+export EDITOR='emacsclient --alternate-editor "" --tty'
+
+bind -x '"\C-l":__clear_screen__'
+bind 'set show-mode-in-prompt on'
 
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 [ -f ~/.bash_helpers ] && source ~/.bash_helpers
 [ -f ~/.bash_aws ] && source ~/.bash_aws
 [ -f ~/.bash_credentials ] && source ~/.bash_credentials
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.klarnarc ] && source ~/.klarnarc
 [ -f ~/.suggestions.sh ] && source ~/.suggestions.sh
-[ -f ~/.nurc ] && source ~/.nurc
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+[ -f /usr/local/bin/aws_completer ] && complete -C '/usr/local/bin/aws_completer' aws
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -f ~/.font ] && source ~/.fonts/*.sh
 
-__clear_screen__() {
-  clear && printf '\e[3J'
-}
-bind -x '"\C-l":__clear_screen__'
+export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
 
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+FZF_CTRL_T_OPTS="--preview-window wrap --preview '
+if [[ -f {} ]]; then
+    file --mime {} | grep -q \"text\/.*;\" && bat --color \"always\" {} || (tput setaf 1; file --mime {})
+elif [[ -d {} ]]; then
+    exa -l --color always {}
+else;
+    tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
+fi'"
 
 parse_git_branch() {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
 PROMPT_DIRTRIM=3
-PS1='\[\e[1;37m\][\w]\[\e[0m\]\[\e[0;36m\]\[\e[0;93m\]$(parse_git_branch)\[\e[0m\]\$ '
+
+PS1='\[\e[1;37m\][\w]\[\e[0m\]\[\e[0;36m\]\[\e[0;93m\]$(parse_git_branch)\[\e[0m\]\n~> '

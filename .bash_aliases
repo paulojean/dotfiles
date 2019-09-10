@@ -1,13 +1,17 @@
-alias sound-menu=alsamixer
-alias ls='ls --color=auto'
-alias la='ls --color=auto -A'
-alias ll='ls --color=auto -lA'
+# -*- sh -*-
+
+alias ls='exa --group-directories-first'
+alias ll='exa -la --group-directories-first'
+alias lt='exa -lT --git-ignore'
 alias adbsi="adb shell input text"
 alias ipup="sudo ip link set wlp2s0 up"
 alias g="git"
-alias vim="nvim"
-alias vi="nvim"
-alias n="nvim"
+alias vi=$(which nvim)
+alias n=$(which nvim)
+alias vim='emacsclient --alternate-editor "" --tty'
+alias e='emacsclient --alternate-editor "" --tty'
 alias die="shutdown now"
-alias tmux="tmux -2"
-alias tmuxa="tmux -2 attach -t"
+alias fuck='sudo "$SHELL" -c "$(history -p !!)"'
+alias dev='tmux -2 new-session -A -s stuffs'
+alias pipup='pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U'
+alias pipup3='pip3.7 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3.7 install -U'
