@@ -8,6 +8,8 @@
 ;; No need for ~ files when editing
 (setq create-lockfiles nil)
 
+(setq vc-follow-symlinks t)
+
 ;; Go straight to scratch buffer on startup
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")

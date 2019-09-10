@@ -47,12 +47,6 @@
        (kbd "x") 'ibuffer-do-kill-on-deletion-marks
 
        ;; immediate operations
-       (kbd "n") 'ibuffer-forward-line
-       (kbd "SPC") 'forward-line
-       (kbd "p") 'ibuffer-backward-line
-       (kbd "M-}") 'ibuffer-forward-next-marked
-       (kbd "M-{") 'ibuffer-backwards-next-marked
-       (kbd "g") 'ibuffer-update
        "`" 'ibuffer-switch-format
        "-" 'ibuffer-add-to-tmp-hide
        "+" 'ibuffer-add-to-tmp-show

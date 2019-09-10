@@ -13,7 +13,7 @@
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (evil-org tmux-pane names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (company-box pfuture ace-window f slack oauth2 websocket request circe emojify ht command-log-mode eyebrowse org-bullets forge ghub treepy closql emacsql-sqlite emacsql evil-org names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((elisp-lint-indent-specs
@@ -66,6 +66,7 @@
 ;; It should be possible to remove them in the future.
 (use-package undo-tree
   :ensure t)
+
 (use-package goto-chg
   :ensure t)
 
@@ -90,7 +91,12 @@
               (apply orig-fn beg end type ?_ args))
             (advice-add 'evil-delete :around 'my/evil-delete)
 
+            (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
             (setq evil-kill-on-visual-paste nil)
+            (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+            (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+            (define-key evil-visual-state-map (kbd "j") 'evil-next-visual-line)
+            (define-key evil-visual-state-map (kbd "k") 'evil-previous-visual-line)
             (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
             (key-chord-define evil-insert-state-map "jk" 'evil-execute-in-normal-state)
             (define-key evil-normal-state-map (kbd "<escape>") 'evil-ex-nohighlight)))
@@ -131,6 +137,7 @@
       "q" 'delete-window
       "q" 'delete-window
       "r" 'ranger
+      "u v" 'undo-tree-visualize
       "v" 'split-window-right
       )))
 
@@ -210,15 +217,50 @@
                                 nil
                               '(display-buffer-same-window)))))))
 
+(use-package forge
+  :ensure t
+  :after magit)
+
 (use-package evil-magit
   :ensure t
   :after magit
   :init (progn
-           (setq evil-magit-want-horizontal-movement t)))
+           (setq evil-magit-want-horizontal-movement t)
+           (evil-define-key 'normal git-rebase-mode-map
+             (kbd "K") 'git-rebase-move-line-up
+             (kbd "J") 'git-rebase-move-line-down
+             (kbd "0") 'evil-beginning-of-line)))
 
 (if (eq system-type 'darwin)
     (use-package exec-path-from-shell
       :ensure t))
+
+(use-package evil-org
+  :ensure t
+  :after org
+  :config
+  (progn
+    ;; Use syntax highlighting in source blocks while editing
+    (setq org-src-fontify-natively t)
+
+    ;; Record the time that a todo was archived
+    (setq org-log-done 'time)
+
+    (setq org-src-window-setup 'current-window)
+
+    (add-hook 'org-mode-hook 'evil-org-mode)
+    (add-hook 'evil-org-mode-hook
+              (lambda ()
+                (evil-org-set-key-theme)))
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys)))
+
+(use-package org-bullets
+  :ensure t
+  :after org
+  :config (progn
+            (add-hook 'org-mode-hook
+                      (lambda () (org-bullets-mode 1)))))
 
 (use-package ivy
   :ensure t
@@ -228,7 +270,7 @@
               (ivy-alt-done t))
 
             (ivy-mode 1)
-            (define-key ivy-minibuffer-map (kbd "C-h") 'my-ivy/alt-done)
+            (define-key ivy-minibuffer-map (kbd "C-t") 'my-ivy/alt-done)
             (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-line)
             (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-line)
             (setq ivy-on-del-error-function #'ignore)
@@ -258,7 +300,19 @@
             (setq ag-highlight-search t)))
 
 (use-package paredit
-  :ensure t)
+  :ensure t
+  :after evil
+  :config (progn
+            (add-hook 'prog-mode-hook #'enable-paredit-mode)
+            (define-key evil-normal-state-map (kbd ">") nil)
+            (define-key evil-normal-state-map (kbd "<") nil)
+            (define-key evil-normal-state-map (kbd "> >") 'evil-shift-right-line)
+            (define-key evil-normal-state-map (kbd "< <") 'evil-shift-left-line)
+            (define-key evil-normal-state-map (kbd "> )") 'paredit-forward-slurp-sexp)
+            (define-key evil-normal-state-map (kbd "< (") 'paredit-backward-slurp-sexp)
+            (define-key evil-normal-state-map (kbd "> (") 'paredit-backward-barf-sexp)
+            (define-key evil-normal-state-map (kbd "< )") 'paredit-forward-barf-sexp)))
+
 (use-package clojure-mode
   :ensure t)
 (use-package clojure-mode-extra-font-locking
@@ -268,7 +322,8 @@
   :ensure t)
 (use-package cider
   :after queue
-  :ensure t)
+  :ensure t
+  :config (add-to-list 'cider-test-defining-forms "defflow"))
 
 (use-package clomacs
   :ensure t)
@@ -317,8 +372,15 @@
   :config (progn
             (add-hook 'after-init-hook 'global-company-mode)
             (define-key company-active-map (kbd "RET") #'company-complete-selection)
+            (define-key company-active-map (kbd "M-n") nil)
+            (define-key company-active-map (kbd "M-p") nil)
             (define-key company-active-map (kbd "C-n") #'company-select-next)
             (define-key company-active-map (kbd "C-p") #'company-select-previous)))
+
+(use-package company-box
+  :ensure t
+  :after company
+  :hook (company-mode . company-box-mode))
 
 (use-package comment-tags
   :ensure t
@@ -384,7 +446,7 @@
   :ensure t
   :config (progn
             (ranger-override-dired-mode t)
-            (setq ranger-parent-depth 3)))
+            (setq ranger-parent-depth 2)))
 
 (use-package neotree
   :ensure t)
@@ -412,6 +474,8 @@
             (require 'which-key)
             (which-key-mode)))
 
+(use-package command-log-mode :ensure t)
+
 (use-package all-the-icons
   :ensure t
   :config (progn
@@ -423,10 +487,37 @@
   :init
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
-(use-package tmux-pane
+(use-package custom-tmux-pane
   :ensure t
-  :config (tmux-pane-mode 1))
+  :quelpa (tmux-pane :repo "paulojean/emacs-tmux-pane" :fetcher github)
+  :init (progn
+          (require 'tmux-pane)
+          (tmux-pane-mode 1)
+          (setq tmux-pane-terminal-folder-fn #'projectile-project-root
+                tmux-pane-horizontal-percent 25)
+          (evil-define-key 'normal tmux-pane-mode-map
+            (kbd "t h") 'tmux-pane-toggle-horizontal
+            (kbd "t v") 'tmux-pane-toggle-vertical
+            (kbd "t q") 'tmux-pane-close
+            (kbd "t r") 'tmux-pane-rerun)))
 
+(use-package eyebrowse
+  :ensure t
+  :after evil
+  :config (progn
+            (eyebrowse-mode t)
+            (setq eyebrowse-wrap-around t)
+            (setq eyebrowse-new-workspace 'projectile-switch-project)
+            (define-key evil-normal-state-map (kbd "C-f") nil)
+            (evil-define-key 'normal eyebrowse-mode-map
+              (kbd "C-f c") 'eyebrowse-create-window-config
+              (kbd "C-f l") 'eyebrowse-next-window-config
+              (kbd "C-f h") 'eyebrowse-prev-window-config
+              (kbd "C-f '") 'eyebrowse-last-window-config
+              (kbd "C-f ,") 'eyebrowse-rename-window-config
+              (kbd "C-f q") 'eyebrowse-close-window-config
+              (kbd "C-f f") 'eyebrowse-switch-to-window-config
+              (kbd "C-f 0") 'eyebrowse-switch-to-window-config-0)))
 
 (add-to-list 'load-path (concat user-emacs-directory "vendor"))
 

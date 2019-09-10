@@ -1,9 +1,5 @@
 ;; Customizations relating to editing a buffer.
 
-;; Key binding to use "hippie expand" for text autocompletion
-;; http://www.emacswiki.org/emacs/HippieExpand
-(global-set-key (kbd "C-;") 'hippie-expand)
-
 ;; Lisp-friendly hippie expand
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
@@ -37,13 +33,6 @@
 (setq auto-save-default nil)
 
 (require 'iso-transl)
-
-;; comments
-(defun toggle-comment-on-line ()
-  "comment or uncomment current line"
-  (interactive)
-  (comment-or-uncomment-region (line-beginning-position) (line-end-position)))
-(global-set-key (kbd "C-;") 'toggle-comment-on-line)
 
 ;; use 2 spaces for tabs
 (defun die-tabs ()
@@ -79,8 +68,6 @@
     (pbcopy)
     (delete-region (region-beginning) (region-end)))
 
-  (require 'evil)
-
   (define-key evil-visual-state-map (kbd "SPC c y") 'my-pbcopy)
   (define-key evil-visual-state-map (kbd "SPC c p") 'my-pbpaste)
   (define-key evil-normal-state-map (kbd "SPC c p") 'my-pbpaste)
@@ -109,3 +96,34 @@
 (setq electric-indent-mode nil)
 
 (setq standard-indent 2)
+
+(add-hook 'org-mode-hook
+          (lambda ()
+
+            (evil-define-key 'normal org-mode-map
+
+              (kbd "-") 'org-ctrl-c-minus
+
+              (kbd "C-t") nil
+              (kbd "C-t c") 'org-table-create
+              (kbd "C-t i c") 'org-table-insert-column
+              (kbd "C-t i h") 'org-table-insert-hline
+              (kbd "C-t k r") 'org-table-kill-row
+              (kbd "C-t k c") 'org-table-delete-column
+              (kbd "C-t m h") 'org-table-move-column-left
+              (kbd "C-t m l") 'org-table-move-column-right
+              (kbd "C-t m k") 'org-table-move-row-up
+              (kbd "C-t m j") 'org-table-move-row-down
+              (kbd "C-t a") 'org-table-align
+
+              (kbd ";") 'org-cycle
+              (kbd "\"") 'org-shifttab
+
+              (kbd "g k") 'org-move-subtree-up
+              (kbd "g j") 'org-move-subtree-down
+              (kbd "K") nil
+              (kbd "K") 'org-move-item-up
+              (kbd "J") nil
+              (kbd "J") 'org-move-item-down
+              )
+            ))

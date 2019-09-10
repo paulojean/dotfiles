@@ -10,7 +10,7 @@
   (scroll-bar-mode -1))
 
 (blink-cursor-mode 0)
-(setq-default tab-width 4)
+(setq-default tab-width 2)
 
 ;; full path in title bar
 (setq-default frame-title-format "%b (%f)")

@@ -2,9 +2,6 @@
 ;; Clojure
 ;;;;
 
-;; Enable paredit for Clojure
-(add-hook 'clojure-mode-hook 'enable-paredit-mode)
-
 ;; This is useful for working with camel-case tokens, like names of
 ;; Java classes (e.g. JavaClassName)
 (add-hook 'clojure-mode-hook 'subword-mode)
@@ -46,9 +43,6 @@
 ;; Wrap when navigating history.
 (setq cider-repl-wrap-history t)
 
-;; enable paredit in your REPL
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
-
 ;; Use clojure mode for other extensions
 (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
@@ -57,14 +51,55 @@
 
 (setq cider-edit-jack-in-command t)
 
-(add-hook 'cider-repl-mode
-          (define-key cider-repl-mode-map (kbd "C-c l") 'cider-repl-clear-buffer))
+(defun my/clojure-hook (-mode-map)
+  (when -mode-map
+    (which-key-add-key-based-replacements (kbd "C-c l") "cider clear repl buffer.")
+    (evil-define-key 'normal -mode-map
+      (kbd "C-c l") '(lambda () (interactive) (cider-find-and-clear-repl-output t))
+      (kbd "C-c r") 'cider-inspect-last-result
+      (kbd "C-p") 'cider-repl-backward-input
+      (kbd "C-n") 'cider-repl-forward-input)
 
-(eval-after-load "evil-maps"
-  (dolist (map '(evil-motion-state-map
-                 evil-insert-state-map
-                 evil-emacs-state-map))
-    (define-key (eval map) "'" nil)))
+    (evil-define-key 'insert -mode-map
+      (kbd "TAB") 'cider-repl-tab))
+
+  (modify-syntax-entry ?+ "w")
+  (modify-syntax-entry ?- "w")
+  (modify-syntax-entry ?_ "w")
+  (modify-syntax-entry ?/ "w")
+  (modify-syntax-entry ?: "w")
+  (modify-syntax-entry ?> "w")
+  (modify-syntax-entry ?< "w")
+  (modify-syntax-entry ?? "w")
+  (modify-syntax-entry ?! "w")
+  (modify-syntax-entry ?. "w")
+  )
+
+(add-hook 'cider-clojure-interaction-mode-hook
+          (lambda ()
+            (evil-define-key 'insert cider-clojure-interaction-mode-map
+              (kbd "S-RET") 'cider-eval-print-last-sexp)
+
+            (evil-define-key 'normal cider-clojure-interaction-mode-map
+              (kbd "S-RET") 'cider-eval-print-last-sexp)))
+
+(add-hook 'cider-repl-mode-hook
+          (lambda ()
+            (paredit-mode)
+            (my/clojure-hook cider-repl-mode-map)))
+
+(add-hook 'cider-mode-hook
+          (lambda ()
+            (my/clojure-hook cider-mode-map)))
+
+(add-hook 'cider-browse-ns-mode-hook
+          (lambda ()
+            (evil-define-key 'normal cider-browse-ns-mode-map
+              (kbd "RET") 'cider-browse-ns-operate-at-point
+              (kbd "^") 'cider-browse-ns-all
+              (kbd "d") 'cider-browse-ns-doc-at-point
+              (kbd "q") 'cider-popup-buffer-quit-function
+              (kbd "s") 'cider-browse-ns-find-at-point)))
 
 (defun my/cider-insert-last-sexp-in-repl ()
   (interactive)
@@ -72,30 +107,16 @@
 
 (add-hook 'clojure-mode-hook
           (lambda ()
-            (require 'evil)
-            (define-key evil-normal-state-map (kbd "' '") 'cider-jack-in)
-            (define-key evil-normal-state-map (kbd "' s s") 'cider-switch-to-repl-buffer)
-            (define-key evil-normal-state-map (kbd "' s n") 'cider-repl-set-ns)
-            (define-key evil-normal-state-map (kbd "' e") 'cider-eval-last-sexp)
-            (define-key evil-normal-state-map (kbd "' r") 'my/cider-insert-last-sexp-in-repl)
-            (define-key evil-normal-state-map (kbd "' b") 'cider-eval-buffer)
-            (define-key evil-normal-state-map (kbd "' n r") 'cider-ns-refresh)
+            (my/clojure-hook nil)
+            (evil-define-key 'normal clojure-mode-map
 
-            (define-key evil-normal-state-map ">" nil)
-            (define-key evil-normal-state-map "<" nil)
-            (define-key evil-normal-state-map (kbd "> )") 'paredit-forward-slurp-sexp)
-            (define-key evil-normal-state-map (kbd "< (") 'paredit-backward-slurp-sexp)
-            (define-key evil-normal-state-map (kbd "< )") 'paredit-forward-barf-sexp)
-            (define-key evil-normal-state-map (kbd "> (") 'paredit-backward-barf-sexp)
-
-            (modify-syntax-entry ?+ "w")
-            (modify-syntax-entry ?- "w")
-            (modify-syntax-entry ?_ "w")
-            (modify-syntax-entry ?/ "w")
-            (modify-syntax-entry ?: "w")
-            (modify-syntax-entry ?> "w")
-            (modify-syntax-entry ?< "w")
-            (modify-syntax-entry ?? "w")
-            (modify-syntax-entry ?! "w")
-            (modify-syntax-entry ?. "w")
+              (kbd "C-e C-e") 'cider-jack-in
+              (kbd "C-e s n") 'cider-repl-set-ns
+              (kbd "C-e e") 'cider-eval-last-sexp
+              (kbd "C-e r") 'my/cider-insert-last-sexp-in-repl
+              (kbd "C-e b") 'cider-eval-buffer
+              (kbd "C-e n f") 'cider-browse-ns
+              (kbd "C-e n r") 'cider-ns-refresh
+              (kbd "C-e d v") 'cider-toggle-trace-var
+              (kbd "C-e d n") 'cider-toggle-trace-ns)
             ))
