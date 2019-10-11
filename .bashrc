@@ -27,9 +27,10 @@ export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH"
 export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
 export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 export KAFKA_HOME="$HOME/.bin/kafka_2.11-2.0.0"
 export GOPATH=~/.go
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-13.jdk/Contents/Home/"
 PATH=$PATH:$JAVA_HOME/bin
 export LEIN_SUPPRESS_USER_LEVEL_REPO_WARNINGS="TRUE"
 export PATH="$PATH:$GOPATH/bin"
@@ -44,6 +45,10 @@ export EDITOR='emacsclient --alternate-editor "" --tty'
 bind -x '"\C-l":__clear_screen__'
 bind 'set show-mode-in-prompt on'
 
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 [ -f ~/.bash_helpers ] && source ~/.bash_helpers
 [ -f ~/.bash_aws ] && source ~/.bash_aws
@@ -55,6 +60,8 @@ bind 'set show-mode-in-prompt on'
 [ -f /usr/local/bin/aws_completer ] && complete -C '/usr/local/bin/aws_completer' aws
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -f ~/.font ] && source ~/.fonts/*.sh
+[ -f /usr/local/etc/profile.d/bash-preexec.sh ] && . /usr/local/etc/profile.d/bash-preexec.sh
+source ~/.bash-preexec.sh
 
 export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
 
@@ -67,10 +74,6 @@ else;
     tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
 fi'"
 
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-}
-
 PROMPT_DIRTRIM=3
 
-PS1='\[\e[1;37m\][\w]\[\e[0m\]\[\e[0;36m\]\[\e[0;93m\]$(parse_git_branch)\[\e[0m\]\n~> '
+# PS1='\[\e[1;37m\][\w]\[\e[0m\]\[\e[0;36m\]\[\e[0;93m\]$(parse_git_branch)\[\e[0m\]\n~> '

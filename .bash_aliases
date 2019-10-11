@@ -15,3 +15,4 @@ alias fuck='sudo "$SHELL" -c "$(history -p !!)"'
 alias dev='tmux -2 new-session -A -s stuffs'
 alias pipup='pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U'
 alias pipup3='pip3.7 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3.7 install -U'
+alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
