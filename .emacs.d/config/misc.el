@@ -25,3 +25,5 @@
   (kill-matching-buffers (format "\*%s*:*" prefix) :no-ask t))
 
 (define-key evil-normal-state-map (kbd "SPC k b") 'my/kill-buffers-with-prefix)
+
+(setq echo-keystrokes 0.01)

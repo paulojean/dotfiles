@@ -110,13 +110,13 @@
             (my/clojure-hook nil)
             (evil-define-key 'normal clojure-mode-map
 
-              (kbd "C-e C-e") 'cider-jack-in
-              (kbd "C-e s n") 'cider-repl-set-ns
-              (kbd "C-e e") 'cider-eval-last-sexp
-              (kbd "C-e r") 'my/cider-insert-last-sexp-in-repl
-              (kbd "C-e b") 'cider-eval-buffer
-              (kbd "C-e n f") 'cider-browse-ns
-              (kbd "C-e n r") 'cider-ns-refresh
-              (kbd "C-e d v") 'cider-toggle-trace-var
-              (kbd "C-e d n") 'cider-toggle-trace-ns)
+              (kbd "C-c '") 'cider-jack-in
+              (kbd "C-c s n") 'cider-repl-set-ns
+              (kbd "C-c e") 'cider-eval-last-sexp
+              (kbd "C-c r") 'my/cider-insert-last-sexp-in-repl
+              (kbd "C-c b") 'cider-eval-buffer
+              (kbd "C-c n f") 'cider-browse-ns
+              (kbd "C-c n r") 'cider-ns-refresh
+              (kbd "C-c d v") 'cider-toggle-trace-var
+              (kbd "C-c d n") 'cider-toggle-trace-ns)
             ))

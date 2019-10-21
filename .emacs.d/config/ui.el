@@ -42,5 +42,16 @@
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
+(require 'whitespace)
+(setq whitespace-display-mappings
+      '(
+        (space-mark   ?\     [?·]      [?.])      ; space - middle dot
+        (space-mark   ?\xA0  [?¤]     [?_])       ; hard space - currency sign
+        (newline-mark ?\n    [?↵ ?\n]  [?↵ ?\n])	; eol - downwards arrow
+        (tab-mark     ?\t    [? ?\t ] [? ?\t])	; tab - right guillemet
+        ))
+
+(define-key evil-normal-state-map (kbd "SPC t w") 'global-whitespace-mode)
+
 (provide 'ui)
 ;;; ui.el ends here

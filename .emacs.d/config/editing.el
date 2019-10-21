@@ -97,6 +97,11 @@
 
 (setq standard-indent 2)
 
+(setq org-todo-keywords
+  '((sequence "TODO" "IN-PROGRESS" "WAIT" "|" "DONE" "CANCELED")))
+
+(setq org-agenda-files '("~/todos.org"))
+
 (add-hook 'org-mode-hook
           (lambda ()
 

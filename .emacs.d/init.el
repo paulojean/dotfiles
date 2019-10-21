@@ -13,7 +13,7 @@
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (company-box pfuture ace-window f slack oauth2 websocket request circe emojify ht command-log-mode eyebrowse org-bullets forge ghub treepy closql emacsql-sqlite emacsql evil-org names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (typescript-mode lsp-python-ms lsp-haskell lsp-mode restclient dumb-jump anzu company-box font-lock+ pfuture ace-window f slack oauth2 websocket request circe emojify ht command-log-mode eyebrowse org-bullets forge ghub treepy closql emacsql-sqlite emacsql evil-org names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((elisp-lint-indent-specs
@@ -59,6 +59,9 @@
 
 (use-package quelpa
   :ensure t)
+
+(use-package dash :ensure t)
+(use-package s :ensure t)
 
 ;;; evil sutffs
 ;; next two imports are needed to make evil's import to work.
@@ -122,7 +125,7 @@
       "SPC" 'counsel-M-x
       "a" 'ag
       "b" 'counsel-switch-buffer
-      "d d" 'neotree-projectile-action
+      "d d" 'treemacs
       "d o" 'delete-other-windows
       "d p" 'pwd
       "e" 'pp-eval-last-sexp
@@ -279,7 +282,9 @@
                   '((swiper . ivy--regex-plus)
                     (t      . ivy--regex-fuzzy)))
             (setq ivy-use-virtual-buffers t)
-            (setq enable-recursive-minibuffers t)))
+            (setq enable-recursive-minibuffers t)
+            (setq browse-url-browser-function #'eww-browse-url)
+            (setq counsel-search-engine 'google)))
 
 (use-package flyspell-correct-ivy
   :ensure t
@@ -289,15 +294,24 @@
   :ensure t
   :config (evil-commentary-mode))
 
-(use-package dash
-  :ensure t)
-(use-package s
-  :ensure t)
 (use-package ag
   :ensure t
   :config (progn
             (setq ag-reuse-buffers t)
             (setq ag-highlight-search t)))
+
+(use-package dumb-jump
+  :ensure t
+  :init
+  (setq dumb-jump-force-searcher 'ag)
+  (setq dumb-jump-selector 'ivy)
+  (dumb-jump-mode)
+  (add-hook 'prog-mode-hook
+            (lambda ()
+              (evil-define-key 'normal dumb-jump-mode-map
+                (kbd "SPC g d") 'dumb-jump-go-prefer-external
+                (kbd "SPC g l") 'dumb-jump-quick-look
+                (kbd "SPC g D") 'dumb-jump-go-prefer-external-other-window))))
 
 (use-package paredit
   :ensure t
@@ -313,24 +327,47 @@
             (define-key evil-normal-state-map (kbd "> (") 'paredit-backward-barf-sexp)
             (define-key evil-normal-state-map (kbd "< )") 'paredit-forward-barf-sexp)))
 
-(use-package clojure-mode
-  :ensure t)
-(use-package clojure-mode-extra-font-locking
-  :ensure t)
+(use-package lsp-mode :ensure t)
 
-(use-package queue
-  :ensure t)
+(use-package lsp-python-ms
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (lsp))))
+(use-package lsp-haskell
+  :ensure t
+  :after lsp-mode
+  :hook
+  (haskell-mode . (lambda ()
+                    (require 'lsp-haskell)
+                    (lsp))))
+
+(use-package typescript-mode
+  :ensure t
+  :hook
+  (typescript-mode . (lambda ()
+                       (require 'typescript-mode)
+                       (lsp)))
+  (js-mode . (lambda ()
+               (require 'typescript-mode)
+               (lsp)))
+  (javascript-mode . (lambda ()
+                       (require 'typescript-mode)
+                       (lsp))))
+
+(use-package clojure-mode :ensure t)
+
+(use-package clojure-mode-extra-font-locking :ensure t)
+
+(use-package queue :ensure t)
 (use-package cider
   :after queue
   :ensure t
   :config (add-to-list 'cider-test-defining-forms "defflow"))
 
-(use-package clomacs
-  :ensure t)
-(use-package yaml-mode
-  :ensure t)
-(use-package go-mode
-  :ensure t)
+(use-package clomacs :ensure t)
+(use-package yaml-mode :ensure t)
+(use-package go-mode :ensure t)
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'"
@@ -351,21 +388,17 @@
   :init (progn
           (add-hook 'purescript-mode-hook 'inferior-psci-mode)))
 
-(use-package lua-mode
-  :ensure t)
+(use-package lua-mode :ensure t)
 
 (use-package feature-mode
   :ensure t
   :config (progn
             (setq feature-default-language "en")))
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-mode :ensure t)
 
-(use-package groovy-mode
-  :ensure t)
+(use-package groovy-mode :ensure t)
 
-(use-package dockerfile-mode
-  :ensure t)
+(use-package dockerfile-mode :ensure t)
 
 (use-package company
   :ensure t
@@ -431,31 +464,47 @@
   :config
   (flycheck-checkbashisms-setup))
 
-(use-package flx
-  :ensure t)
-(use-package flx-ido
-  :ensure t)
+(use-package flx :ensure t)
+(use-package flx-ido :ensure t)
 
-(use-package ido-completing-read+
-  :ensure t)
-(use-package rainbow-delimiters
-  :ensure t)
-(use-package tagedit
-  :ensure t)
+(use-package ido-completing-read+ :ensure t)
+(use-package rainbow-delimiters :ensure t)
+
+(use-package tagedit :ensure t)
 (use-package ranger
   :ensure t
   :config (progn
             (ranger-override-dired-mode t)
             (setq ranger-parent-depth 2)))
 
-(use-package neotree
+(use-package neotree :ensure t)
+
+(use-package treemacs
+  :ensure t
+  :config
+  (evil-define-key 'normal treemacs-mode-map
+    (kbd "w a") 'treemacs-create-workspace
+    (kbd "w d") 'treemacs-remove-workspace
+    (kbd "w e") 'treemacs-edit-workspaces
+    (kbd "w r") 'treemacs-rename-workspace
+    (kbd "w s") 'treemacs-switch-workspace
+    (kbd "p a") 'treemacs-add-project))
+
+(use-package treemacs-evil
+  :after treemacs evil
   :ensure t)
 
-(use-package buffer-move
+(use-package treemacs-projectile
+  :after treemacs projectile
   :ensure t)
 
-(use-package spacemacs-theme
+(use-package treemacs-magit
+  :after treemacs magit
   :ensure t)
+
+(use-package buffer-move :ensure t)
+
+(use-package spacemacs-theme :ensure t)
 (use-package spaceline
   :ensure t
   :config (progn
@@ -465,27 +514,16 @@
             (spaceline-emacs-theme)
             (setq spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)))
 
-(use-package linum-relative
-  :ensure t)
+(use-package linum-relative :ensure t)
 
 (use-package which-key
   :ensure t
-  :config (progn
-            (require 'which-key)
-            (which-key-mode)))
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 1)
+  (setq which-key-idle-secondary-delay 0.05))
 
 (use-package command-log-mode :ensure t)
-
-(use-package all-the-icons
-  :ensure t
-  :config (progn
-            (setq neo-theme (if (display-graphic-p) 'icons 'arrow))))
-
-(use-package all-the-icons-dired
-  :ensure t
-  :diminish all-the-icons-dired-mode
-  :init
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 (use-package custom-tmux-pane
   :ensure t
@@ -518,6 +556,32 @@
               (kbd "C-f q") 'eyebrowse-close-window-config
               (kbd "C-f f") 'eyebrowse-switch-to-window-config
               (kbd "C-f 0") 'eyebrowse-switch-to-window-config-0)))
+
+(use-package restclient
+  :ensure t)
+
+(use-package spotify.el
+  :ensure t
+  :quelpa (spotify :repo "danielfm/spotify.el" :fetcher github)
+  :after evil
+  :init
+  (setq spotify-oauth2-client-secret (getenv "SPOTIFY_SECRET"))
+  (setq spotify-oauth2-client-id (getenv "SPOTIFY_CLIENT_ID"))
+  :config (progn
+            (require 'spotify)
+            (evil-define-key 'normal spotify-playlist-search-mode-map
+              (kbd "q") 'kill-this-buffer
+              (kbd "p") 'spotify-playlist-select
+              (kbd "P") 'spotify-pause
+              (kbd "J") 'spotify-playlist-load-more
+              )
+            (evil-define-key 'normal spotify-track-search-mode-map
+              (kbd "q") 'kill-this-buffer
+              (kbd "p") 'spotify-track-select
+              (kbd "P") 'spotify-pause
+              (kbd "J") 'spotify-track-load-more
+              )
+            ))
 
 (add-to-list 'load-path (concat user-emacs-directory "vendor"))
 
