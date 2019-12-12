@@ -49,7 +49,7 @@
 (add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
 (add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
 
-(setq cider-edit-jack-in-command t)
+;; (setq cider-edit-jack-in-command nil)
 
 (defun my/clojure-hook (-mode-map)
   (when -mode-map
@@ -73,6 +73,7 @@
   (modify-syntax-entry ?? "w")
   (modify-syntax-entry ?! "w")
   (modify-syntax-entry ?. "w")
+  (modify-syntax-entry ?* "w")
   )
 
 (add-hook 'cider-clojure-interaction-mode-hook
@@ -90,6 +91,8 @@
 
 (add-hook 'cider-mode-hook
           (lambda ()
+            (setq lsp-enable-indentation nil)
+            (setq lsp-enable-completion-at-point nil)
             (my/clojure-hook cider-mode-map)))
 
 (add-hook 'cider-browse-ns-mode-hook
@@ -120,3 +123,18 @@
               (kbd "C-c d v") 'cider-toggle-trace-var
               (kbd "C-c d n") 'cider-toggle-trace-ns)
             ))
+
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (require 'clj-refactor)
+            (clj-refactor-mode 1)
+            ;; (yas-minor-mode 1) ; for adding require/use/import statements
+            (cljr-add-keybindings-with-prefix "C-c C-m")))
+(add-hook 'clojure-mode-hook
+          (lambda ()
+
+            (evil-define-key 'normal clojure-mode-map
+              (kbd "C-c C-l r") 'lsp-find-references
+              (kbd "C-c C-l d") 'lsp-find-definition
+              )
+            (lsp)))

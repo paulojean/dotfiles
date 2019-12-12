@@ -7,6 +7,10 @@ cmd - h : yabai -m window --focus west
 cmd - j : yabai -m window --focus south
 cmd - k : yabai -m window --focus north
 cmd - l : yabai -m window --focus east
+#  `;` key
+cmd - 0x29 : yabai -m window --focus "$(yabai -m query --windows | jq -re "sort_by(.display, .frame.x, .frame.y, .id) | reverse | map(select(.visible == 1 and .subrole != \"AXUnknown\")) | reverse | nth(index(map(select(.focused == 1))) - 1).id")"
+# `'` key
+cmd - 0x27 : yabai -m window --focus "$(yabai -m query --windows | jq -re "sort_by(.display, .frame.x, .frame.y, .id) | map(select(.visible == 1 and .subrole != \"AXUnknown\")) | reverse | nth(index(map(select(.focused == 1))) - 1).id")"
 
 # swap window
 shift + alt - h : yabai -m window --swap west
@@ -20,8 +24,20 @@ shift + cmd - j : yabai -m window --warp south
 shift + cmd - k : yabai -m window --warp north
 shift + cmd - l : yabai -m window --warp east
 
+# --grid <rows>:<cols>:<start-x>:<start-y>:<width>:<height>
+shift + cmd + ctrl - l :  yabai -m window --grid 2:2:1:0:1:2
+shift + cmd + ctrl - h :  yabai -m window --grid 2:2:0:0:1:2
+shift + cmd + ctrl - k :  yabai -m window --grid 2:2:0:0:2:1
+shift + cmd + ctrl - j :  yabai -m window --grid 2:2:0:1:2:1
+
+cmd + ctrl - f :  yabai -m window --grid 100:1:10:0:1:100 || yabai -m window -toggle zoom-fullscreen
+shift + cmd + ctrl - f : yabai -m window --toggle native-fullscreen
+
 # balance size of windows
 shift + cmd - 0 : yabai -m space --balance
+
+shift + cmd - b : yabai -m space --layout bsp
+shift + cmd - f : yabai -m space --layout float
 
 # increase window size
 shift + cmd - a : yabai -m window --resize left:-20:0
@@ -38,9 +54,7 @@ shift + alt - d : yabai -m window --resize right:-20:0
 # toggle window split type
 cmd + ctrl - e : yabai -m window --toggle split
 
-# float / unfloat window and center on screen
-alt - t : yabai -m window --toggle float;\
-          yabai -m window --grid 4:4:1:1:2:2
+cmd + ctrl - p : yabai -m window --toggle sticky
 
 # create desktop and follow focus
 cmd + ctrl - n : yabai -m space --create && \
@@ -48,7 +62,6 @@ cmd + ctrl - n : yabai -m space --create && \
                 yabai -m space --focus "${index}"
 
 # fast focus desktop
-cmd + ctrl - f : yabai -m window --toggle zoom-fullscreen
 cmd + ctrl - x : yabai -m space --focus recent
 cmd + ctrl - h : yabai -m space --focus prev || yabai -m space --focus last
 cmd + ctrl - l : yabai -m space --focus next || yabai -m space --focus first
@@ -73,6 +86,7 @@ fn + cmd + ctrl - k : yabai -m space --display next && yabai -m config status_ba
 fn + cmd + ctrl - j : yabai -m space --display prev && yabai -m config status_bar_foreground_color 0xff5e81ac
 
 cmd - b : yabai -m config status_bar $([ $(yabai -m config status_bar) == 'on' ] && echo off || echo on)
+# cmd - b : skhdrc_helpers change-toolbar-visibility $([ $(yabai -m config top_padding) == "20" ] && echo "hidden" || echo "visible")
 
 # send window to desktop and follow focus
 alt + ctrl - x : yabai -m window --space recent; yabai -m space --focus recent
@@ -91,6 +105,10 @@ alt + ctrl - 8 : yabai -m window --space  8; yabai -m space --focus 8
 alt + ctrl - 9 : yabai -m window --space  9; yabai -m space --focus 9
 alt + ctrl - 0 : yabai -m window --space 10; yabai -m space --focus 10
 
-shift  + cmd + ctrl + alt - q : yabai -m config status_bar_background_color 0xff2e3440
-shift  + cmd + ctrl + alt - w : yabai -m config status_bar_background_color 0x9fbf616a
-shift  + cmd + ctrl + alt - e : yabai -m config status_bar_background_color 0x9f88c0d0
+shift + cmd + ctrl + alt - q : yabai -m config status_bar_background_color 0xff2e3440
+shift + cmd + ctrl + alt - w : yabai -m config status_bar_background_color 0x9fbf616a
+shift + cmd + ctrl + alt - e : yabai -m config status_bar_background_color 0x9f88c0d0
+
+# shift + cmd + ctrl + alt - q : skhdrc_helpers refresh-toolbar-color "2e3440" #ff2e3440
+# shift + cmd + ctrl + alt - w : skhdrc_helpers refresh-toolbar-color "bf616a80"
+# shift + cmd + ctrl + alt - e : skhdrc_helpers refresh-toolbar-color "88c0d080"

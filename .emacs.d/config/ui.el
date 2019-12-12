@@ -20,8 +20,6 @@
 
 (set-face-attribute 'lazy-highlight nil :foreground "#262626" :background "#86dc2f")
 
-(load-theme 'spacemacs-dark t)
-
 (defun on-frame-open (frame)
   (if (not (display-graphic-p frame))
       (set-face-background 'default "unspecified-bg" frame)))
@@ -47,7 +45,7 @@
       '(
         (space-mark   ?\     [?·]      [?.])      ; space - middle dot
         (space-mark   ?\xA0  [?¤]     [?_])       ; hard space - currency sign
-        (newline-mark ?\n    [?↵ ?\n]  [?↵ ?\n])	; eol - downwards arrow
+        (newline-mark ?\n    [?¶ ?\n]  [?¶ ?\n])	; eol - downwards arrow
         (tab-mark     ?\t    [? ?\t ] [? ?\t])	; tab - right guillemet
         ))
 

@@ -13,7 +13,7 @@
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (typescript-mode lsp-python-ms lsp-haskell lsp-mode restclient dumb-jump anzu company-box font-lock+ pfuture ace-window f slack oauth2 websocket request circe emojify ht command-log-mode eyebrowse org-bullets forge ghub treepy closql emacsql-sqlite emacsql evil-org names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord spacemacs-theme ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (adjust-parens use-package lsp-java dap-mode bui tree-mode nov esxml spacemacs-theme browse-kill-ring+ browse-kill-ring typescript-mode lsp-python-ms lsp-haskell lsp-mode restclient dumb-jump anzu company-box font-lock+ pfuture ace-window f slack oauth2 websocket request circe emojify ht command-log-mode eyebrowse org-bullets forge ghub treepy closql emacsql-sqlite emacsql evil-org names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((elisp-lint-indent-specs
@@ -54,21 +54,19 @@
  '(quelpa-use-package
    :fetcher git
    :url "https://framagit.org/steckerhalter/quelpa-use-package.git"))
-(require 'quelpa-use-package)
 (setq use-package-ensure-function 'quelpa)
-
-(use-package quelpa
-  :ensure t)
+(require 'quelpa-use-package)
 
 (use-package dash :ensure t)
 (use-package s :ensure t)
 
-;;; evil sutffs
+;; evil sutffs
 ;; next two imports are needed to make evil's import to work.
 ;; goto-chg is refering to a undo-tree version that does not exist.
 ;; It should be possible to remove them in the future.
 (use-package undo-tree
   :ensure t)
+(savehist-mode 1)
 
 (use-package goto-chg
   :ensure t)
@@ -94,7 +92,7 @@
               (apply orig-fn beg end type ?_ args))
             (advice-add 'evil-delete :around 'my/evil-delete)
 
-            (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
+            ;; (define-key evil-insert-state-map (kbd "TAB") 'company-complete-common-or-cycle)
             (setq evil-kill-on-visual-paste nil)
             (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
             (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
@@ -145,6 +143,9 @@
       )))
 
 (setq gc-cons-threshold 100000000)
+
+;; yolo
+(setq warning-minimum-level :emergency)
 
 (keyboard-translate ?\C-x ?\C-a)
 (keyboard-translate ?\C-a ?\C-x)
@@ -276,6 +277,7 @@
             (define-key ivy-minibuffer-map (kbd "C-t") 'my-ivy/alt-done)
             (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-line)
             (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-line)
+            (setq ivy-use-selectable-prompt t)
             (setq ivy-on-del-error-function #'ignore)
             (setq ivy-initial-inputs-alist ())
             (setq ivy-re-builders-alist
@@ -329,11 +331,65 @@
 
 (use-package lsp-mode :ensure t)
 
+(use-package lsp-ui
+  :ensure t
+  :init (setq lsp-ui-doc-enable nil)
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (setq lsp-ui-sideline-show-code-actions nil))
+
+(use-package lsp-java
+  :ensure t
+  :after lsp-mode
+  :config
+  (add-hook 'java-mode-hook #'lsp)
+  (add-hook 'java-mode-hook #'flycheck-mode)
+  (add-hook 'java-mode-hook
+            (lambda ()
+              (evil-define-key 'normal java-mode-map
+                (kbd "K") 'lsp-describe-thing-at-point
+                (kbd "g d") 'lsp-find-definition
+                (kbd "C-c f r") 'lsp-find-references
+                (kbd "C-c g o") 'lsp-java-generate-overrides
+                (kbd "C-c b p") 'lsp-java-build-project
+                (kbd "C-c e v") 'lsp-java-extract-to-local-variable
+                (kbd "C-c e c") 'lsp-java-extract-to-constant
+                (kbd "C-c r r") 'lsp-rename
+                )
+              (evil-define-key 'insert java-mode-map
+                (kbd "TAB") 'completion-at-point)
+              ))
+  )
+
+(use-package dap-java :ensure t :after lsp-java)
+
+(use-package scala-mode
+  :ensure t
+  :interpreter
+  ("scala" . scala-mode))
+
+(use-package sbt-mode
+  :ensure t
+  :commands sbt-start sbt-command
+    :config
+    ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+    ;; allows using SPACE when in the minibuffer
+    (substitute-key-definition
+     'minibuffer-complete-word
+     'self-insert-command
+     minibuffer-local-completion-map)
+    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+    (setq sbt:program-options '("-Dsbt.supershell=false"))
+    )
+
 (use-package lsp-python-ms
   :ensure t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms)
-                         (lsp))))
+  :after lsp-mode
+  :hook
+  (python-mode . (lambda ()
+                   (require 'lsp-python-ms)
+                   (lsp))))
+
 (use-package lsp-haskell
   :ensure t
   :after lsp-mode
@@ -363,7 +419,13 @@
 (use-package cider
   :after queue
   :ensure t
+  :init
+  (setq cider-eval-result-duration nil)
   :config (add-to-list 'cider-test-defining-forms "defflow"))
+(use-package clj-refactor
+  :ensure t
+  :init
+  (setq cljr-warn-on-eval nil))
 
 (use-package clomacs :ensure t)
 (use-package yaml-mode :ensure t)
@@ -490,6 +552,11 @@
     (kbd "w s") 'treemacs-switch-workspace
     (kbd "p a") 'treemacs-add-project))
 
+(use-package highlight-parentheses
+  :ensure t
+  :config
+  (global-highlight-parentheses-mode))
+
 (use-package treemacs-evil
   :after treemacs evil
   :ensure t)
@@ -505,6 +572,7 @@
 (use-package buffer-move :ensure t)
 
 (use-package spacemacs-theme :ensure t)
+(load-theme 'spacemacs-dark t)
 (use-package spaceline
   :ensure t
   :config (progn

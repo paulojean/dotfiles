@@ -1,3 +1,4 @@
+# -*- sh -*-
 # vim: syntax=sh
 
 function dynamodb_run() {

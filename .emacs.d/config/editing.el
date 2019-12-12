@@ -71,7 +71,9 @@
   (define-key evil-visual-state-map (kbd "SPC c y") 'my-pbcopy)
   (define-key evil-visual-state-map (kbd "SPC c p") 'my-pbpaste)
   (define-key evil-normal-state-map (kbd "SPC c p") 'my-pbpaste)
-  (define-key evil-visual-state-map (kbd "SPC c c") 'my-pbcut))
+  (define-key evil-visual-state-map (kbd "SPC c c") 'my-pbcut)
+  (define-key evil-normal-state-map (kbd "SPC c s") 'counsel-yank-pop)
+  )
 
 (defun my/remove-trailing-whitespace-and-save ()
   (interactive)

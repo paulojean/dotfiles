@@ -8,21 +8,21 @@
         {:des "right cmd -> Alfred"
          :rules [[:right_command :right_command nil {:alone :!CTOSspacebar}]]}
         {:des "right cmd+num -> go to space"
-         :rules [[:!Q1 :!CT1]
-                 [:!Q2 :!CT2]
-                 [:!Q3 :!CT3]
-                 [:!Q4 :!CT4]
-                 [:!Q5 :!CT5]
-                 [:!Q6 :!CT6]
-                 [:!Q7 :!CT7]
-                 [:!Q8 :!CT8]
-                 [:!Q9 :!CT9]
-                 [:!Q0 :!CT10]]}
+         :rules [[:!T1 :!CT1]
+                 [:!T2 :!CT2]
+                 [:!T3 :!CT3]
+                 [:!T4 :!CT4]
+                 [:!T5 :!CT5]
+                 [:!T6 :!CT6]
+                 [:!T7 :!CT7]
+                 [:!T8 :!CT8]
+                 [:!T9 :!CT9]]}
         {:des   "normal-mode"
          :rules [[:!Tspacebar [["in-normal-mode" 1] ["in-navigation-mode" 0] :!CTOSw]]
 
                  :in-normal-mode
                  [:!Tg [["in-normal-mode" 0] :!CTOSq]]
+                 ;; [:##escape [["in-normal-mode" 0] :!CTOSq]]
                  [:!Sd :end]
                  [:!Sh :!SOh]
                  [:!Sj :!SOj]
