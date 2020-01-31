@@ -477,6 +477,13 @@
   :after company
   :hook (company-mode . company-box-mode))
 
+(use-package prescient
+  :ensure t
+  :config
+  (setq prescient-filter-method '(literal regexp initialism)))
+(use-package ivy-prescient :ensure t)
+(use-package company-prescient :ensure t)
+
 (use-package comment-tags
   :ensure t
   :init (progn

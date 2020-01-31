@@ -114,15 +114,15 @@
             (evil-define-key 'normal clojure-mode-map
 
               (kbd "C-c '") 'cider-jack-in
-              (kbd "C-c s n") 'cider-repl-set-ns
-              (kbd "C-c e") 'cider-eval-last-sexp
-              (kbd "C-c r") 'my/cider-insert-last-sexp-in-repl
               (kbd "C-c b") 'cider-eval-buffer
+              (kbd "C-c e") 'cider-eval-last-sexp
+              (kbd "C-c v") 'cider-eval-sexp-at-point
+              (kbd "C-c d n") 'cider-toggle-trace-ns
+              (kbd "C-c d v") 'cider-toggle-trace-var
               (kbd "C-c n f") 'cider-browse-ns
               (kbd "C-c n r") 'cider-ns-refresh
-              (kbd "C-c d v") 'cider-toggle-trace-var
-              (kbd "C-c d n") 'cider-toggle-trace-ns)
-            ))
+              (kbd "C-c s n") 'cider-repl-set-ns
+              (kbd "C-c s r") 'my/cider-insert-last-sexp-in-repl)))
 
 (add-hook 'clojure-mode-hook
           (lambda ()

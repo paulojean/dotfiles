@@ -26,4 +26,33 @@
 
 (define-key evil-normal-state-map (kbd "SPC k b") 'my/kill-buffers-with-prefix)
 
+(defun my/toggle-minor-modes (flag)
+  (async-bytecomp-package-mode flag)
+  (auto-composition-mode flag)
+  (auto-encryption-mode flag)
+  (comment-tags-mode flag)
+  (company-mode flag)
+  (diff-auto-refine-mode flag)
+  (file-name-shadow-mode flag)
+  (flycheck-mode flag)
+  (flycheck-popup-tip-mode flag)
+  (font-lock-mode flag)
+  (highlight-parentheses-mode flag)
+  (hs-minor-mode flag)
+  (line-number-mode flag)
+  (save-place-mode flag)
+  (subword-mode flag)
+  (tooltip-mode flag))
+
+(defun my/disable-minor-modes ()
+  (interactive)
+  (my/toggle-minor-modes -1))
+
+(defun my/enable-minor-modes ()
+  (interactive)
+  (my/toggle-minor-modes t))
+
+(define-key evil-normal-state-map (kbd "SPC m d") 'my/disable-minor-modes)
+(define-key evil-normal-state-map (kbd "SPC m e") 'my/enable-minor-modes)
+
 (setq echo-keystrokes 0.01)
