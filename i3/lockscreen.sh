@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 ICON=/tmp/xkcd #might be png or jpg, identify from imagemagick will know
 TMPBG=/tmp/screen.png
 

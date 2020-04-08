@@ -61,7 +61,23 @@ parse_git_branch() {
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -f ~/.font ] && source ~/.fonts/*.sh
 [ -f /usr/local/etc/profile.d/bash-preexec.sh ] && . /usr/local/etc/profile.d/bash-preexec.sh
+
 source ~/.bash-preexec.sh
+
+preexec() {
+  cmd_start="$SECONDS"
+}
+
+precmd() {
+  last_command_result="$?"
+  local cmd_end="$SECONDS"
+  elapsed=$((cmd_end-cmd_start))
+
+  # do not override PS1 when it has a custom shell
+  # this avoids overriding PS1 for applications with custom prompt, eg: nix-shell
+  [ -z "$shell" ] && \
+    PS1='\[\e[1;37m\][\w]\[\e[0m\]\[\e[0;36m\]\[\e[0m\]\[\e[0;93m\]$(parse_git_branch)\[\e[0m\] $(date +%T) ~${elapsed}s > $last_command_result \n~> '
+}
 
 export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
 

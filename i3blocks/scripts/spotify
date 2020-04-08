@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# based on https://github.com/Madh93/conky-spotify
+
+RUNNING=$(pgrep spotify)
+
+if [[ -n "$RUNNING" ]]; then
+  if [ -n "$button" ]; then
+    dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+  fi
+
+  STATUS=$(dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'PlaybackStatus' | grep -E 'variant[ ]+string' | cut -d "\"" -f2)
+
+  TITLE=$(dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'| grep -A 1 "title"| grep -v "title"| cut -b 44- | cut -d '"' -f 1| grep -v ^$)
+
+  if [[ "$STATUS" == "Paused" ]]; then
+    STATUS_ICON="契"
+    COLOR="#d8dee9"
+  else
+    STATUS_ICON=""
+    COLOR="#00ff00"
+  fi
+
+  echo "{\"full_text\": \"${STATUS_ICON} ${TITLE}\", \"color\": \"$COLOR\"}"
+else
+  # this is needed to remove spotify from the status bar, when it is closed
+  echo
+fi

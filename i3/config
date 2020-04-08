@@ -11,7 +11,7 @@
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Iosevka Nerd Font Mono 10
+font pango: FuraCode Nerd Font 10
 #1il 0oO
 
 set $mod Mod1
@@ -38,7 +38,8 @@ set $right l
 floating_modifier Mod1
 
 # start a terminal
-bindsym $mod+Return exec alacritty --command bash -c 'tmux new-session -A -s stuffs'
+# bindsym $mod+Return exec alacritty --command bash -c 'tmux new-session -A -s stuffs'
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -57,10 +58,10 @@ bindsym $mod+$up focus up
 bindsym $mod+$right focus right
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
+# bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+# bindsym $mod+Right focus right
 
 # move focused window
 bindsym $mod+Shift+$left move left
@@ -105,7 +106,7 @@ bindsym $mod+Shift+minus move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+minus scratchpad show
+bindsym $mod+equal scratchpad show
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -130,6 +131,12 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
+
+# commands sent from libinput-gestures
+bindsym $mod+ctrl+l workspace next
+bindsym $mod+ctrl+h workspace prev
+bindsym Mod1+Right workspace next
+bindsym Mod1+Left workspace prev
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -168,29 +175,39 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
   position bottom
-        status_command i3status
-  font pango: sans 10
+  status_command i3blocks
+  font pango: FuraCode Nerd Font 10
 
   colors {
-    background #232323
+    background #2e3440
     statusline #DCDCDC
+
+   focused_workspace #5e81ac #5e81ac #ffffff
+   active_workspace #2e3440 #2e3440 #ffffff
+   inactive_workspace #2e3440 #2e3440 #888888
+   urgent_workspace #2f343a #900000 #ffffff
   }
 
   tray_output none
 }
+
+# yad is used on i3blocks scripts
+for_window [class="Yad"] floating enable
 
 # Customss
 #bindsym $mod+Escape exec "i3lock"
 bindsym $mod+Escape exec "/home/paulo/.config/i3/lockscreen.sh"
 
 # Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer set Master 1%+ && killall -SIGUSR1 i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer set Master 1%- && killall -SIGUSR1 i3status
-bindsym XF86AudioMute exec --no-startup-id amixer set Master toggle && killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec amixer set Master 1%+ && pkill -RTMIN+1 i3blocks
+bindsym XF86AudioLowerVolume exec amixer set Master 1%- && pkill -RTMIN+1 i3blocks
+bindsym XF86AudioMute exec amixer set Master toggle && pkill -RTMIN+1 i3blocks
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec light -A 1 # increase screen brightness
-bindsym XF86MonBrightnessDown exec light -U 1 # decrease screen brightness
+## increase screen brightness
+bindsym XF86MonBrightnessUp exec light -A 2
+## decrease screen brightness
+bindsym XF86MonBrightnessDown exec light -U 2
 
 # Touchpad controls
 bindsym XF86TouchpadToggle exec /home/paulo/.config/i3/toggletouchpad.sh # toggle touchpad
@@ -205,6 +222,11 @@ bindsym XF86AudioPrev exec playerctl previous
 
 bindsym Mod1+Shift+Return exec --no-startup-id xdotool mousedown 1
 bindsym --release Mod1+Shift+Return exec --no-startup-id xdotool mouseup 1
+
+exec_always --no-startup-id feh --bg-fill /home/paulo/Pictures/night-moon-made-by-me-1920×1080.jpg
+
+exec_always --no-startup-id albert
+exec_always --no-startup-id libinput-gestures
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a
