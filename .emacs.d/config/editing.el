@@ -57,11 +57,11 @@
   (defun my-pbcopy ()
     (interactive)
     (let ((deactivate-mark t))
-      (call-process-region (point) (mark) "pbcopy")))
+      (call-process-region (point) (mark) "xclip" nil nil nil "-selection" "c")))
 
   (defun my-pbpaste ()
     (interactive)
-    (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+    (call-process-region (point) (if mark-active (mark) (point)) "xsel" nil t nil "-b"))
 
   (defun my-pbcut ()
     (interactive)

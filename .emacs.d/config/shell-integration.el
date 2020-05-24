@@ -5,10 +5,10 @@
   (exec-path-from-shell-copy-envs
    '("PATH")))
 
-(progn
-  (add-to-list 'load-path "~/code/shutils.el")
-  (require 'shutils-history-ivy)
-  (shutils-history/start-auto-update))
+;;(progn
+;;  (add-to-list 'load-path "~/code/shutils.el")
+;;  (require 'shutils-history-ivy)
+;;  (shutils-history/start-auto-update))
 
 (progn
   (require 'evil)

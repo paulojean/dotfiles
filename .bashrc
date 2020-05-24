@@ -20,17 +20,14 @@ export PATH="$PATH:$ANDROID_HOME/tools/emulator"
 export PATH="$PATH:$ANDROID_HOME/tools"
 export PATH="$PATH:$ANDROID_HOME/platform-tools"
 export PATH="$PATH:~/Library/Python/2.7/bin"
-export PATH="~/.config/tlp:$PATH"
-export PATH="~/watchman:$PATH"
-export PATH="$PATH:~/proj"
-export PATH="/usr/local/opt/coreutils/libexec/gnubin:/usr/local/bin:$PATH"
-export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+export PATH="$HOME/.config/tlp:$PATH"
+export PATH="$HOME/watchman:$PATH"
 export KAFKA_HOME="$HOME/.bin/kafka_2.11-2.0.0"
 export GOPATH=~/.go
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-13.jdk/Contents/Home/"
+
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-13.jdk/Contents/Home/"
+_jhome=$(readlink -f $(command -v java))
+export JAVA_HOME=$_jhome
 PATH=$PATH:$JAVA_HOME/bin
 export LEIN_SUPPRESS_USER_LEVEL_REPO_WARNINGS="TRUE"
 export PATH="$PATH:$GOPATH/bin"
@@ -54,7 +51,6 @@ parse_git_branch() {
 [ -f ~/.bash_aws ] && source ~/.bash_aws
 [ -f ~/.bash_credentials ] && source ~/.bash_credentials
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-[ -f ~/.klarnarc ] && source ~/.klarnarc
 [ -f ~/.suggestions.sh ] && source ~/.suggestions.sh
 [ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 [ -f /usr/local/bin/aws_completer ] && complete -C '/usr/local/bin/aws_completer' aws
@@ -64,19 +60,35 @@ parse_git_branch() {
 
 source ~/.bash-preexec.sh
 
+ps aux | grep '[C]aps' 1>/dev/null || xcape -e 'Caps_Lock=Escape'
+
 preexec() {
   cmd_start="$SECONDS"
 }
 
 precmd() {
   last_command_result="$?"
+
+  local WHITE='\[\e[1;37m\]'
+  local ORANGE='\[\e[0;33m\]'
+  local RED='\[\e[1;31m\]'
+  local GREEN='\[\e[1;32m\]'
+  local NO_COLLOR='\[\e[0m\]'
+  local pretty_command_result
+
   local cmd_end="$SECONDS"
   elapsed=$((cmd_end-cmd_start))
+
+  if [ "$last_command_result" == "0" ]; then
+    pretty_command_result="${GREEN}${NO_COLLOR}"
+  else
+    pretty_command_result="${RED} [${last_command_result}]${NO_COLLOR}"
+  fi
 
   # do not override PS1 when it has a custom shell
   # this avoids overriding PS1 for applications with custom prompt, eg: nix-shell
   [ -z "$shell" ] && \
-    PS1='\[\e[1;37m\][\w]\[\e[0m\]\[\e[0;36m\]\[\e[0m\]\[\e[0;93m\]$(parse_git_branch)\[\e[0m\] $(date +%T) ~${elapsed}s > $last_command_result \n~> '
+    PS1="${WHITE}[\w]${NO_COLLOR}${NO_COLLOR}${ORANGE}$(parse_git_branch)${NO_COLLOR} $(date +%T) ~${elapsed}s ${pretty_command_result} \n~> "
 }
 
 export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
@@ -86,7 +98,7 @@ if [[ -f {} ]]; then
     file --mime {} | grep -q \"text\/.*;\" && bat --color \"always\" {} || (tput setaf 1; file --mime {})
 elif [[ -d {} ]]; then
     exa -l --color always {}
-else;
+else
     tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
 fi'"
 

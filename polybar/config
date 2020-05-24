@@ -1,0 +1,422 @@
+[colors]
+background = #eff3fa
+foreground = #222222
+primary = #6c6cb3
+
+nord0 = #2E3440
+nord1 = #3B4252
+nord2 = #434C5E
+nord3 = #4C566A
+nord3.25 = #546076
+nord3.5 = #5C6A82
+
+nord4 = #D8DEE9
+nord5 = #E5E9F0
+nord6 = #ECEFF4
+
+nord7 = #8FBCBB
+nord8 = #88C0D0
+nord9 = #81A1C1
+nord10 = #5E81AC
+
+nord11 = #BF616A
+nord12 = #D08770
+nord13 = #EBCB8B
+nord14 = #A3BE8C
+nord15 = #B48EAD
+
+[color]
+
+;; Active Colors
+bg = #00327BBC
+fg = #f2f2f2
+fg-alt = #D0D0D0
+
+trans = #00000000
+white = #FFFFFF
+black = #000000
+
+;; BG Colors
+
+red = #E75955
+pink = #E84B84
+purple = #974EAA
+deep-purple = #753CE8
+indigo = #5966BA
+blue = #327BBC
+cyan = #00acc1
+teal = #00897b
+green = #67B16B
+lime = #ADB44F
+yellow = #C8AD35
+amber = #E6AE29
+orange = #F99E2B
+deep-orange = #F3663A
+brown = #B16E58
+grey = #757575
+blue-gray = #546e7a
+
+[bar/bar1]
+width = 100%
+height =  20
+; offset-x = 2%
+offset-y = 4
+
+bottom = true
+background = ${color.bg}
+foreground = ${color.fg}
+padding-left = 5
+padding-right = 5
+font-0 = "jua:size=11;2"
+font-1 = "Fura Code Nerd Font:size=15;4"
+modules-left = padding1 bspwm padding1 left1 sxhkd
+modules-center = spotify
+modules-right = right4 padding4 nord-vpn-status network padding4 right3 padding3 battery padding3 right2 padding2 bluetooth padding2 light padding2 volume-pulseaudio padding2 right1 padding1 popup-calendar padding1
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+; i3wm
+; override-redirect = false
+; wm-restack = i3
+; scroll-up = i3wm-wsnext
+; scroll-down = i3wm-wsprev
+
+; bspwm
+wm-restack = bspwm
+scroll-up = bspwm-desknext
+scroll-down = bspwm-deskprev
+
+; separator = |
+; separator = %{B#00000000}%{F#eceff4}  %{B- F-}"
+
+overline-size = 2
+; overline-color = #ff0000
+
+[module/sxhkd]
+type = custom/script
+tail = true
+label = %output%
+exec = ~/.config/polybar/polybar-sxhkd
+
+[module/spotify]
+type = custom/script
+exec = ~/.config/i3blocks/scripts/spotify
+interval = 2
+click-left = ~/.config/i3blocks/scripts/spotify --toggle
+max-width = 10
+; label = %output:20:30:…%
+
+[module/left1]
+type = custom/text
+; content = "%{T3}%{T-}"
+content = "%{T3}%{T-}"
+content-foreground = ${colors.nord10}
+; content-background = ${colors.nord0}
+
+[module/right1]
+type = custom/text
+; content = "%{T3}%{T-}"
+content = "%{T3}%{T-}"
+content-foreground = ${colors.nord10}
+content-background = ${colors.nord0}
+
+[module/right2]
+type = custom/text
+; content = "%{T3}%{T-}"
+content = "%{T3}%{T-}"
+content-foreground = ${colors.nord0}
+content-background = ${colors.nord10}
+
+[module/right3]
+type = custom/text
+content = "%{T3}%{T-}"
+; content = "%{T3}%{T-}"
+content-foreground = ${colors.nord10}
+content-background = ${colors.nord0}
+
+[module/right4]
+type = custom/text
+; content = "%{T3}%{T-}"
+content = "%{T3}%{T-}"
+content-foreground = ${colors.nord0}
+
+[module/padding1]
+type = custom/text
+content = "%{B#5e81ac} %{B-}"
+content-backgroud = ${colors.nord10}
+
+[module/padding2]
+type = custom/text
+content = "%{B#2e3440} %{B-}"
+
+[module/padding3]
+type = custom/text
+content = "%{B#5281ac} %{B-}"
+
+[module/padding4]
+type = custom/text
+content = "%{B#2e3440} %{B-}"
+
+[module/popup-calendar]
+type = custom/script
+interval = 10
+exec = ~/.config/polybar-scripts/polybar-scripts/popup-calendar/popup-calendar.sh
+click-left = ~/.config/polybar-scripts/polybar-scripts/popup-calendar/popup-calendar.sh --popup &
+label = "%{B#5e81ac}%output%"
+; overline-size = 1
+; overline-color = #000000
+; label-padding = 2
+
+[module/battery]
+type = internal/battery
+battery = BAT1
+adapter = ADP1
+poll-interval = 10
+time-format = %H:%M
+format-charging = %{B#5281ac} <animation-charging> <label-charging>
+format-discharging = %{B#5281ac} <ramp-capacity> <label-discharging>
+label-full = %{B#5281ac} ﮤ
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+
+animation-charging-framerate = 750
+
+[module/cpu]
+type = internal/cpu
+interval = 5
+label =  %percentage%%
+
+[module/memory]
+type = internal/memory
+interval = 5
+; format = <label> <bar-used>
+label = RAM %gb_used%/%gb_free%
+
+[module/pulseaudio]
+type = internal/pulseaudio
+sink = alsa_output.pci-0000_00_1f.3.analog-stereo
+; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
+; Default: true
+; use-ui-max = true
+interval = 5
+format-volume = <ramp-volume> <label-volume>
+label-muted = 婢 muted
+label-muted-foreground = #666
+
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+enable-click = true
+
+[module/volume-pulseaudio]
+type = custom/script
+exec = $HOME/.config/i3blocks-contrib/volume-pulseaudio/volume-pulseaudio
+interval = 1
+label = %{B#2e3440}%output%
+enable-click = true
+enable-scroll = true
+USE_DESCRIPTION = 1
+click-right = bash -c "BLOCK_BUTTON=1 $HOME/.config/i3blocks-contrib/volume-pulseaudio/volume-pulseaudio"
+click-left = bash -c "BLOCK_BUTTON=3 $HOME/.config/i3blocks-contrib/volume-pulseaudio/volume-pulseaudio"
+scroll-up = bash -c "BLOCK_BUTTON=4 $HOME/.config/i3blocks-contrib/volume-pulseaudio/volume-pulseaudio"
+scroll-down = bash -c "BLOCK_BUTTON=5 $HOME/.config/i3blocks-contrib/volume-pulseaudio/volume-pulseaudio"
+LONG_FORMAT = "${SYMB} ${VOL}% [${NAME}]"
+AUDIO_HIGH_SYMBOL = 
+AUDIO_MED_SYMBOL = 
+AUDIO_LOW_SYMBOL = 
+
+[module/bluetooth]
+type = custom/script
+exec = bluetooth | awk '/.* = .*/{ if ($3 == "on") { color="%{F#88c0d0}"; icon="" } else { color="%{F#FF0000}"; icon="" } } END { printf("%s%s\n", color, icon) }'
+label = "%{B#3b4252}%output%"
+interval = 10
+
+[module/light]
+type = custom/script
+exec = ~/alight
+interval = 5
+label = %{B#2e3440}%output%
+; label = "%{o#ff0000}%{+o} %{B#5c6a82} %output% {-o}"
+label-foreground = ${root.foreground}
+scroll-up = light -A 2
+scroll-down = light -U 2
+
+[module/nord-vpn-status]
+type = custom/script
+exec = ~/.config/i3blocks-contrib/nm-vpn/nm-vpn
+click-left = button=1 ~/.config/i3blocks-contrib/nm-vpn/nm-vpn
+interval = 1
+label = "%{B#2e3440} %output% %{B-}"
+; label = "%{B#5c6a82} %{o#ff0000} %output% %{o- B-}"
+
+[module/wired-network]
+type = internal/network
+interface = wlo1
+
+[module/wireless-network]
+type = internal/network
+interface = enp60s0
+
+[module/network]
+type = internal/network
+label = "%{B#ff0000}%output% "
+label-connected-background = ${colors.nord0}
+label-disconnected-background = ${colors.nord0}
+; Name of the network interface to display. You can get the names of the
+; interfaces on your machine with `ip link`
+; Wireless interfaces often start with `wl` and ethernet interface with `eno` or `eth`
+interface = wlo1
+interval = 3
+
+accumulate-stats = true
+
+unknown-as-up = true
+label-connected = 直
+label-disconnected = 睊
+label-disconnected-foreground = ${color.fg-alt}
+
+[module/bspwm]
+type = internal/bspwm
+
+; Only show workspaces defined on the same output as the bar
+; NOTE: The bspwm and XRandR monitor names must match, which they do by default.
+; But if you rename your bspwm monitors with bspc -n this option will no longer
+; behave correctly.
+; Default: true
+pin-workspaces = true
+
+; Output mode flags after focused state label
+; Default: false
+inline-mode = false
+
+; Use fuzzy (partial) matching on labels when assigning
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces
+; containing 'code' in the label
+; Default: false
+fuzzy-match = true
+
+format = <label-state> <label-mode>
+; Available tokens:
+;   %name%
+; Default: %name%
+label-monitor = %name%
+label-mode-padding = 2
+label-mode-background = #e60053
+
+; label-focused = %{B#5e81ac}%icon% %index%
+label-focused = %icon% %index%
+label-focused-foreground = #ffffff
+label-focused-background = ${colors.nord0}
+label-focused-underline = #5e81ac
+label-focused-padding = 1
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-occupied = %icon% %index%
+label-occupied-underline = #555555
+label-occupied-padding = 1
+label-occupied-background = ${colors.nord10}
+label-occupied-foreground = ${colors.nord7}
+
+label-urgent = %icon% %index%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 2
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-empty =
+label-empty-foreground = #55
+
+; Separator in between workspaces
+; label-separator = |
+; label-separator-padding = 2
+; label-separator-foreground = #ffb52a
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 0;
+ws-icon-default = 
+
+[module/i3]
+type = internal/i3
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = true
+
+; This will split the workspace name on ':'
+; Default: false
+strip-wsnumbers = true
+
+; Sort the workspaces by index instead of the default
+; sorting that groups the workspaces by output
+; Default: false
+index-sort = true
+
+; Create click handler used to focus workspace
+; Default: true
+enable-click = true
+format = <label-state> <label-mode>
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-background = #e60053
+
+; label-focused = %icon%%index%
+label-focused-foreground = #ffffff
+label-focused-background = #3f3f3f
+label-focused-underline = #fba922
+label-focused-padding = 2
+
+; label-unfocused = %icon%%index%
+label-unfocused-padding = 2
+
+; label-visible = %icon%%index%
+label-visible-underline = #555555
+label-visible-padding = 2
+
+label-urgent = %index%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 2
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 10;
+ws-icon-default = 

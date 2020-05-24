@@ -1,0 +1,70 @@
+#!/usr/bin/env sh
+print_vpn() {
+     # gsub(/ \[.*/, "", name);
+  ## i3blocks
+  # nmcli -t connection show --active | awk -F ':' '
+  # /tun0/{vpn="ON"} /vpn/{name=$1}
+  # END{
+  #    gsub(/ #.*/, "", name);
+  #     if(vpn) printf("%s\n%s\n%s\n", name, vpn, "#a3be8c")
+  # }'
+
+  ## polybar
+  nmcli -t connection show --active | awk -F ':' '
+  /tun0/{vpn="ON"} /vpn/{name=$1}
+  END{
+     gsub(/ #.*/, "", name);
+      if(vpn) printf("%{F#00ff00} %s", name)
+      else printf("%{F#ff0000} %{o#ff0000} VPN off")
+  }'
+    # echo "%{F#82E0AA}%{A1:nordvpn d:}$(nordvpn status | grep City | cut -d ':' -f2)%{A}%{F-}"
+}
+
+if [ -n "$button" ]; then
+
+  # get `X` and `Y` position
+  eval "$(xdotool getmouselocation --shell)"
+  eval "$(xdotool getdisplaygeometry --shell)"
+  posX=$(($X - 300 / 2))
+  posY=$(($Y - 30))
+  # nmcli -t connection show --active | awk -F ':' '
+  # /tun0/{vpn="ON"} /vpn/{name=$1}
+  # END{if(vpn) printf("%s\n%s\n%s\n", name, vpn, "#00FF00")}'
+
+  CONNECTION=$(
+  nmcli -t connection show --active | awk -F ':' '
+  /tun0/{vpn="ON"} /vpn/{name=$1}
+  END{if(vpn) printf("%s", name)}'
+  )
+
+      # --text=\"<span color='#00ff00' background='#2e3440' >$CONNECTION </span>\" \
+
+  # i3blocks
+  # i3-msg -q "exec yad --html \
+  #     --text=\"<span color='#00ff00' background='#2e3440' >$CONNECTION </span>\" \
+  #     --margins=0 \
+  #     --borders=0 \
+  #     --back='#2e3440' \
+  #     --fore='#ff0000' \
+  #     --undecorated \
+  #     --close-on-unfocus \
+  #     --no-buttons \
+  #     --posx=$posX --posy=$posY \
+  #     > /dev/null"
+
+ yad --html \
+      --text="<span color='#00ff00' background='#2e3440' >$CONNECTION</span>" \
+      --margins=0 \
+      --borders=0 \
+      --back='#2e3440' \
+      --fore='#ff0000' \
+      --undecorated \
+      --close-on-unfocus \
+      --no-buttons \
+      --posx=$posX --posy=$posY \
+      > /dev/null
+
+      # --posx=$posX --posy=$posY \
+fi
+
+print_vpn

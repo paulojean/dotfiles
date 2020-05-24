@@ -13,7 +13,7 @@
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (adjust-parens use-package lsp-java dap-mode bui tree-mode nov esxml spacemacs-theme browse-kill-ring+ browse-kill-ring typescript-mode lsp-python-ms lsp-haskell lsp-mode restclient dumb-jump anzu company-box font-lock+ pfuture ace-window f slack oauth2 websocket request circe emojify ht command-log-mode eyebrowse org-bullets forge ghub treepy closql emacsql-sqlite emacsql evil-org names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
+    (all-the-icons nord-theme adjust-parens use-package lsp-java dap-mode bui tree-mode nov esxml browse-kill-ring+ browse-kill-ring typescript-mode lsp-python-ms lsp-haskell lsp-mode restclient dumb-jump anzu company-box font-lock+ pfuture ace-window f slack oauth2 websocket request circe emojify ht command-log-mode eyebrowse org-bullets forge ghub treepy closql emacsql-sqlite emacsql evil-org names comment-tags alert log4e gntp frog-jump-buffer avy clj-refactor hydra lv inflections edn peg multiple-cursors yasnippet dockerfile-mode groovy-mode key-chord ranger ido-completing-read+ haskell-mode flycheck evil-surround dash clojure-mode parseedn parseclj a spotify apropospriate-theme psc-ide magit company cider bash-completion quelpa-use-package quelpa frame-local ov flycheck-checkbashisms google-translate flyspell-correct-popup flyspell-correct-ivy flycheck-joker buffer-move neotree company-mode counsel ivy-posframe flycheck-posframe posframe evil-collection ivy treemacs-magit treemacs-projectile treemacs-evil treemacs lua-mode psci feature-mode clomacs evil-magit evil-commentary which-key origami linum-relative nix-mode auto-complete ag paredit projectile evil-leader ## evil)))
  '(safe-local-variable-values
    (quote
     ((elisp-lint-indent-specs
@@ -578,8 +578,12 @@
 
 (use-package buffer-move :ensure t)
 
-(use-package spacemacs-theme :ensure t)
-(load-theme 'spacemacs-dark t)
+;; (use-package spacemacs-theme :ensure t)
+;; (load-theme 'spacemacs-dark t)
+
+(use-package nord-theme :ensure t)
+(load-theme 'nord t)
+
 (use-package spaceline
   :ensure t
   :config (progn

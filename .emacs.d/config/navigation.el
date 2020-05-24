@@ -29,9 +29,9 @@
 
 (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
 
-(progn
-  (define-key evil-normal-state-map (kbd "TAB") 'switch-to-prev-buffer)
-  (define-key evil-normal-state-map (kbd "SPC TAB") 'switch-to-next-buffer))
+;; (progn
+;;   (define-key evil-normal-state-map (kbd "TAB") 'switch-to-prev-buffer)
+;;   (define-key evil-normal-state-map (kbd "SPC TAB") 'switch-to-next-buffer))
 
 (progn
   (define-key evil-normal-state-map (kbd "C-m C-m") 'magit)

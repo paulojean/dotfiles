@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ -n "$(setxkbmap -query | grep variant)" ]; then
+  setxkbmap -layout us
+else
+  setxkbmap -layout us -variant intl
+fi

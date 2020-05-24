@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-bluetooth | awk '/.* = .*/{ if ($3 == "on") { color="#5E81AC"; icon="" } else { color="#FF0000"; icon="" } } END { printf("%s\n%s\n%s\n", icon, "", color) }'
+# if [ -n "$button" ]; then
+#   sudo bluetooth toggle
+# fi
+
+# bluetooth | awk '/.* = .*/{ if ($3 == "on") { color="#5E81AC"; icon="" } else { color="#FF0000"; icon="" } } END { printf("%s\n%s\n%s\n", icon, "", color) }'
+bluetooth | awk '/.* = .*/{ if ($3 == "on") { color="#88c0d0"; icon="" } else { color="#FF0000"; icon="" } } END { printf("%s\n%s\n%s\n", icon, "", color) }'
