@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if pgrep polybar;
+then
+  # polybar-msg cmd hide
+  pkill polybar
+  bspc config -m focused bottom_padding $((`bspc config -m focused bottom_padding` - 24 ))
+else
+  # polybar-msg cmd show
+  ~/.config/polybar/launch.sh
+  bspc config -m focused bottom_padding $((`bspc config -m focused bottom_padding` + 20 ))
+fi

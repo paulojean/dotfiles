@@ -28,9 +28,11 @@ case "$1$2" in
   "Sj") bspc node -z top 0 20;;
   "Sk") bspc node -z bottom 0 -20;;
   "Sl") bspc node -z left 20 0;;
+  "Ch") bspc node -z left -20 0 && bspc node -z right -20 0;;
+  "Cj") bspc node -z bottom 0 20 && bspc node -z top 0 20;;
+  "Ck") bspc node -z top 0 -20 && bspc node -z bottom 0 -20;;
+  "Cl") bspc node -z right 20 0 && bspc node -z left 20 0;;
 esac
-
-xdotool key --clearmodifiers alt+i
 
 # bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 

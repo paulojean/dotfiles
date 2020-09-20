@@ -637,30 +637,16 @@
               (kbd "C-f 0") 'eyebrowse-switch-to-window-config-0)))
 
 (use-package restclient
-  :ensure t)
-
-(use-package spotify.el
   :ensure t
-  :quelpa (spotify :repo "danielfm/spotify.el" :fetcher github)
-  :after evil
-  :init
-  (setq spotify-oauth2-client-secret (getenv "SPOTIFY_SECRET"))
-  (setq spotify-oauth2-client-id (getenv "SPOTIFY_CLIENT_ID"))
-  :config (progn
-            (require 'spotify)
-            (evil-define-key 'normal spotify-playlist-search-mode-map
-              (kbd "q") 'kill-this-buffer
-              (kbd "p") 'spotify-playlist-select
-              (kbd "P") 'spotify-pause
-              (kbd "J") 'spotify-playlist-load-more
-              )
-            (evil-define-key 'normal spotify-track-search-mode-map
-              (kbd "q") 'kill-this-buffer
-              (kbd "p") 'spotify-track-select
-              (kbd "P") 'spotify-pause
-              (kbd "J") 'spotify-track-load-more
-              )
-            ))
+  :mode "\\.http\\'")
+
+(define-generic-mode sxhkd-mode
+  '(?#)
+  '("alt" "Escape" "super" "bspc" "ctrl" "space" "shift")
+  nil
+  '("sxhkdrc")
+  nil
+  "Simple mode for sxhkdrc files.")
 
 (add-to-list 'load-path (concat user-emacs-directory "vendor"))
 

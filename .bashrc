@@ -62,6 +62,9 @@ source ~/.bash-preexec.sh
 
 ps aux | grep '[C]aps' 1>/dev/null || xcape -e 'Caps_Lock=Escape'
 
+export NNN_PLUG='l:launch'
+export NNN_COLORS='1234'
+
 preexec() {
   cmd_start="$SECONDS"
 }

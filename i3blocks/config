@@ -10,18 +10,18 @@ interval=5
 
 [wifi]
 command=$HOME/.config/i3blocks-contrib/wifi/wifi
-label=wifi:
+label=
 INTERFACE=wlo1
 interval=60
 
 [cpu_usage]
 command=$HOME/.config/i3blocks-contrib/cpu_usage/cpu_usage
 interval=10
-LABEL=CPU:
+LABEL= 
 
 [memory]
 command=$HOME/.config/i3blocks-contrib/memory/memory
-label=MEM:
+label= 
 interval=30
 
 [battery2]
@@ -56,4 +56,4 @@ HEIGHT=180
 WIDTH=220
 
 [noop]
-full_text=
+full_text= 

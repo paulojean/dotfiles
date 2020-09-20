@@ -13,7 +13,7 @@ sxhkd -s /tmp/sxhkd.fifo &
 sxhkd-statusd /tmp/sxhkd.fifo &
 
 $HOME/.config/polybar/launch.sh
-feh --bg-fill $HOME/Pictures/night-moon-made-by-me-1920×1080.jpg
+feh --bg-fill $HOME/Pictures/samurai-champloo-img.jpg
 dunst &
 
 bspc monitor -d 1 2 3 4 5 6 7 8 9 0
