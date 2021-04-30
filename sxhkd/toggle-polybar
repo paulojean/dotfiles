@@ -7,6 +7,5 @@ then
   bspc config -m focused bottom_padding $((`bspc config -m focused bottom_padding` - 24 ))
 else
   # polybar-msg cmd show
-  ~/.config/polybar/launch.sh
-  bspc config -m focused bottom_padding $((`bspc config -m focused bottom_padding` + 20 ))
+  ~/code/dotfiles/polybar/launch.sh && bspc config -m focused bottom_padding $((`bspc config -m focused bottom_padding` + 20 ))
 fi

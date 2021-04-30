@@ -4,7 +4,7 @@
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-export HISTCONTROL=ignoreboth:erasedups
+export HISTCONTROL=ignoreboth:erasedups:ignorespace
 export HISTSIZE=50000
 export HISTFILESIZE=500000
 export HISTIGNORE='?:??:git co -:cd -:git ??:git stash:git stash pop'
@@ -26,9 +26,9 @@ export KAFKA_HOME="$HOME/.bin/kafka_2.11-2.0.0"
 export GOPATH=~/.go
 
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-13.jdk/Contents/Home/"
-_jhome=$(readlink -f $(command -v java))
+_jhome=$(readlink -f $(command -v java) | sed "s:bin/java::")
 export JAVA_HOME=$_jhome
-PATH=$PATH:$JAVA_HOME/bin
+export PATH=$PATH:$JAVA_HOME/bin
 export LEIN_SUPPRESS_USER_LEVEL_REPO_WARNINGS="TRUE"
 export PATH="$PATH:$GOPATH/bin"
 

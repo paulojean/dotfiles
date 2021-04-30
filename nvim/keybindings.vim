@@ -38,12 +38,6 @@ nnoremap <c-h> <c-w><c-h>
 " A-r paste from buffer on terminal in insert mode
 tnoremap <expr> <A-r> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
-" Move cursor by visual lines
-noremap <silent> k gk
-noremap <silent> j gj
-noremap <silent> 0 g0
-noremap <silent> $ g$
-
 " undotree
 nnoremap tt :UndotreeToggle<cr>
 

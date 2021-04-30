@@ -7,8 +7,6 @@ nord0 = #2E3440
 nord1 = #3B4252
 nord2 = #434C5E
 nord3 = #4C566A
-nord3.25 = #546076
-nord3.5 = #5C6A82
 
 nord4 = #D8DEE9
 nord5 = #E5E9F0
@@ -70,28 +68,32 @@ padding-left = 5
 padding-right = 5
 font-0 = "jua:size=11;2"
 font-1 = "Fura Code Nerd Font:size=15;4"
-modules-left = padding1 bspwm padding1 left1 sxhkd
+; modules-left = padding1 i3 padding1 left1 sxhkd
+modules-left = padding1 i3 padding1 left1
 modules-center = spotify
 modules-right = right4 padding4 nord-vpn-status network padding4 right3 padding3 battery padding3 right2 padding2 bluetooth padding2 light padding2 volume-pulseaudio padding2 right1 padding1 popup-calendar padding1
 cursor-click = pointer
 cursor-scroll = ns-resize
 
 ; i3wm
-; override-redirect = false
-; wm-restack = i3
-; scroll-up = i3wm-wsnext
-; scroll-down = i3wm-wsprev
+override-redirect = false
+scroll-up = i3-msg workspace next_on_output
+scroll-down = i3-msg workspace prev_on_output
 
 ; bspwm
-wm-restack = bspwm
-scroll-up = bspwm-desknext
-scroll-down = bspwm-deskprev
+; wm-restack = bspwm
+; scroll-up = bspwm-desknext
+; scroll-down = bspwm-deskprev
 
 ; separator = |
 ; separator = %{B#00000000}%{F#eceff4}  %{B- F-}"
 
 overline-size = 2
 ; overline-color = #ff0000
+
+; Display in  multiple monitors
+; See https://github.com/polybar/polybar/issues/763
+monitor = ${env:MONITOR:}
 
 [module/sxhkd]
 type = custom/script
@@ -104,7 +106,7 @@ type = custom/script
 exec = ~/.config/i3blocks/scripts/spotify
 interval = 2
 click-left = ~/.config/i3blocks/scripts/spotify --toggle
-max-width = 10
+label-maxlen = 80
 ; label = %output:20:30:…%
 
 [module/left1]
@@ -253,13 +255,15 @@ label = %{B#2e3440}%output%
 label-foreground = ${root.foreground}
 scroll-up = light -A 2
 scroll-down = light -U 2
+enable-click = true
+click-left = button=1 uxterm &
 
 [module/nord-vpn-status]
 type = custom/script
 exec = ~/.config/i3blocks-contrib/nm-vpn/nm-vpn
-click-left = button=1 ~/.config/i3blocks-contrib/nm-vpn/nm-vpn
 interval = 1
 label = "%{B#2e3440} %output% %{B-}"
+click-left = button=1 ~/.config/i3blocks-contrib/nm-vpn/nm-vpn
 ; label = "%{B#5c6a82} %{o#ff0000} %output% %{o- B-}"
 
 [module/wired-network]
@@ -378,7 +382,7 @@ pin-workspaces = true
 
 ; This will split the workspace name on ':'
 ; Default: false
-strip-wsnumbers = true
+; strip-wsnumbers = true
 
 ; Sort the workspaces by index instead of the default
 ; sorting that groups the workspaces by output
@@ -411,14 +415,20 @@ label-urgent-foreground = #000000
 label-urgent-background = #bd2c40
 label-urgent-padding = 2
 
-ws-icon-0 = 1;
-ws-icon-1 = 2;
-ws-icon-2 = 3;
-ws-icon-3 = 4;
-ws-icon-4 = 5;
-ws-icon-5 = 6;
-ws-icon-6 = 7;
-ws-icon-7 = 8;
-ws-icon-8 = 9;
-ws-icon-9 = 10;
-ws-icon-default = 
+label-occupied = %icon% %index%
+label-occupied-underline = #555555
+label-occupied-padding = 1
+label-occupied-background = ${colors.nord10}
+label-occupied-foreground = ${colors.nord7}
+
+; ws-icon-0 = 1;
+; ws-icon-1 = 2;
+; ws-icon-2 = 3;
+; ws-icon-3 = 4;
+; ws-icon-4 = 5;
+; ws-icon-5 = 6;
+; ws-icon-6 = 7;
+; ws-icon-7 = 8;
+; ws-icon-8 = 9;
+; ws-icon-9 = 10;
+; ws-icon-default = 

@@ -14,7 +14,7 @@
 font pango: FuraCode Nerd Font 10
 #1il 0oO
 
-set $mod Mod1
+set $mod Mod4
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -42,7 +42,7 @@ floating_modifier Mod1
 bindsym $mod+Return exec kitty
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+w kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
@@ -89,8 +89,8 @@ bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+m layout tabbed
+bindsym $mod+n layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -102,7 +102,7 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+bindsym $mod+z focus child
 
 # move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -156,16 +156,16 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym $left       resize shrink width 10 px or 10 ppt
-        bindsym $down       resize grow height 10 px or 10 ppt
-        bindsym $up         resize shrink height 10 px or 10 ppt
-        bindsym $right      resize grow width 10 px or 10 ppt
+        bindsym $left       resize shrink width 5 px or 5 ppt
+        bindsym $down       resize grow height 5 px or 5 ppt
+        bindsym $up         resize shrink height 5 px or 5 ppt
+        bindsym $right      resize grow width 5 px or 5 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left        resize shrink width 10 px or 10 ppt
-        bindsym Down        resize grow height 10 px or 10 ppt
-        bindsym Up          resize shrink height 10 px or 10 ppt
-        bindsym Right       resize grow width 10 px or 10 ppt
+        bindsym Left        resize shrink width 5 px or 5 ppt
+        bindsym Down        resize grow height 5 px or 5 ppt
+        bindsym Up          resize shrink height 5 px or 5 ppt
+        bindsym Right       resize grow width 5 px or 5 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -174,33 +174,8 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-bar {
-  position bottom
-  status_command i3blocks
-  font pango: FuraCode Nerd Font 10
-
-  colors {
-    background #2e3440
-    statusline #DCDCDC
-
-   focused_workspace #5e81ac #5e81ac #ffffff
-   active_workspace #2e3440 #2e3440 #ffffff
-   inactive_workspace #2e3440 #2e3440 #888888
-   urgent_workspace #2f343a #900000 #ffffff
-  }
-
-  tray_output none
-}
-
 # yad is used on i3blocks scripts
 for_window [class="Yad"] floating enable
-
-new_window pixel 1
-for_window [class=".*"] border pixel 0
-smart_gaps on
-gaps inner 8
 
 # Customss
 #bindsym $mod+Escape exec "i3lock"
@@ -235,7 +210,8 @@ bindsym --release Mod1+Shift+Return exec --no-startup-id xdotool mouseup 1
 exec_always --no-startup-id feh --bg-fill /home/paulo/Pictures/night-moon-made-by-me-1920×1080.jpg
 
 exec_always --no-startup-id albert
-exec_always --no-startup-id libinput-gestures
+exec_always --no-startup-id keynav
+exec_always --no-startup-id libinput-gestures-setup start
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 #######################################################################
