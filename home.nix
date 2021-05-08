@@ -141,6 +141,11 @@
     source = ./polybar;
   };
 
+  xdg.configFile."rofi" = {
+    recursive = true;
+    source = ./rofi;
+  };
+
   programs.kitty = {
     enable = true;
     extraConfig = builtins.readFile ./kitty/kitty.conf;
