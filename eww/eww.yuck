@@ -1,0 +1,123 @@
+(include "variables.yuck")
+(include "pollers.yuck")
+(include "controls.yuck")
+(include "revealer.yuck")
+(include "metrics.yuck")
+
+(defwidget bar []
+  (centerbox :orientation "h"
+    (workspaces)
+    (music)
+    (sidestuff)))
+
+(defwidget sidestuff []
+  (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
+       (box :orientation "h" :spacing 2 :space-evenly false :halign "end"
+            (vpn)
+            (wifi)
+            (network)
+            (bluetooth)
+            (light)
+            (volume)
+            "${time} ")))
+
+(defwidget workspaces []
+  (box :class "workspaces"
+       :orientation "h"
+       :space-evenly true
+       :halign "start"
+       :spacing 10
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 1" 1)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 2" 2)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 3" 3)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 4" 4)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 5" 5)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 6" 6)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 7" 7)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 8" 8)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 9" 9)
+    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 10" 10)))
+
+(defwidget music []
+  (button :onclick "scripts/spotify-toggle-play"
+          :class "spotify ${spotifyState}"
+          spotify))
+
+
+
+(defwidget volume [?class]
+  (box :space-evenly false
+       :class "hover-module ${class}"
+       (revealer-on-hover :class "hl-on-hover"
+                          :var revealVolume
+                          :varname "revealVolume"
+                          :transition "slideleft"
+                          :class "volume"
+                          (hovered-sign :var revealVolume
+                                        (label :text "")
+                                        (label :text ""))
+                          (metric :icon ""
+                                  :class "volume volume-control"
+                                  :value volume
+                                  :onclick "amixer set Master toggle"
+                                  :onchange "amixer set Master {}%")
+                          (button
+                            :class {volumeState == "on" ? "on" : "off"}
+                            :onclick "scripts/toggle-volume"
+                            {volumeState == "on" ? "墳 " : "婢 "}))))
+
+(defwidget light [?class]
+  (box :space-evenly false
+       :class "hover-module ${class}"
+    (revealer-on-hover :class "hl-on-hover"
+                       :var revealLight
+                       :varname "revealLight"
+                       :transition "slideleft"
+                       :class "light"
+
+      (hovered-sign :var revealLight
+                    (label :text "")
+                    (label :text  ""))
+      (metric :icon ""
+              :class "light"
+              :value light
+              :onchange "light -S {}%")
+      " ﯧ ")))
+
+(defwidget bluetooth []
+  (button :onclick "scripts/bluetooth"
+          :class "bluetooth ${bluetoothState}"
+          :timeout "500ms"
+          {bluetoothState == "on" ? "" : ""}))
+
+(defwidget vpn []
+  (label :class {vpn != "" ? "vpn on" : "vpn off"}
+         :text "${vpn} "))
+
+(defwidget wifi []
+  (label :class {wifi == "enabled" ? "wifi on" : "wifi off"}
+         :text {wifi == "enabled" ? "直" : "睊"}))
+
+(defwidget network []
+  (box :orientation "h" :space-evenly false
+       (label :text "${wirelessId} ")
+       ;; (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
+       ;; (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.1 ?
+       ;;        round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 5 ?
+       ;;        "veryuplink" : "uplink" : "noactive"} :text  "  ")
+       ;; (label :text "${round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2)}")
+       ;; (label :class {round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 0.1 ?
+       ;;        round(EWW_NET[interfaceId].NET_DOWN / 1000000, 2) > 10 ?
+       ;;        "verydownlink" : "downlink" : "noactive"} :text  "  ")
+       ))
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0%"
+                      :y "0%"
+                      :width "90%"
+                      :height "10px"
+                      :anchor "top center")
+  :reserve (struts :side "top" :distance "4%")
+  (bar))

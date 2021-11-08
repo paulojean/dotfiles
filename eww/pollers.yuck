@@ -1,0 +1,22 @@
+(defpoll weather :interval "60s" "weather Northampton,UK")
+
+(defpoll volume :interval "1s"  "scripts/getvol")
+
+(defpoll spotify :interval "1s"  "scripts/spotify")
+
+;; either "paused" or "playing"
+(defpoll spotifyState :interval "1s"  "scripts/spotify-state")
+
+(defpoll light :interval "1s"  "light -G")
+
+(defpoll time :interval "10s" "date '+%b %d %H:%M'")
+
+(defpoll date :interval "10s"  "date '+%b %d, %Y'")
+
+(defpoll vpn :interval "5s" "scripts/vpn-connection")
+
+(defpoll wifi :interval "5s" "scripts/wifi")
+
+(defpoll wirelessId :interval "60s"  "iwgetid -r")
+
+(defpoll interfaceId :interval "60s" "iwgetid | awk '{print $1}'")

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+amixer set Master toggle
+
+CURRENT_STATE=$(amixer get Master | grep 'Front Left:' | sed 's/.*\[\(.*\)\]$/\1/')
+
+eww update volumeState="$CURRENT_STATE"

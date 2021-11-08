@@ -1,0 +1,196 @@
+@import "gruvbox.scss";
+
+* {
+  all: unset; //Unsets everything so you can style everything from scratch
+}
+
+//Global Styles
+.bar {
+  background-color: $background;
+  color: $foreground;
+  padding: 0px 1px;
+  font-size: 1em;
+  font-family: FuraCode Nerd Font;
+}
+
+.bottombar {
+  background-color: $background;
+  color: $foreground;
+  padding: 5px;
+  font-size: 1em;
+  font-family: FuraCode Nerd Font;
+}
+
+// Styles on classes (see eww.yuck for more information)
+
+.icon-module {
+  margin: 0 5px;
+  & > &__icon {
+    margin-right: 5px;
+    font-family: "Font Awesome 5 Free Solid";
+  }
+}
+
+.sidestuff slider {
+  all: unset;
+  color: #ffd5cd;
+}
+
+.metric scale trough highlight {
+  all: unset;
+  background-color: $green;
+  color: $black;
+  border-radius: 10px;
+}
+
+.metric scale.warning trough highlight {
+  all: unset;
+  background-color: $yellow;
+  color: $black;
+  border-radius: 10px;
+}
+
+.metric scale.error trough highlight {
+  all: unset;
+  background-color: $error;
+  color: $black;
+  border-radius: 10px;
+}
+
+.metric scale.volume trough highlight {
+  all: unset;
+  background-color: $cyan;
+  color: $black;
+  border-radius: 10px;
+}
+
+.metric scale.light trough highlight {
+  all: unset;
+  background-color: $white;
+  color: $black;
+  border-radius: 10px;
+}
+
+.metric scale trough {
+  all: unset;
+  background-color: $background-alt;
+  border-radius: 50px;
+  min-height: 5px;
+  min-width: 100px;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.label-ram {
+  font-size: large;
+}
+
+.workspaces {
+  background-color: $background-alt;
+  border-radius: 15px;
+  margin-left: 0px;
+  margin-top: 0px;
+  padding-left: 10px;
+  padding-right: 5px;
+
+  // font-family: "Hack NF Regular";
+  font-family: FuraCode Nerd Font;
+  font-size: 12px;
+  // margin-right: 20px;
+
+  button {
+    color: #a89984;
+    // margin: 0px 3px;
+    padding: 0px 3px;
+  }
+  button.focused {
+    color: $green;
+  }
+  button.urgent {
+    color: $urgent;
+  }
+}
+
+.spotify.playing {
+    color: $green
+}
+
+.volume {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $foreground;
+}
+
+.volume button.off {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $red;
+}
+
+.bluetooth.on {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $blue;
+}
+
+.bluetooth.off {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $red;
+}
+
+.vpn.on {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $green;
+}
+
+.vpn.off {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $lightred;
+}
+
+.wifi.off {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $lightred;
+}
+
+.light {
+  font-family: FuraCode Nerd Font;
+  font-size: 1em;
+  color: $foreground;
+}
+
+.uplink {
+  color: $lightmagenta;
+}
+
+.veryuplink {
+  color: $red;
+}
+
+.noactive {
+  color: $white;
+}
+
+.downlink {
+  color: $lightcyan;
+}
+
+.verydownlink {
+  color: $green;
+}
+
+.close {
+  background-color: $red;
+  color: $background;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+button:hover {
+  text-decoration: underline;
+  color: white;
+}

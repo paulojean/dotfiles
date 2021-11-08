@@ -5,15 +5,15 @@
   home = {
     username = "paulo";
     homeDirectory = "/home/paulo";
- };
+  };
   programs.home-manager = {
     enable = true;
     path = "~/.config/nixpkgs/home.nix";
   };
-  home.stateVersion = "20.09";
+  home.stateVersion = "21.05";
   home.packages = with pkgs;
   [
-    pkgs.bspwm
+    # pkgs.bspwm
     pkgs.sxhkd
     pkgs.i3
   ];
@@ -141,10 +141,15 @@
     source = ./polybar;
   };
 
-  xdg.configFile."rofi" = {
+  xdg.configFile."eww" = {
     recursive = true;
-    source = ./rofi;
+    source = ./eww;
   };
+
+  # xdg.configFile."rofi" = {
+  #   recursive = true;
+  #   source = ./rofi;
+  # };
 
   programs.kitty = {
     enable = true;

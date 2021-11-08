@@ -46,8 +46,9 @@ bindsym $mod+w kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
-bindsym $mod+d exec rofi -show run
-bindsym $mod+o exec rofi -show window
+bindsym $mod+d exec rofi -show run -terminal kitty # -theme launcher -run-shell-command 'kitty -e {cmd}'
+bindsym $mod+o exec rofi -show window # -theme launcher
+# bindsym $mod+Escape exec $HOME/.config/i3/rofi-option-menu.sh
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -112,16 +113,16 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+equal scratchpad show
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+1 exec $HOME/.config/i3/go-to-workspace.sh 1
+bindsym $mod+2 exec $HOME/.config/i3/go-to-workspace.sh 2
+bindsym $mod+3 exec $HOME/.config/i3/go-to-workspace.sh 3
+bindsym $mod+4 exec $HOME/.config/i3/go-to-workspace.sh 4
+bindsym $mod+5 exec $HOME/.config/i3/go-to-workspace.sh 5
+bindsym $mod+6 exec $HOME/.config/i3/go-to-workspace.sh 6
+bindsym $mod+7 exec $HOME/.config/i3/go-to-workspace.sh 7
+bindsym $mod+8 exec $HOME/.config/i3/go-to-workspace.sh 8
+bindsym $mod+9 exec $HOME/.config/i3/go-to-workspace.sh 9
+bindsym $mod+0 exec $HOME/.config/i3/go-to-workspace.sh 10
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -174,6 +175,9 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# remove decoration when not stacking
+for_window [class=".*"] border pixel 0
+
 # yad is used on i3blocks scripts
 for_window [class="Yad"] floating enable
 
@@ -209,10 +213,12 @@ bindsym --release Mod1+Shift+Return exec --no-startup-id xdotool mouseup 1
 
 exec_always --no-startup-id feh --bg-fill /home/paulo/Pictures/night-moon-made-by-me-1920×1080.jpg
 
-exec_always --no-startup-id albert
+# exec_always --no-startup-id albert
 exec_always --no-startup-id keynav
+# exec_always --no-startup-id xinput --set-prop "SynPS/2 Synaptics TouchPad" "libinput Accel Speed" 1.0
 exec_always --no-startup-id libinput-gestures-setup start
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/eww/launch.sh
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a

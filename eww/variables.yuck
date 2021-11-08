@@ -1,0 +1,7 @@
+(defvar revealSpotify false)
+(defvar revealDocker false)
+(defvar revealGithub false)
+(defvar revealVolume false)
+(defvar revealLight false)
+(defvar volumeState "on")
+(defvar bluetoothState "on")

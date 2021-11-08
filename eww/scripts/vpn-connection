@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nmcli -a | awk '/VPN connection/ { printf $1 }'
