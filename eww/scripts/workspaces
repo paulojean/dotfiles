@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -eou pipefail
+
+WORKSPACES=($(i3-msg -t get_workspaces \
+  | jq --raw-output --compact-output \
+  'map([.num, .focused]) | map(join(",")) | .[]'))
+
+S_EXP='(box :class "workspaces"
+            :orientation "h"
+            :space-evenly true
+            :halign "start"
+            :spacing 10 '
+
+for workspace in "${WORKSPACES[@]}"; do
+  number=$(echo $workspace | awk -F, '{ printf $1 }')
+  active=$(echo $workspace | awk -F, '{ printf $2 }')
+  if [[ "$active" == "true" ]]; then
+    class="active"
+  else
+    class="inactive"
+  fi
+
+  button="(button :onclick \"\$HOME/.config/i3/go-to-workspace.sh $number\"
+                  :class \"$class\"
+                  :timeout \"1s\" "
+  button="$button $number)"
+
+  S_EXP="$S_EXP $button"
+done
+
+S_EXP="$S_EXP)"
+echo $S_EXP

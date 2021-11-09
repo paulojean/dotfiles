@@ -95,7 +95,7 @@
 
   // font-family: "Hack NF Regular";
   font-family: FuraCode Nerd Font;
-  font-size: 12px;
+  font-size: 14px;
   // margin-right: 20px;
 
   button {
@@ -109,6 +109,12 @@
   button.urgent {
     color: $urgent;
   }
+}
+
+.workspaces button.active{
+    background-color: $yellow;
+    color: $black;
+    border-radius: 2px;
 }
 
 .spotify.playing {

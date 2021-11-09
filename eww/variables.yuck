@@ -5,3 +5,4 @@
 (defvar revealLight false)
 (defvar volumeState "on")
 (defvar bluetoothState "on")
+(defvar workspaces "")

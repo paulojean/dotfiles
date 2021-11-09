@@ -22,28 +22,12 @@
             "${time} ")))
 
 (defwidget workspaces []
-  (box :class "workspaces"
-       :orientation "h"
-       :space-evenly true
-       :halign "start"
-       :spacing 10
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 1" 1)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 2" 2)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 3" 3)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 4" 4)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 5" 5)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 6" 6)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 7" 7)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 8" 8)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 9" 9)
-    (button :onclick "$HOME/.config/i3/go-to-workspace.sh 10" 10)))
+  (literal :content workspaces))
 
 (defwidget music []
   (button :onclick "scripts/spotify-toggle-play"
           :class "spotify ${spotifyState}"
           spotify))
-
-
 
 (defwidget volume [?class]
   (box :space-evenly false
@@ -55,7 +39,7 @@
                           :class "volume"
                           (hovered-sign :var revealVolume
                                         (label :text "")
-                                        (label :text ""))
+                                        (label :text volume))
                           (metric :icon ""
                                   :class "volume volume-control"
                                   :value volume
@@ -77,7 +61,7 @@
 
       (hovered-sign :var revealLight
                     (label :text "")
-                    (label :text  ""))
+                    (label :text  light))
       (metric :icon ""
               :class "light"
               :value light
