@@ -25,6 +25,23 @@
                                 (children :nth 1))
                       (box :class "${class}" (children :nth 2))))))
 
+; same as revealer-on-hover, but the revealed content is displayed to the right
+(defwidget revealer-on-hover-r [var varname ?class ?duration ?transition]
+  (box :class "${class} revealer-on-hover"
+       :orientation "h"
+       :space-evenly false
+       (eventbox :class "eventbox"
+                 :onhover "eww update ${varname}=true"
+                 :onhoverlost "eww update ${varname}=false"
+                 (box :space-evenly false
+                      :class "revealing-${var}"
+                      (box :class "${class}" (children :nth 2))
+                      (children :nth 0)
+                      (revealer :reveal var
+                                :transition {transition ?: "slideright"}
+                                :duration {duration ?: "500ms"}
+                                (children :nth 1))))))
+
 
 (defwidget clickbox [var varname ?class ?duration ?transition]
   (box :class "${class} clickbox" :orientation "h" :space-evenly false

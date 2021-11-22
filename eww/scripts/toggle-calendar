@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [[ "$(eww windows | grep calendar)" == "*calendar" ]]; then
+  eww close calendar
+else
+  eww open calendar
+fi

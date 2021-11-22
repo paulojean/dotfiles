@@ -7,5 +7,6 @@ else
   while [[ "$(eww windows)" != *"*bar"* ]]
   do
     eww open "bar"
+    sleep 1
   done
 fi

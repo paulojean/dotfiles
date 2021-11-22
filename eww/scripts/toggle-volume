@@ -2,6 +2,6 @@
 
 amixer set Master toggle
 
-CURRENT_STATE=$(amixer get Master | grep 'Front Left:' | sed 's/.*\[\(.*\)\]$/\1/')
+CURRENT_STATE=$(amixer get Master | awk 'match($0, /Front Left:.*\[(on|off)\]$/, arr) { print arr[1]}')
 
 eww update volumeState="$CURRENT_STATE"

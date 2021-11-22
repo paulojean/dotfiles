@@ -19,7 +19,34 @@
             (bluetooth)
             (light)
             (volume)
-            "${time} ")))
+            (bat)
+            (time))))
+
+(defwidget time []
+  (button :class "even"
+          :onclick "scripts/toggle-calendar"
+          :timeout "500ms"
+          "${time} "))
+
+(defwidget bat []
+  (label :class "odd"
+         :text " ${EWW_BATTERY.BAT1.capacity}"))
+
+(defwidget cal []
+  (calendar :halign "center"
+            :valign "center"
+            :class "cal"))
+
+(defwindow calendar
+  :wm-ignore: true
+  :monitor 0
+  ;; :windowtype "dock"
+  :geometry (geometry :x "0px"
+                      :y "25px"
+                      :width "240px"
+                      :height "160px"
+                      :anchor "top right")
+  (cal))
 
 (defwidget workspaces []
   (literal :content workspaces))
@@ -32,45 +59,45 @@
 (defwidget volume [?class]
   (box :space-evenly false
        :class "hover-module ${class}"
-       (revealer-on-hover :class "hl-on-hover"
-                          :var revealVolume
-                          :varname "revealVolume"
-                          :transition "slideleft"
-                          :class "volume"
-                          (hovered-sign :var revealVolume
-                                        (label :text "")
-                                        (label :text volume))
-                          (metric :icon ""
-                                  :class "volume volume-control"
-                                  :value volume
-                                  :onclick "amixer set Master toggle"
-                                  :onchange "amixer set Master {}%")
-                          (button
-                            :class {volumeState == "on" ? "on" : "off"}
-                            :onclick "scripts/toggle-volume"
-                            {volumeState == "on" ? "墳 " : "婢 "}))))
+       (revealer-on-hover-r
+        :class "hl-on-hover"
+        :var revealVolume
+        :varname "revealVolume"
+        :transition "slideleft"
+        :class "volume even"
+        (hovered-sign :var revealVolume
+                      (label :text "${volume}")
+                      (label :text ""))
+        (metric :icon ""
+                :class "volume volume-control"
+                :value volume
+                :onclick "amixer set Master toggle"
+                :onchange "amixer set Master {}%")
+        (button :class {volumeState} ;; volumeState -> "on"|"off"
+                :onclick "scripts/toggle-volume"
+                {volumeState == "on" ? "墳" : "婢"}))))
 
 (defwidget light [?class]
   (box :space-evenly false
-       :class "hover-module ${class}"
-    (revealer-on-hover :class "hl-on-hover"
-                       :var revealLight
-                       :varname "revealLight"
-                       :transition "slideleft"
-                       :class "light"
+       :class "hover-module ${class} odd"
+       (revealer-on-hover-r :class "hl-on-hover"
+                            :var revealLight
+                            :varname "revealLight"
+                            :transition "slideleft"
+                            :class "light"
 
-      (hovered-sign :var revealLight
-                    (label :text "")
-                    (label :text  light))
-      (metric :icon ""
-              :class "light"
-              :value light
-              :onchange "light -S {}%")
-      " ﯧ ")))
+                            (hovered-sign :var revealLight
+                                          (label :text "")
+                                          (label :text ""))
+                            (metric :icon ""
+                                    :class "light"
+                                    :value light
+                                    :onchange "light -S {}%")
+                            " ﯧ ")))
 
 (defwidget bluetooth []
   (button :onclick "scripts/bluetooth"
-          :class "bluetooth ${bluetoothState}"
+          :class "bluetooth ${bluetoothState} even"
           :timeout "500ms"
           {bluetoothState == "on" ? "" : ""}))
 
@@ -84,7 +111,7 @@
 
 (defwidget network []
   (box :orientation "h" :space-evenly false
-       (label :text "${wirelessId} ")
+       (label :text "${wirelessId}")
        ;; (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
        ;; (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.1 ?
        ;;        round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 5 ?

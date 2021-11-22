@@ -7,7 +7,7 @@
 ;; either "paused" or "playing"
 (defpoll spotifyState :interval "1s"  "scripts/spotify-state")
 
-(defpoll light :interval "1s"  "light -G")
+(defpoll light :interval "1s"  "light -G | awk -F. '{ printf $1 }'")
 
 (defpoll time :interval "10s" "date '+%b %d %H:%M'")
 

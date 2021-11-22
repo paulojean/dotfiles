@@ -59,7 +59,7 @@
 
 .metric scale.volume trough highlight {
   all: unset;
-  background-color: $cyan;
+  background-color: $white;
   color: $black;
   border-radius: 10px;
 }
@@ -124,7 +124,6 @@
 .volume {
   font-family: FuraCode Nerd Font;
   font-size: 1em;
-  color: $foreground;
 }
 
 .volume button.off {
@@ -166,7 +165,6 @@
 .light {
   font-family: FuraCode Nerd Font;
   font-size: 1em;
-  color: $foreground;
 }
 
 .uplink {
@@ -198,5 +196,27 @@
 
 button:hover {
   text-decoration: underline;
-  color: white;
+  color: $white;
+}
+
+box.revealer-on-hover .revealing-true box {
+  text-decoration: underline;
+  color: $white;
+}
+
+.cal {
+  color: $black;
+  padding: 5px;
+  padding-bottom: 1px;
+  background-color: $yellow;
+}
+
+.even {
+  padding: 0em 0.5em;
+}
+
+.odd {
+  background-color: $yellow;
+  color: $black;
+  padding: 0em 0.5em;
 }
