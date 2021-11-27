@@ -14,7 +14,6 @@
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
        (box :orientation "h" :spacing 2 :space-evenly false :halign "end"
             (vpn)
-            (wifi)
             (network)
             (bluetooth)
             (light)
@@ -26,11 +25,19 @@
   (button :class "even"
           :onclick "scripts/toggle-calendar"
           :timeout "500ms"
-          "${time} "))
+          "${time}"))
 
 (defwidget bat []
   (label :class "odd"
-         :text " ${EWW_BATTERY.BAT1.capacity}"))
+         :text {EWW_BATTERY.BAT1.capacity < 25
+                ? " ${EWW_BATTERY[battery].capacity}"
+                : EWW_BATTERY.BAT1.capacity < 50
+                ? " ${EWW_BATTERY[battery].capacity}"
+                : EWW_BATTERY.BAT1.capacity < 60
+                ? " ${EWW_BATTERY[battery].capacity}"
+                : EWW_BATTERY.BAT1.capacity < 75
+                ? " ${EWW_BATTERY[battery].capacity}"
+                : " ${EWW_BATTERY[battery].capacity}"}))
 
 (defwidget cal []
   (calendar :halign "center"
@@ -49,7 +56,10 @@
   (cal))
 
 (defwidget workspaces []
-  (literal :content workspaces))
+  (box :space-evenly false
+       (literal :content workspaces)
+       (label :class {resizeMode ? "resize-on" : "resize-off"}
+              :text "resize mode")))
 
 (defwidget music []
   (button :onclick "scripts/spotify-toggle-play"
@@ -102,15 +112,15 @@
           {bluetoothState == "on" ? "" : ""}))
 
 (defwidget vpn []
-  (label :class {vpn != "" ? "vpn on" : "vpn off"}
-         :text "${vpn} "))
-
-(defwidget wifi []
-  (label :class {wifi == "enabled" ? "wifi on" : "wifi off"}
-         :text {wifi == "enabled" ? "直" : "睊"}))
+  (label :class {vpn != "" ? "vpn on odd" : "vpn off odd"}
+         :text "${vpn}"))
 
 (defwidget network []
-  (box :orientation "h" :space-evenly false
+  (box :orientation "h"
+       :space-evenly false
+       :class "wireless"
+       (label :class {wifi == "enabled" ? "wifi on" : "wifi off"}
+              :text {wifi == "enabled" ? "直" : "睊"})
        (label :text "${wirelessId}")
        ;; (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
        ;; (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.1 ?

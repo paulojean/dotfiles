@@ -1,6 +1,32 @@
 #!/usr/bin/env bash
 set -eou pipefail
 
+ALL_WORKSPACES=$(i3-msg -t get_tree)
+
+get_workspace_icon() {
+  local workspace_number="$1"
+  local application_type=$($HOME/.config/eww/scripts/i3-workspace-applications.clj "$ALL_WORKSPACES" "$workspace_number")
+
+  case $application_type in
+    Firefox)
+      echo "$workspace_number "
+      ;;
+    kitty)
+      echo "$workspace_number "
+      ;;
+    Spotify)
+      echo "$workspace_number "
+      ;;
+    Chromium-browser)
+      echo "$workspace_number "
+      ;;
+
+    *)
+      echo "$workspace_number"
+      ;;
+  esac
+}
+
 WORKSPACES=($(i3-msg -t get_workspaces \
   | jq --raw-output --compact-output \
   'map([.num, .focused]) | map(join(",")) | .[]'))
@@ -20,10 +46,12 @@ for workspace in "${WORKSPACES[@]}"; do
     class="inactive"
   fi
 
+  icon=$(get_workspace_icon "$number")
+
   button="(button :onclick \"\$HOME/.config/i3/go-to-workspace.sh $number\"
                   :class \"$class\"
                   :timeout \"1s\" "
-  button="$button $number)"
+  button="$button \"$icon\")"
 
   S_EXP="$S_EXP $button"
 done

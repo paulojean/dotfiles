@@ -80,7 +80,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+b split h
+bindsym $mod+Shift+v split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -169,11 +169,11 @@ mode "resize" {
         bindsym Right       resize grow width 5 px or 5 ppt
 
         # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return exec i3-msg mode "default" && eww update resizeMode=false
+        bindsym Escape exec i3-msg mode "default" && eww update resizeMode=false
 }
 
-bindsym $mod+r mode "resize"
+bindsym $mod+r exec i3-msg mode "resize" && eww update resizeMode=true
 
 # remove decoration when not stacking
 for_window [class=".*"] border pixel 0
@@ -185,6 +185,9 @@ for_window [class="Yad"] floating enable
 #bindsym $mod+Escape exec "i3lock"
 # bindsym $mod+Escape exec /home/paulo/.config/i3/lockscreen.sh
 bindsym $mod+Escape exec i3lock-fancy --pixelate
+
+# toggle eww
+bindsym $mod+b exec (pgrep eww && pkill eww) || ~/.config/eww/launch.sh
 
 # Audio controls
 bindsym XF86AudioRaiseVolume exec amixer set Master 1%+ && pkill -RTMIN+1 i3blocks

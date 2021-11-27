@@ -9,4 +9,6 @@ else
     eww open "bar"
     sleep 1
   done
+  eww update workspaces="$("$HOME/.config/eww/scripts/workspaces")"
+  eww update bluetoothState="$(bluetooth | awk '{ printf $3 }')"
 fi

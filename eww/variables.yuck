@@ -6,3 +6,5 @@
 (defvar volumeState "on")
 (defvar bluetoothState "on")
 (defvar workspaces "")
+(defvar resizeMode false)
+(defvar battery "BAT1")

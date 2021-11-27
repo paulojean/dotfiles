@@ -6,9 +6,9 @@
 
 //Global Styles
 .bar {
-  background-color: $background;
+  background-color: rgba(58, 58, 58, 0.0);
   color: $foreground;
-  padding: 0px 1px;
+  padding: 0.2em 0.5em;
   font-size: 1em;
   font-family: FuraCode Nerd Font;
 }
@@ -29,6 +29,10 @@
     margin-right: 5px;
     font-family: "Font Awesome 5 Free Solid";
   }
+}
+
+.sidestuff  {
+  background-color: $background-alt;
 }
 
 .sidestuff slider {
@@ -87,20 +91,13 @@
 
 .workspaces {
   background-color: $background-alt;
-  border-radius: 15px;
-  margin-left: 0px;
-  margin-top: 0px;
-  padding-left: 10px;
-  padding-right: 5px;
+  margin: 0em 0em;
 
-  // font-family: "Hack NF Regular";
   font-family: FuraCode Nerd Font;
   font-size: 14px;
-  // margin-right: 20px;
 
   button {
     color: #a89984;
-    // margin: 0px 3px;
     padding: 0px 3px;
   }
   button.focused {
@@ -117,8 +114,32 @@
     border-radius: 2px;
 }
 
+.resize-off {
+  color: $white;
+  font-size: 0em;
+}
+
+.resize-on {
+  color: $white;
+  background-color: $red;
+  padding: 0em 0.5em;
+  border-radius: 0.5em;
+}
+
+.spotify {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.spotify.paused {
+  background-color: $background;
+  color: $foreground;
+  padding: 0em 0.5em;
+}
+
 .spotify.playing {
-    color: $green
+  background-color: $green;
+  color: $black;
+  padding: 0em 0.5em;
 }
 
 .volume {
@@ -147,13 +168,18 @@
 .vpn.on {
   font-family: FuraCode Nerd Font;
   font-size: 1em;
-  color: $green;
+  background-color: $yellow;
 }
 
 .vpn.off {
   font-family: FuraCode Nerd Font;
   font-size: 1em;
-  color: $lightred;
+  color: $black;
+  background-color: $lightred;
+}
+
+.wireless {
+  padding: 0em 0.5em;
 }
 
 .wifi.off {
@@ -217,6 +243,6 @@ box.revealer-on-hover .revealing-true box {
 
 .odd {
   background-color: $yellow;
-  color: $black;
+  color: #423c40;
   padding: 0em 0.5em;
 }
