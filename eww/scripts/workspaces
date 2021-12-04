@@ -29,7 +29,7 @@ get_workspace_icon() {
 
 WORKSPACES=($(i3-msg -t get_workspaces \
   | jq --raw-output --compact-output \
-  'map([.num, .focused]) | map(join(",")) | .[]'))
+  'map([.num, .focused, .urgent]) | map(join(",")) | .[]'))
 
 S_EXP='(box :class "workspaces"
             :orientation "h"
@@ -40,10 +40,15 @@ S_EXP='(box :class "workspaces"
 for workspace in "${WORKSPACES[@]}"; do
   number=$(echo $workspace | awk -F, '{ printf $1 }')
   active=$(echo $workspace | awk -F, '{ printf $2 }')
+  urgent=$(echo $workspace | awk -F, '{ printf $3 }')
   if [[ "$active" == "true" ]]; then
     class="active"
   else
     class="inactive"
+  fi
+
+  if [[ "$urgent" == "true" ]]; then
+    class="$class urgent"
   fi
 
   icon=$(get_workspace_icon "$number")

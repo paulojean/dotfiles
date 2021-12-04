@@ -113,7 +113,7 @@
 
 (defwidget vpn []
   (label :class {vpn != "" ? "vpn on odd" : "vpn off odd"}
-         :text "${vpn}"))
+         :text {vpn != "" ? vpn : "vpn off"}))
 
 (defwidget network []
   (box :orientation "h"

@@ -222,6 +222,7 @@ exec_always --no-startup-id keynav
 exec_always --no-startup-id libinput-gestures-setup start
 # exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id $HOME/.config/eww/launch.sh
+exec_always --no-startup-id $HOME/.config/eww/scripts/monitor-workspaces
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a

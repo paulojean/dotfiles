@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# listen to changes from i3 and update workspaces useful for changes that are not triggered by the
+# use, such as an application requesting focus (which result in its workspace status to be set to
+# `urgent`
+while read -r line;
+do
+  eww update workspaces="$("$HOME/.config/eww/scripts/workspaces")"
+done < <(i3-msg --monitor '["window"]' -t subscribe)

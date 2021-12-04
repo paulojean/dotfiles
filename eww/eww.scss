@@ -100,18 +100,16 @@
     color: #a89984;
     padding: 0px 3px;
   }
-  button.focused {
-    color: $green;
-  }
-  button.urgent {
-    color: $urgent;
-  }
-}
-
-.workspaces button.active{
+  button.active {
     background-color: $yellow;
     color: $black;
     border-radius: 2px;
+  }
+
+  button.urgent {
+    color: $black;
+    background-color: $urgent;
+  }
 }
 
 .resize-off {
