@@ -390,13 +390,15 @@
                    (require 'lsp-python-ms)
                    (lsp))))
 
-(use-package lsp-haskell
+(use-package google-c-style
   :ensure t
-  :after lsp-mode
-  :hook
-  (haskell-mode . (lambda ()
-                    (require 'lsp-haskell)
-                    (lsp))))
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda()
+              (subword-mode)
+              (google-set-c-style)
+              (google-make-newline-indent)
+              (setq c-basic-offset 4))))
 
 (use-package typescript-mode
   :ensure t
@@ -581,8 +583,8 @@
 ;; (use-package spacemacs-theme :ensure t)
 ;; (load-theme 'spacemacs-dark t)
 
-(use-package nord-theme :ensure t)
-(load-theme 'nord t)
+(use-package gruvbox-theme :ensure t)
+(load-theme 'gruvbox t)
 
 (use-package spaceline
   :ensure t
