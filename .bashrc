@@ -16,13 +16,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$PATH:$HOME/.gem/ruby/2.4.0/bin"
 export PATH="$PATH:$HOME/.gem/ruby/2.5.0/bin"
-export PATH="$PATH:$ANDROID_HOME/tools/emulator"
-export PATH="$PATH:$ANDROID_HOME/tools"
-export PATH="$PATH:$ANDROID_HOME/platform-tools"
-export PATH="$PATH:~/Library/Python/2.7/bin"
 export PATH="$HOME/.config/tlp:$PATH"
-export PATH="$HOME/watchman:$PATH"
-export KAFKA_HOME="$HOME/.bin/kafka_2.11-2.0.0"
 export GOPATH=~/.go
 
 # export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-13.jdk/Contents/Home/"
@@ -57,8 +51,7 @@ parse_git_branch() {
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -f ~/.font ] && source ~/.fonts/*.sh
 [ -f /usr/local/etc/profile.d/bash-preexec.sh ] && . /usr/local/etc/profile.d/bash-preexec.sh
-
-source ~/.bash-preexec.sh
+[ -f ~/.bash-preexec.sh ] && source ~/.bash-preexec.sh
 
 ps aux | grep '[C]aps' 1>/dev/null || xcape -e 'Caps_Lock=Escape'
 
@@ -94,16 +87,16 @@ precmd() {
     PS1="${WHITE}[\w]${NO_COLLOR}${NO_COLLOR}${ORANGE}$(parse_git_branch)${NO_COLLOR} $(date +%T) ~${elapsed}s ${pretty_command_result} \n~> "
 }
 
-export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
+# export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
 
-FZF_CTRL_T_OPTS="--preview-window wrap --preview '
-if [[ -f {} ]]; then
-    file --mime {} | grep -q \"text\/.*;\" && bat --color \"always\" {} || (tput setaf 1; file --mime {})
-elif [[ -d {} ]]; then
-    exa -l --color always {}
-else
-    tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
-fi'"
+# FZF_CTRL_T_OPTS="--preview-window wrap --preview '
+# if [[ -f {} ]]; then
+#     file --mime {} | grep -q \"text\/.*;\" && bat --color \"always\" {} || (tput setaf 1; file --mime {})
+# elif [[ -d {} ]]; then
+#     exa -l --color always {}
+# else
+#     tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
+# fi'"
 
 PROMPT_DIRTRIM=3
 

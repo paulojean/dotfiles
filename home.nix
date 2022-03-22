@@ -1,6 +1,13 @@
 { pkgs, ... }:
-
+let
+  suggestions.bash = import ./programs/bash/suggestions.nix {};
+in
 {
+
+  imports = [
+    ./programs/neovim
+  ];
+
   systemd.user.startServices = true;
   home = {
     username = "paulo";
@@ -21,7 +28,10 @@
   programs.bash = {
     enable = true;
     profileExtra = ''[[ -f ~/.bashrc ]] && . ~/.bashrc'';
-    initExtra = builtins.readFile ./.bashrc;
+    initExtra = (builtins.readFile ./.bashrc) + ''
+      [ -f ${pkgs.bash-preexec}/share/bash/bash-preexec.sh ] && . ${pkgs.bash-preexec}/share/bash/bash-preexec.sh
+      [ -f ${suggestions.bash}/share/bash/suggestions.sh ] && . ${suggestions.bash}/share/bash/suggestions.sh
+    '';
     shellAliases = {
       ls="exa --group-directories-first";
       ll="exa -la --group-directories-first";
@@ -46,6 +56,24 @@
       "....."="cd ../../../..";
       "......"="cd ../../../../..";
     };
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableBashIntegration = true;
+    defaultCommand = ''ag -s --hidden --ignore .git -g ""'';
+    fileWidgetOptions = [
+''
+--preview-window wrap --preview '
+if [[ -f {} ]]; then
+    file --mime {} | grep -q \"text\/.*;\" && bat --color \"always\" {} || (tput setaf 1; file --mime {})
+elif [[ -d {} ]]; then
+    exa -l --color always {}
+else
+    tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
+fi'
+    ''
+    ];
   };
 
   programs.git = {
@@ -131,10 +159,6 @@
     source = ./i3blocks;
   };
 
-  xdg.configFile."nvim" = {
-    recursive = true;
-    source = ./nvim;
-  };
 
   xdg.configFile."polybar" = {
     recursive = true;
@@ -146,10 +170,15 @@
     source = ./eww;
   };
 
-  # xdg.configFile."rofi" = {
+  # xdg.configFile."eww" = {
   #   recursive = true;
-  #   source = ./rofi;
+  #   source = ./eww;
   # };
+
+  xdg.configFile."rofi" = {
+    recursive = true;
+    source = ./rofi;
+  };
 
   programs.kitty = {
     enable = true;
