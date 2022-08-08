@@ -25,6 +25,35 @@ in
     pkgs.i3
   ];
 
+  programs.readline = {
+    enable = true;
+    extraConfig = ''
+      # Pressing tab will list all completions & select the first one. Pressing it
+      # again will cycle through available completions.
+      TAB: menu-complete
+      # Shift-TAB cycles completions backward
+      "\e[Z": menu-complete-backward
+    '';
+    variables = {
+      show-mode-in-prompt =  "on";
+      vi-ins-mode-string = ''\1\e[34;1m\2(insert)\1\e[0m\2'';
+      vi-cmd-mode-string = ''\1\e[35;1m\2(normal)\1\e[0m\2'';
+      editing-mode = "vi";
+
+      # Show all completions as soon as I press tab, even if there's more than one
+      show-all-if-ambiguous = "on";
+      # Ignore case
+      completion-ignore-case = "on";
+      # on menu-complete, first display the common prefix, then cycle through the
+      # options when hitting TAB
+      menu-complete-display-prefix = "on";
+      # Keymaps for when we're in insert (i.e., typing stuff in) mode
+      keymap = "vi-insert";
+      # Remove delay when switching modes. Ref: https://superuser.com/a/1161871/586817
+      keyseq-timeout = "0.01";
+    };
+  };
+
   programs.bash = {
     enable = true;
     profileExtra = ''[[ -f ~/.bashrc ]] && . ~/.bashrc'';
