@@ -8,7 +8,7 @@ get_workspace_icon() {
   local application_type=$($HOME/.config/eww/scripts/i3-workspace-applications.clj "$ALL_WORKSPACES" "$workspace_number")
 
   case $application_type in
-    Firefox)
+    firefox)
       echo "$workspace_number "
       ;;
     kitty)

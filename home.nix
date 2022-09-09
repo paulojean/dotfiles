@@ -3,9 +3,10 @@ let
   suggestions.bash = import ./programs/bash/suggestions.nix {};
 in
 {
-
   imports = [
     ./programs/neovim
+    ./programs/emacs
+    ./programs/tmux
   ];
 
   systemd.user.startServices = true;
@@ -17,7 +18,7 @@ in
     enable = true;
     path = "~/.config/nixpkgs/home.nix";
   };
-  home.stateVersion = "21.05";
+  home.stateVersion = "22.05";
   home.packages = with pkgs;
   [
     # pkgs.bspwm
@@ -194,19 +195,14 @@ fi'
     source = ./polybar;
   };
 
-  xdg.configFile."eww" = {
-    recursive = true;
-    source = ./eww;
-  };
-
-  # xdg.configFile."eww" = {
-  #   recursive = true;
-  #   source = ./eww;
-  # };
-
   xdg.configFile."rofi" = {
     recursive = true;
     source = ./rofi;
+  };
+
+  programs.eww = {
+    enable = true;
+    configDir = ./eww;
   };
 
   programs.kitty = {
