@@ -1,6 +1,6 @@
 { pkgs, ... }: with pkgs;
 let
-  suggestions.bash = import ./suggestions.nix {};
+  suggestions.bash = import ./suggestions.nix { pkgs = pkgs; };
 in
 {
   programs.readline = {

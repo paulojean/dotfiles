@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}, ... }: with pkgs;
+{ pkgs, ... }: with pkgs;
 stdenv.mkDerivation rec {
   pname = "suggestions.bash";
   version = "0.0.1";
