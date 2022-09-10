@@ -75,31 +75,4 @@ fi'
     enable = true;
     extraConfig = builtins.readFile ./kitty/kitty.conf;
   };
-
-  # xsession = {
-  #   enable = true;
-  #   windowManager.i3 = {
-  #     enable = true;
-  #     extraConfig = builtins.readFile ./i3/config;
-  #   };
-  #   # windowManager.bspwm = {
-  #   #   enable = true;
-  #   #   extraConfig = builtins.readFile ./bspwm/bspwmrc;
-  #   #   # monitors = {
-  #   #     #   eDP-1 = ["1" "2" "3" "4" "5" "6" "7" "8" "9" "10"];
-  #   #     # };
-  #   #     # settings = {
-  #   #       #   border_width = 1;
-  #   #       #   window_gap = 0;
-  #   #       #   split_ratio = 0.52;
-  #   #       #   borderless_monocle = true;
-  #   #       #   gapless_monocle = true;
-  #   #       # };
-  #   #       # rules = {
-  #   #         #   "Yad" = {
-  #   #           #     state = "floating";
-  #   #           #   };
-  #   #           # };
-  #   # };
-  # };
 }
