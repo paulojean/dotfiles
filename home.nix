@@ -1,7 +1,4 @@
 { pkgs, ... }:
-let
-  suggestions.bash = import ./programs/bash/suggestions.nix {};
-in
 {
   imports = [
     ./programs/bash
@@ -9,6 +6,7 @@ in
     ./programs/neovim
     ./programs/emacs
     ./programs/tmux
+    ./programs/alacritty
   ];
 
   systemd.user.startServices = true;

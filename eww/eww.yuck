@@ -103,7 +103,7 @@
                                     :class "light"
                                     :value light
                                     :onchange "light -S {}%")
-                            " ﯧ ")))
+                            "ﯧ")))
 
 (defwidget bluetooth []
   (button :onclick "scripts/bluetooth"

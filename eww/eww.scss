@@ -10,7 +10,7 @@
   color: $foreground;
   padding: 0.2em 0.5em;
   font-size: 1em;
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
 }
 
 .bottombar {
@@ -18,7 +18,7 @@
   color: $foreground;
   padding: 5px;
   font-size: 1em;
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
 }
 
 // Styles on classes (see eww.yuck for more information)
@@ -27,7 +27,7 @@
   margin: 0 5px;
   & > &__icon {
     margin-right: 5px;
-    font-family: "Font Awesome 5 Free Solid";
+    font-family: "Font Awesome 5 Free";
   }
 }
 
@@ -93,7 +93,7 @@
   background-color: $background-alt;
   margin: 0em 0em;
 
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 14px;
 
   button {
@@ -141,36 +141,36 @@
 }
 
 .volume {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
 }
 
 .volume button.off {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
   color: $red;
 }
 
 .bluetooth.on {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
   color: $blue;
 }
 
 .bluetooth.off {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
   color: $red;
 }
 
 .vpn.on {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
   background-color: $yellow;
 }
 
 .vpn.off {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
   color: $black;
   background-color: $lightred;
@@ -181,13 +181,13 @@
 }
 
 .wifi.off {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
   color: $lightred;
 }
 
 .light {
-  font-family: FuraCode Nerd Font;
+  font-family: FiraCode Nerd Font Mono;
   font-size: 1em;
 }
 
