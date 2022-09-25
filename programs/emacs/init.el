@@ -198,6 +198,53 @@
             (google-make-newline-indent)
             (setq c-basic-offset 4)))
 
+
+;; scala
+(require 'scala-mode)
+(add-to-list 'auto-mode-alist '("\\.scala\\'" . scala-mode))
+(add-to-list 'auto-mode-alist '("\\.sbt\\'" . scala-mode))
+(add-to-list 'interpreter-mode-alist '("scala" . scala-mode))
+(require 'lsp-mode)
+(add-hook 'scala-mode-hook
+          (lambda()
+            (lsp-deferred)
+            (company-mode)))
+(add-hook 'scala-mode-hook #'lsp-deferred)
+
+(require 'dap-mode)
+(dap-auto-configure-mode)
+(add-hook 'lsp-mode-hook #'dap-mode)
+(add-hook 'lsp-mode-hook #'dap-ui-mode)
+
+(require 'sbt-mode)
+;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+;; allows using SPACE when in the minibuffer
+(substitute-key-definition
+ 'minibuffer-complete-word
+ 'self-insert-command
+ minibuffer-local-completion-map)
+;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+(setq sbt:program-options '("-Dsbt.supershell=false"))
+
+
+;; java
+(require 'lsp-java)
+(add-hook 'java-mode-hook 'lsp)
+(add-hook 'java-mode-hook
+          (lambda ()
+            (evil-define-key 'normal java-mode-map
+              (kbd "K") 'lsp-describe-thing-at-point
+              (kbd "g d") 'lsp-find-definition
+              (kbd "C-c f r") 'lsp-find-references
+              (kbd "C-c g o") 'lsp-java-generate-overrides
+              (kbd "C-c b p") 'lsp-java-build-project
+              (kbd "C-c e v") 'lsp-java-extract-to-local-variable
+              (kbd "C-c e c") 'lsp-java-extract-to-constant
+              (kbd "C-c r r") 'lsp-rename)
+            (evil-define-key 'insert java-mode-map
+              (kbd "TAB") 'completion-at-point)))
+
+
 ;; clj-refactor
 (setq cljr-warn-on-eval nil)
 
@@ -354,8 +401,7 @@
 
 (setq org-agenda-files '("~/todos.org"))
 (add-hook 'org-mode-hook
-	  (lambda ()
-
+          (lambda ()
             (evil-define-key 'normal org-mode-map
 
               (kbd "-") 'org-ctrl-c-minus

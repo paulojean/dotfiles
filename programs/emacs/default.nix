@@ -3,6 +3,7 @@ let
   plugins = pkgs.callPackage ./custom-plugins.nix {};
 in
 {
+  services.emacs.enable = true;
   programs.emacs = {
     enable = true;
 
@@ -34,19 +35,6 @@ in
       projectile
       counsel-projectile
 
-      yaml-mode
-      clojure-mode
-      clojure-mode-extra-font-locking
-      clj-refactor
-      go-mode
-      nix-mode
-      haskell-mode
-      lua-mode
-      feature-mode
-      markdown-mode
-      groovy-mode
-      dockerfile-mode
-
       keychain-environment
 
       company
@@ -74,6 +62,32 @@ in
       command-log-mode
       eyebrowse
       restclient
+
+      # programming
+      yaml-mode
+      clojure-mode
+      clojure-mode-extra-font-locking
+      clj-refactor
+      go-mode
+      nix-mode
+      haskell-mode
+      lua-mode
+      feature-mode
+      markdown-mode
+      groovy-mode
+      dockerfile-mode
+      scala-mode
+      sbt-mode
+      vimrc-mode
+
+      ## lsp
+      lsp-mode
+      lsp-java
+      lsp-metals
+      dap-mode
+      lsp-ui
+      lsp-ivy
+
 
       plugins.emacs-tmux-pane
 

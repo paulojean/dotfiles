@@ -17,16 +17,28 @@ in {
       ack-vim
 
       ale
+      lightline-vim
       lightline-ale
       lightline-bufferline
 
       vim-tmux
       tmux-navigator
 
-      rainbow_parentheses
-
       nvim-contabs
+
+      # ui
+      rainbow_parentheses
+      gruvbox-nvim
+
     ];
-    extraConfig = builtins.readFile ./config.vim;
+    extraConfig = builtins.concatStringsSep "\n" [
+      ''
+        lua << EOF
+        ${pkgs.lib.strings.fileContents ./config.lua}
+        EOF
+      ''
+
+      (pkgs.lib.strings.fileContents ./config.vim)
+    ];
   };
 }

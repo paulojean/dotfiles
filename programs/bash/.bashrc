@@ -87,7 +87,7 @@ precmd() {
     PS1="${WHITE}[\w]${NO_COLLOR}${NO_COLLOR}${ORANGE}$(parse_git_branch)${NO_COLLOR} $(date +%T) ~${elapsed}s ${pretty_command_result} \n~> "
 }
 
-# export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
+export FZF_DEFAULT_COMMAND='ag -s --hidden --ignore .git -g ""'
 
 # FZF_CTRL_T_OPTS="--preview-window wrap --preview '
 # if [[ -f {} ]]; then
