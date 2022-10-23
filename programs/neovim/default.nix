@@ -15,6 +15,7 @@ in {
       undotree
       ncm2
       ack-vim
+      vim-easymotion
 
       ale
       lightline-vim

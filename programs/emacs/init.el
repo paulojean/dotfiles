@@ -83,6 +83,9 @@
                  (kbd "C-f f") 'eyebrowse-switch-to-window-config
                  (kbd "C-f 0") 'eyebrowse-switch-to-window-config-0)
 
+(require 'evil-easymotion)
+(evilem-default-keybindings ",")
+
 ;; dired
 (eval-after-load 'dired
   '(progn
@@ -245,7 +248,114 @@
               (kbd "TAB") 'completion-at-point)))
 
 
-;; clj-refactor
+;; clj
+
+;; This is useful for working with camel-case tokens, like names of
+;; Java classes (e.g. JavaClassName)
+(require 'clojure-mode)
+(add-hook 'clojure-mode-hook 'subword-mode)
+
+;;; cider
+(require 'cider-mode)
+;;; provides minibuffer documentation for the code you're typing into the repl
+(add-hook 'cider-mode-hook 'eldoc-mode)
+;;; don't go right to the REPL buffer when it's finished connecting
+(setq cider-repl-pop-to-buffer-on-connect nil)
+;;; When there's a cider error, show its buffer and switch to it
+(setq cider-show-error-buffer t)
+(setq cider-auto-select-error-buffer t)
+;;; Where to store the cider history.
+(setq cider-repl-history-file "~/.emacs.d/cider-history")
+;;; Wrap when navigating history.
+(setq cider-repl-wrap-history t)
+;;; Use clojure mode for other extensions
+(add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("\\.cljs.*$" . clojure-mode))
+(add-to-list 'auto-mode-alist '("lein-env" . enh-ruby-mode))
+;;; custom
+(defun my/clojure-hook (-mode-map)
+  (when -mode-map
+    (which-key-add-key-based-replacements (kbd "C-c l") "cider clear repl buffer.")
+    (evil-define-key 'normal -mode-map
+      (kbd "C-c l") '(lambda () (interactive) (cider-find-and-clear-repl-output t))
+      (kbd "C-c r") 'cider-inspect-last-result
+      (kbd "C-p") 'cider-repl-backward-input
+      (kbd "C-n") 'cider-repl-forward-input)
+
+    (evil-define-key 'insert -mode-map
+      (kbd "TAB") 'cider-repl-tab))
+
+  (modify-syntax-entry ?+ "w")
+  (modify-syntax-entry ?- "w")
+  (modify-syntax-entry ?_ "w")
+  (modify-syntax-entry ?/ "w")
+  (modify-syntax-entry ?: "w")
+  (modify-syntax-entry ?> "w")
+  (modify-syntax-entry ?< "w")
+  (modify-syntax-entry ?? "w")
+  (modify-syntax-entry ?! "w")
+  (modify-syntax-entry ?. "w")
+  (modify-syntax-entry ?* "w")
+  )
+(add-hook 'cider-clojure-interaction-mode-hook
+          (lambda ()
+            (evil-define-key 'insert cider-clojure-interaction-mode-map
+              (kbd "S-RET") 'cider-eval-print-last-sexp)
+
+            (evil-define-key 'normal cider-clojure-interaction-mode-map
+              (kbd "S-RET") 'cider-eval-print-last-sexp)))
+(add-hook 'cider-repl-mode-hook
+          (lambda ()
+            (paredit-mode t)
+            (my/clojure-hook cider-repl-mode-map)
+            (setq lsp-enable-indentation nil)
+            (setq lsp-enable-completion-at-point nil)
+            (my/clojure-hook cider-mode-map)))
+(add-hook 'cider-browse-ns-mode-hook
+          (lambda ()
+            (evil-define-key 'normal cider-browse-ns-mode-map
+              (kbd "RET") 'cider-browse-ns-operate-at-point
+              (kbd "^") 'cider-browse-ns-all
+              (kbd "d") 'cider-browse-ns-doc-at-point
+              (kbd "q") 'cider-popup-buffer-quit-function
+              (kbd "s") 'cider-browse-ns-find-at-point)))
+(defun my/cider-insert-last-sexp-in-repl ()
+  (interactive)
+  (cider-insert-last-sexp-in-repl t))
+(add-hook 'clojure-mode-hook
+          (lambda ()
+            (paredit-mode t)
+            ;; keybindings
+            (my/clojure-hook nil)
+            (evil-define-key 'normal clojure-mode-map
+              (kbd "C-c '") 'cider-jack-in
+              (kbd "C-c b") 'cider-eval-buffer
+              (kbd "C-c e") 'cider-eval-last-sexp
+              (kbd "C-c v") 'cider-eval-sexp-at-point
+              (kbd "C-c d n") 'cider-toggle-trace-ns
+              (kbd "C-c d v") 'cider-toggle-trace-var
+              (kbd "C-c n f") 'cider-browse-ns
+              (kbd "C-c n r") 'cider-ns-refresh
+              (kbd "C-c s n") 'cider-repl-set-ns
+              (kbd "C-c s r") 'my/cider-insert-last-sexp-in-repl
+              (kbd "> )") 'paredit-forward-slurp-sexp
+              (kbd "< (") 'paredit-backward-slurp-sexp
+              (kbd "< )") 'paredit-forward-barf-sexp
+              (kbd "> (") 'paredit-backward-barf-sexp
+              )
+            ;;refactor
+            (require 'clj-refactor)
+            (clj-refactor-mode 1)
+            ;; (yas-minor-mode 1) ; for adding require/use/import statements
+            (cljr-add-keybindings-with-prefix "C-c C-m")
+            ;; lsp
+            (evil-define-key 'normal clojure-mode-map
+              (kbd "C-c C-l r") 'lsp-find-references
+              (kbd "C-c C-l d") 'lsp-find-definition)
+            (lsp)))
+
+;;; clj-refactor
 (setq cljr-warn-on-eval nil)
 
 (require 'company)
@@ -689,22 +799,18 @@
   (define-key evil-normal-state-map (kbd "C-m C-m") 'magit)
   (define-key evil-normal-state-map (kbd "C-m C-d") 'magit-dispatch)
   (define-key evil-normal-state-map (kbd "C-m C-f") 'magit-file-dispatch)
-)
-
-(progn
-  (defun my/scroll-up ()
-    (interactive)
-    (evil-scroll-up nil)
-    (evil-scroll-line-to-center (line-number-at-pos)))
-
-  (defun my/scroll-down ()
-    (interactive)
-    (evil-scroll-down nil)
-    (evil-scroll-line-to-center (line-number-at-pos)))
-
-  (define-key evil-normal-state-map (kbd "C-b") 'my/scroll-up)
-  (define-key evil-normal-state-map (kbd "C-d") 'my/scroll-down)
   )
+
+(defun my/scroll-up ()
+  (interactive)
+  (evil-scroll-up nil)
+  (evil-scroll-line-to-center (line-number-at-pos)))
+(defun my/scroll-down ()
+  (interactive)
+  (evil-scroll-down nil)
+  (evil-scroll-line-to-center (line-number-at-pos)))
+(define-key evil-normal-state-map (kbd "C-b") 'my/scroll-up)
+(define-key evil-normal-state-map (kbd "C-d") 'my/scroll-down)
 
 (define-key evil-normal-state-map (kbd "/") 'swiper)
 

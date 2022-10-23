@@ -19,7 +19,7 @@ in
       evil-surround
       evil-org
       evil-commentary
-      # evil-magit
+      evil-easymotion
 
       ivy
       flyspell-correct-ivy
@@ -79,8 +79,12 @@ in
       scala-mode
       sbt-mode
       vimrc-mode
+      cider
 
-      ## lsp
+      # editing
+      paredit
+
+      # lsp
       lsp-mode
       lsp-java
       lsp-metals

@@ -6,7 +6,7 @@ else
   eww daemon
   while [[ "$(eww windows)" != *"*bar"* ]]
   do
-    eww open "bar"
+    eww open "bar" --debug
     sleep 1
   done
   eww update workspaces="$("$HOME/.config/eww/scripts/workspaces")"

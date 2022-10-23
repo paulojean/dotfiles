@@ -111,6 +111,8 @@ case "$BLOCK_BUTTON" in
     3) amixer set Master toggle ;;
     4) amixer set Master 2%+ && pkill -RTMIN+1 i3blocks ;;
     5) amixer set Master 2%- && pkill -RTMIN+1 i3blocks ;;
+    # 4) amixer -q -D $MIXER sset $SCONTROL $CAPABILITY $AUDIO_DELTA%+ ;;
+    # 5) amixer -q -D $MIXER sset $SCONTROL $CAPABILITY $AUDIO_DELTA%- ;;
 esac
 
 function print_format {
