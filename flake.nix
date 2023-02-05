@@ -9,17 +9,18 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
+      user = "paulo";
     in {
-      homeConfigurations.paulo = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      homeConfigurations = (
+        import ./nix {
+          inherit (nixpkgs) lib;
+          inherit inputs nixpkgs home-manager user;
+        }
+      );
 
-        modules = [
-          ./home.nix
-        ];
-      };
     };
 }
