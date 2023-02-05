@@ -15,12 +15,18 @@
       pkgs = nixpkgs.legacyPackages.${system};
       user = "paulo";
     in {
+      nixosConfigurations = (
+        import ./hosts {
+          inherit (nixpkgs) lib;
+          inherit inputs nixpkgs home-manager user;
+        }
+      );
+
       homeConfigurations = (
         import ./nix {
           inherit (nixpkgs) lib;
           inherit inputs nixpkgs home-manager user;
         }
       );
-
     };
 }
