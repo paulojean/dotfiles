@@ -1,6 +1,6 @@
 { config, pkgs, user, ... }:
 let
-  packages = pkgs.callPackage ./packages { pkgs = pkgs; } ;
+  packages = pkgs.callPackage ./packages { inherit pkgs; } ;
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
