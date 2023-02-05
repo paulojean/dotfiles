@@ -4,8 +4,8 @@
     enable = true;
     historyLimit = 10000;
     plugins = with pkgs.tmuxPlugins; [
+      # sensible # is loaded by default
       copycat
-      sensible
       gruvbox
       {
         plugin = tmux-fzf;

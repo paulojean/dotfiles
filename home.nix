@@ -23,7 +23,7 @@
     enable = true;
     path = "~/.config/nixpkgs/home.nix";
   };
-  home.stateVersion = "22.05";
+  home.stateVersion = "23.05";
   home.packages = with pkgs;
     [
       i3

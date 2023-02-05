@@ -21,7 +21,6 @@
         offset.y = 0;
         glyph_offset.x = 0;
         glyph_offset.y = 0;
-        use_thin_strokes = true;
       };
 
       custom_cursor_colors = false;
