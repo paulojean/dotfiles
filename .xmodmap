@@ -1,5 +1,0 @@
-clear lock
-clear control
-clear mod1
-keycode 172 = XF86AudioPause
-add control = Control_L Control_R
