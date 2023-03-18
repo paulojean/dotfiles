@@ -189,7 +189,6 @@ in
     wmctrl
     dunst
 
-    # packages.eww
     # eww widgets dependencies
     playerctl
     wirelesstools
