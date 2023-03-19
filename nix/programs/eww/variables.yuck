@@ -8,3 +8,4 @@
 (defvar workspaces "")
 (defvar resizeMode false)
 (defvar battery "BAT1")
+(defvar low-battery-threshold 15)

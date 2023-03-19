@@ -1,5 +1,3 @@
-;; (defpoll weather :interval "60s" "weather Northampton,UK")
-
 (defpoll volume :interval "1s"  "scripts/getvol")
 
 (defpoll spotify :interval "1s"  "scripts/spotify")

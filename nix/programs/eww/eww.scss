@@ -13,6 +13,14 @@
   font-family: FiraCode Nerd Font Mono;
 }
 
+.bar.low-battery {
+  background-color: #ff0000;
+}
+
+.bar.low-battery * {
+  background-color: #ff0000;
+}
+
 .bottombar {
   background-color: $background;
   color: $foreground;

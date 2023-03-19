@@ -6,9 +6,10 @@
 
 (defwidget bar []
   (centerbox :orientation "h"
-    (workspaces)
-    (music)
-    (sidestuff)))
+             :class "bar ${EWW_BATTERY[battery].capacity <= low-battery-threshold ? 'low-battery' : 'ok-battery'}"
+             (workspaces)
+             (music)
+             (sidestuff)))
 
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
@@ -29,13 +30,13 @@
 
 (defwidget bat []
   (label :class "odd"
-         :text {EWW_BATTERY.BAT1.capacity < 25
+         :text {EWW_BATTERY[battery].capacity < 25
                 ? " ${EWW_BATTERY[battery].capacity}"
-                : EWW_BATTERY.BAT1.capacity < 50
+                : EWW_BATTERY[battery].capacity < 50
                 ? " ${EWW_BATTERY[battery].capacity}"
-                : EWW_BATTERY.BAT1.capacity < 60
+                : EWW_BATTERY[battery].capacity < 60
                 ? " ${EWW_BATTERY[battery].capacity}"
-                : EWW_BATTERY.BAT1.capacity < 75
+                : EWW_BATTERY[battery].capacity < 75
                 ? " ${EWW_BATTERY[battery].capacity}"
                 : " ${EWW_BATTERY[battery].capacity}"}))
 
