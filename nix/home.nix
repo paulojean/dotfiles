@@ -21,7 +21,6 @@
   # };
   programs.home-manager = {
     enable = true;
-    path = "~/.config/nixpkgs/home.nix";
   };
   # home.stateVersion = "23.05";
   home.packages = with pkgs;

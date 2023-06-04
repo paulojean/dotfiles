@@ -86,7 +86,7 @@
                 :onchange "amixer set Master {}%")
         (button :class {volumeState} ;; volumeState -> "on"|"off"
                 :onclick "scripts/toggle-volume"
-                {volumeState == "on" ? "墳" : "婢"}))))
+                {volumeState == "on" ? "󰕾" : "󰖁"}))))
 
 (defwidget light [?class]
   (box :space-evenly false
@@ -104,13 +104,13 @@
                                     :class "light"
                                     :value light
                                     :onchange "light -S {}%")
-                            "ﯧ")))
+                            "󰛨")))
 
 (defwidget bluetooth []
   (button :onclick "scripts/bluetooth"
           :class "bluetooth ${bluetoothState} even"
           :timeout "500ms"
-          {bluetoothState == "on" ? "" : ""}))
+          {bluetoothState == "on" ? "󰂯" : "󰂲"}))
 
 (defwidget vpn []
   (label :class {vpn != "" ? "vpn on odd" : "vpn off odd"}
@@ -121,7 +121,7 @@
        :space-evenly false
        :class "wireless"
        (label :class {wifi == "enabled" ? "wifi on" : "wifi off"}
-              :text {wifi == "enabled" ? "直" : "睊"})
+              :text {wifi == "enabled" ? "󰖩" : "󰖪"})
        (label :text "${wirelessId}")
        ;; (label :text "${wirelessId}: ${round(EWW_NET[interfaceId].NET_UP / 1000000, 2)}")
        ;; (label :class {round(EWW_NET[interfaceId].NET_UP / 1000000, 2) > 0.1 ?

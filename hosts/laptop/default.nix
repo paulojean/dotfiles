@@ -203,7 +203,6 @@ in
 
     packages.sxhkd-statusd
     packages.teiler
-    packages.nordvpn
 
     packages.icons.pokemon-cursor
 
