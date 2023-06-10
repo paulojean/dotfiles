@@ -20,10 +20,10 @@ if [[ -n "$RUNNING" ]]; then
             | grep -v ^$)
 
   if [[ "$STATUS" == "Paused" ]]; then
-    STATUS_ICON="契"
+    STATUS_ICON="󰏤"
     COLOR="#d8dee9"
   else
-    STATUS_ICON=""
+    STATUS_ICON="󰐊"
     COLOR="#00ff00"
   fi
 
