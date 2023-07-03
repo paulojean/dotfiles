@@ -155,7 +155,7 @@ in
     lsof pciutils zip unzip unrar bind cacert
     fzf file nnn
     libreoffice-fresh
-    nodejs yarn
+    nodejs
 
     python311Packages.pip
 
@@ -345,6 +345,11 @@ in
     ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{power/control}="auto", ATTR{remove}="1"
     # Remove NVIDIA VGA/3D controller devices
     ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", ATTR{power/control}="auto", ATTR{remove}="1"
+  '';
+
+  systemd.extraConfig = ''
+    DefaultTimeoutStartSec=30s
+    DefaultTimeoutStopSec=30s
   '';
 
   # systemd.packages = [ packages.nordvpn ];
