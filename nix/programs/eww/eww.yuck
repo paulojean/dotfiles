@@ -11,6 +11,11 @@
              (music)
              (sidestuff)))
 
+(defwidget low-battery-warning []
+  (label :class "low-battery-popup"
+         :visible {EWW_BATTERY[battery].capacity <= low-battery-threshold}
+         :text "LOW BATTERY!!"))
+
 (defwidget sidestuff []
   (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :spacing 10
        (box :orientation "h" :spacing 2 :space-evenly false :halign "end"
@@ -143,3 +148,14 @@
                       :anchor "top center")
   :reserve (struts :side "top" :distance "4%")
   (bar))
+
+(defwindow low-battery
+  :monitor 0
+  :windowtype "dialog"
+  :wm-ignore true
+  :geometry (geometry :x "0%"
+                      :y "20px"
+                      :width "60px"
+                      :height "10px"
+                      :anchor "top right")
+ (low-battery-warning))

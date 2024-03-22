@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-CURRENT_STATE=$(sudo bluetooth toggle | awk '{ printf $3 }')
+CURRENT_STATE=$(bluetooth toggle | awk '{ printf $3 }')
 eww update bluetoothState="$CURRENT_STATE"
