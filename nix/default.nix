@@ -3,6 +3,9 @@
 let
   system = "x86_64-linux";
   pkgs = nixpkgs.legacyPackages.${system};
+  overlays = [
+    inputs.neovim-nightly-overlay.overlays.default
+  ];
 in
 {
   aiur = home-manager.lib.homeManagerConfiguration {
@@ -11,10 +14,13 @@ in
     modules = [
       ./home.nix
       {
+        nixpkgs.overlays = overlays;
+      }
+      {
         home = {
           username = "${user}";
           homeDirectory = "/home/${user}";
-          stateVersion = "23.05";
+          stateVersion = "24.05";
         };
       }
     ];

@@ -192,6 +192,8 @@ in
     wine winetricks vulkan-tools
     gnutls libinput-gestures libgpgerror
 
+    parsec-bin
+
     polybar
     tabbed
     wmctrl
@@ -248,6 +250,11 @@ in
 
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
+
+  services.mullvad-vpn = {
+    enable = true;
+    package = pkgs.mullvad-vpn;
+  };
 
   services.fstrim.enable = true;
   services.tlp.enable = true;
@@ -520,6 +527,6 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
 }

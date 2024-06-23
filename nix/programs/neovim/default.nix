@@ -1,45 +1,226 @@
-{ pkgs, ... }:
+{ inputs, pkgs, lib, ... }:
 let
-  plugins = pkgs.vimPlugins // pkgs.callPackage ./custom-plugins.nix {};
+  custom-plugins = pkgs.callPackage ./custom-plugins.nix {};
+
 in {
+
+  # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
+  xdg.configFile."nvim/parser".source =
+    let
+      parsers = pkgs.symlinkJoin {
+        name = "treesitter-parsers";
+        paths = (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: with plugins; [
+          c
+          lua
+        ])).dependencies;
+      };
+    in
+      "${parsers}/parser";
+
+  # Normal LazyVim config here, see https://github.com/LazyVim/starter/tree/main/lua
+  xdg.configFile."nvim/lua".source = ./lua;
+
   programs.neovim = {
     enable = true;
+    # package = pkgs.neovim;
     vimAlias = true;
     vimdiffAlias = true;
     withNodeJs = true;
-    withRuby = true;
-    withPython3 = true;
+    # withRuby = false;
 
-    plugins =  with plugins; [
-      fzf-vim
-      undotree
-      ncm2
-      ack-vim
-      vim-easymotion
+    extraPackages = with pkgs; [
+      # LazyVim
+      lua-language-server
+      stylua
 
-      ale
-      lightline-vim
-      lightline-ale
-      lightline-bufferline
+      yaml-language-server
+      java-language-server
+      bash-language-server
 
-      vim-tmux
-      tmux-navigator
-
-      nvim-contabs
-
-      # ui
-      rainbow_parentheses
-      gruvbox-nvim
-
+      # Telescope
+      ripgrep
+      xclip
     ];
-    extraConfig = builtins.concatStringsSep "\n" [
-      ''
-        lua << EOF
-        ${pkgs.lib.strings.fileContents ./config.lua}
-        EOF
-      ''
 
-      (pkgs.lib.strings.fileContents ./config.vim)
+    plugins = with pkgs.vimPlugins; [
+      lazy-nvim
     ];
+
+    extraLuaConfig =
+      let
+        plugins = with pkgs.vimPlugins; [
+          # LazyVim
+          lazy-nvim
+          LazyVim
+          bufferline-nvim
+          cmp-buffer
+          cmp-nvim-lsp
+          cmp-path
+          cmp_luasnip
+          conform-nvim
+          dashboard-nvim
+          dressing-nvim
+          flash-nvim
+          friendly-snippets
+          gitsigns-nvim
+          indent-blankline-nvim
+          lualine-nvim
+          neo-tree-nvim
+          neoconf-nvim
+          neodev-nvim
+          noice-nvim
+          nui-nvim
+          nvim-cmp
+          nvim-lint
+          nvim-lspconfig
+          nvim-notify
+          nvim-spectre
+          nvim-treesitter
+          nvim-treesitter-context
+          nvim-treesitter-textobjects
+          nvim-ts-autotag
+          nvim-ts-context-commentstring
+          nvim-web-devicons
+          persistence-nvim
+          plenary-nvim
+          telescope-fzf-native-nvim
+          telescope-nvim
+          todo-comments-nvim
+          tokyonight-nvim
+          trouble-nvim
+          vim-illuminate
+          vim-startuptime
+
+          custom-plugins.nvim-tmux-navigation
+
+          # clojure
+          custom-plugins.conjure
+          custom-plugins.cmp-conjure
+          custom-plugins.nvim-treesitter-sexp
+
+          which-key-nvim
+          { name = "LuaSnip"; path = luasnip; }
+          { name = "catppuccin"; path = catppuccin-nvim; }
+          { name = "mini.ai"; path = mini-nvim; }
+          { name = "mini.bufremove"; path = mini-nvim; }
+          { name = "mini.comment"; path = mini-nvim; }
+          { name = "mini.indentscope"; path = mini-nvim; }
+          { name = "mini.pairs"; path = mini-nvim; }
+          { name = "mini.surround"; path = mini-nvim; }
+        ];
+        mkEntryFromDrv = drv:
+          if lib.isDerivation drv then
+            { name = "${lib.getName drv}"; path = drv; }
+          else
+            drv;
+        lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
+      in
+      ''
+        vim.opt.rtp:prepend("${lazyPath}/lazy.nvim")
+        require("lazy").setup({
+          defaults = {
+            lazy = true,
+          },
+          dev = {
+            -- reuse files from pkgs.vimPlugins.*
+            path = "${lazyPath}",
+            patterns = { "." },
+            -- fallback to download
+            fallback = true,
+          },
+          spec = {
+            { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+            -- The following configs are needed for fixing lazyvim on nix
+            -- force enable telescope-fzf-native.nvim
+            { "nvim-telescope/telescope-fzf-native.nvim", enabled = true },
+            -- disable mason.nvim, use programs.neovim.extraPackages
+            { "williamboman/mason-lspconfig.nvim", enabled = false },
+            { "williamboman/mason.nvim", enabled = false },
+            -- import/override with your plugins
+            { import = "plugins" },
+            -- treesitter handled by xdg.configFile."nvim/parser", put this line at the end of spec to clear ensure_installed
+            { "nvim-treesitter/nvim-treesitter",
+               opts = function(_, opts)
+                opts.ensure_installed = {}
+              end,
+            },
+
+          },
+        })
+      '';
+
+    # plugins = {
+
+    #   lazy.enable = true;
+
+    #   tmux-navigator.enable = true;
+
+
+    #   # clojure
+    #   conjure.enable = true;
+
+    #   lsp = {
+    #     enable = true;
+    #   };
+
+    #   treesitter = {
+    #     enable = true;
+    #     indent = true;
+    #     folding = true;
+    #   };
+    #   treesitter-context = {
+    #     enable = true;
+    #   };
+    #   treesitter-refactor = {
+    #     enable = true;
+    #   };
+    #   treesitter-textobjects = {
+    #     enable = true;
+    #   };
+
+    #   undotree.enable = true;
+
+    #   vim-slime.enable = true;
+
+    #   # which-key.enable = true;
+    # };
+
+
+
+    # plugins = with pkgs.vimPlugins; [
+    #   lazy-nvim
+    # ];
+
+    # plugins =  with plugins; [
+    #   fzf-vim
+    #   undotree
+    #   ncm2
+    #   ack-vim
+    #   vim-easymotion
+
+    #   ale
+    #   lightline-vim
+    #   lightline-ale
+    #   lightline-bufferline
+
+    #   vim-tmux
+    #   tmux-navigator
+
+    #   nvim-contabs
+
+    #   # ui
+    #   rainbow_parentheses
+    #   gruvbox-nvim
+
+    # ];
+    # extraConfig = builtins.concatStringsSep "\n" [
+    #   ''
+    #     lua << EOF
+    #     ${pkgs.lib.strings.fileContents ./config.lua}
+    #     EOF
+    #   ''
+
+    #   (pkgs.lib.strings.fileContents ./config.vim)
+    # ];
   };
 }

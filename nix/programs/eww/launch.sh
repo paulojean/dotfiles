@@ -4,7 +4,7 @@ if [[ "$(ps aux | grep [e]ww)" == "0" ]]; then
   eww reload
 else
   eww daemon
-  while [[ "$(eww windows)" != *"*bar"* ]]
+  while [[ ! "$(eww active-windows | grep bar)" ]]
   do
     eww open "bar" --debug
     sleep 1
