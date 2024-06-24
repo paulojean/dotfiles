@@ -1,10 +1,14 @@
 { pkgs, ... }:
 {
+  # https://jeppesen.io/git-commit-sign-nix-home-manager-ssh/
+  home.file.".ssh/allowed_signers".text =
+    "* ${builtins.readFile /Users/paulo/.ssh/id_ed25519.pub}";
+
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "Paulo Sousa";
-    userEmail = "pauloj10" + "@" + "gmail.com";
+    userEmail = "paulo" + "@" + "griffin.com";
     aliases = {
       br = "branch";
       bd = "branch -D";
@@ -21,14 +25,23 @@
       please = "push --force-with-lease";
       rehead = "reset HEAD~";
     };
+    # diff-so-fancy.enable = true;
+    difftastic = {
+      enable = true;
+      display = "side-by-side";
+    };
     extraConfig = {
       core = {
         editor = "nvim";
-        pager = "diff-so-fancy | less --tabs=4 -RFX";
+        # pager = "diff-so-fancy | less --tabs=4 -RFX";
       };
       push = {
         default = "current";
       };
+      commit.gpgsign = true;
+      gpg.format = "ssh";
+      gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
+      user.signingKey = "/Users/paulo/.ssh/id_ed25519.pub";
     };
     ignores = [
       "*.elc"

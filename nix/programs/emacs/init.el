@@ -17,6 +17,11 @@
 (setq evil-want-C-u-scroll t)
 (setq evil-want-integration t)
 
+(global-visual-line-mode t)
+;; wrap line but avoid `kill-line` deleting only the current visual line
+;; see https://stackoverflow.com/questions/3281581/how-can-i-enable-line-wrap-on-word-boundaries-only-in-emacs#comment24345478_3282132
+(setq-default word-wrap t)
+
 ;; evil
 
 ;; need to require evil-leader and run (global-evil-leader-mode) before evil is loaded,
@@ -26,6 +31,8 @@
 
 (require 'evil)
 (evil-mode 1)
+
+(global-display-line-numbers-mode 1)
 
 (defun my/evil-delete (orig-fn beg end &optional type _ &rest args)
   (apply orig-fn beg end type ?_ args))
@@ -41,6 +48,9 @@
 (require 'evil-collection)
 (evil-collection-init)
 (evil-leader/set-leader "SPC")
+
+(setq ag-ignore-list (list " BUILD.bazel"))
+
 (evil-leader/set-key
   "'" 'linum-mode
   "," 'other-window
@@ -68,6 +78,21 @@
   )
 (require 'evil-surround)
 (global-evil-surround-mode 1)
+
+(add-hook 'treemacs-mode-hook
+          (lambda ()
+            (evil-define-key 'normal treemacs-mode-map
+              (kbd "C-c C-d c") 'treemacs-create-dir
+              (kbd "C-c C-f d") 'treemacs-delete-file
+              (kbd "C-c C-f c") 'treemacs-create-file
+              (kbd "C-c C-f r") 'treemacs-rename-file
+              (kbd "C-c C-f m") 'treemacs-move-file
+              (kbd "C-c C-p n") 'treemacs-previous-project
+              (kbd "C-c C-p p") 'treemacs-next-project
+              (kbd "C-c C-r u") 'treemacs-root-up
+              (kbd "C-c C-r d") 'treemacs-root-down
+            )
+          ))
 
 (eyebrowse-mode t)
 (setq eyebrowse-wrap-around t)
@@ -114,8 +139,114 @@
 (projectile-mode +1)
 (setq projectile-completion-system 'ivy)
 
-;; magit
+;;; magit
 (require 'magit)
+
+;; helper functions
+
+;; from https://tsdh.org/posts/2022-08-01-difftastic-diffing-with-magit.html
+(defun th/magit--with-difftastic (buffer command)
+  "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
+  (let ((process-environment
+         (cons (concat "GIT_EXTERNAL_DIFF=difft --width="
+                       (number-to-string (frame-width)))
+               process-environment)))
+    ;; Clear the result buffer (we might regenerate a diff, e.g., for
+    ;; the current changes in our working directory).
+    (with-current-buffer buffer
+      (setq buffer-read-only nil)
+      (erase-buffer))
+    ;; Now spawn a process calling the git COMMAND.
+    (make-process
+     :name (buffer-name buffer)
+     :buffer buffer
+     :command command
+     ;; Don't query for running processes when emacs is quit.
+     :noquery t
+     ;; Show the result buffer once the process has finished.
+     :sentinel (lambda (proc event)
+                 (when (eq (process-status proc) 'exit)
+                   (with-current-buffer (process-buffer proc)
+                     (goto-char (point-min))
+                     (ansi-color-apply-on-region (point-min) (point-max))
+                     (setq buffer-read-only t)
+                     (view-mode)
+                     (end-of-line)
+                     ;; difftastic diffs are usually 2-column side-by-side,
+                     ;; so ensure our window is wide enough.
+                     (let ((width (current-column)))
+                       (while (zerop (forward-line 1))
+                         (end-of-line)
+                         (setq width (max (current-column) width)))
+                       ;; Add column size of fringes
+                       (setq width (+ width
+                                      (fringe-columns 'left)
+                                      (fringe-columns 'right)))
+                       (goto-char (point-min))
+                       (pop-to-buffer
+                        (current-buffer)
+                        `(;; If the buffer is that wide that splitting the frame in
+                          ;; two side-by-side windows would result in less than
+                          ;; 80 columns left, ensure it's shown at the bottom.
+                          ,(when (> 80 (- (frame-width) width))
+                             #'display-buffer-at-bottom)
+                          (window-width
+                           . ,(min width (frame-width))))))))))))
+(defun th/magit-show-with-difftastic (rev)
+  "Show the result of \"git show REV\" with GIT_EXTERNAL_DIFF=difft."
+  (interactive
+   (list (or
+          ;; If REV is given, just use it.
+          (when (boundp 'rev) rev)
+          ;; If not invoked with prefix arg, try to guess the REV from
+          ;; point's position.
+          (and (not current-prefix-arg)
+               (or (magit-thing-at-point 'git-revision t)
+                   (magit-branch-or-commit-at-point)))
+          ;; Otherwise, query the user.
+          (magit-read-branch-or-commit "Revision"))))
+  (if (not rev)
+      (error "No revision specified")
+    (th/magit--with-difftastic
+     (get-buffer-create (concat "*git show difftastic " rev "*"))
+     (list "git" "--no-pager" "show" "--ext-diff" rev))))
+(defun th/magit-diff-with-difftastic (arg)
+  "Show the result of \"git diff ARG\" with GIT_EXTERNAL_DIFF=difft."
+  (interactive
+   (list (or
+          ;; If RANGE is given, just use it.
+          (when (boundp 'range) range)
+          ;; If prefix arg is given, query the user.
+          (and current-prefix-arg
+               (magit-diff-read-range-or-commit "Range"))
+          ;; Otherwise, auto-guess based on position of point, e.g., based on
+          ;; if we are in the Staged or Unstaged section.
+          (pcase (magit-diff--dwim)
+            ('unmerged (error "unmerged is not yet implemented"))
+            ('unstaged nil)
+            ('staged "--cached")
+            (`(stash . ,value) (error "stash is not yet implemented"))
+            (`(commit . ,value) (format "%s^..%s" value value))
+            ((and range (pred stringp)) range)
+            (_ (magit-diff-read-range-or-commit "Range/Commit"))))))
+  (let ((name (concat "*git diff difftastic"
+                      (if arg (concat " " arg) "")
+                      "*")))
+    (th/magit--with-difftastic
+     (get-buffer-create name)
+     `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
+(transient-append-suffix 'magit-dispatch "!"
+  '("R" "My Magit Cmds" th/magit-aux-commands))
+
+(transient-define-prefix th/magit-aux-commands ()
+  "My personal auxiliary magit commands."
+  ["Auxiliary commands"
+   ("d" "Difftastic Diff (dwim)" th/magit-diff-with-difftastic)
+   ("s" "Difftastic Show" th/magit-show-with-difftastic)])
+
+
+;; sort branches by most recent commit
+(setq magit-list-refs-sortby "-creatordate")
 (setq magit-display-buffer-function
       (lambda (buffer)
         (display-buffer
@@ -128,6 +259,10 @@
                                  magit-status-mode)))
                     nil
                   '(display-buffer-same-window)))))
+
+
+;;; magit end
+
 
 (evil-collection-init)
 (evil-define-key 'normal git-rebase-mode-map
@@ -298,6 +433,7 @@
   (modify-syntax-entry ?. "w")
   (modify-syntax-entry ?* "w")
   )
+(setq cider-clojure-cli-aliases ":dev:test:portal")
 (add-hook 'cider-clojure-interaction-mode-hook
           (lambda ()
             (evil-define-key 'insert cider-clojure-interaction-mode-map
@@ -329,20 +465,32 @@
             ;; keybindings
             (my/clojure-hook nil)
             (evil-define-key 'normal clojure-mode-map
-              (kbd "C-c '") 'cider-jack-in
-              (kbd "C-c b") 'cider-eval-buffer
-              (kbd "C-c e") 'cider-eval-last-sexp
-              (kbd "C-c v") 'cider-eval-sexp-at-point
-              (kbd "C-c d n") 'cider-toggle-trace-ns
-              (kbd "C-c d v") 'cider-toggle-trace-var
-              (kbd "C-c n f") 'cider-browse-ns
-              (kbd "C-c n r") 'cider-ns-refresh
-              (kbd "C-c s n") 'cider-repl-set-ns
-              (kbd "C-c s r") 'my/cider-insert-last-sexp-in-repl
-              (kbd "> )") 'paredit-forward-slurp-sexp
-              (kbd "< (") 'paredit-backward-slurp-sexp
-              (kbd "< )") 'paredit-forward-barf-sexp
-              (kbd "> (") 'paredit-backward-barf-sexp
+              (kbd "C-c '")     'cider-jack-in
+              (kbd "C-c a")     'lsp-execute-code-action
+              (kbd "C-c b")     'cider-eval-buffer
+              (kbd "C-c e")     'cider-eval-last-sexp
+              (kbd "C-c v")     'cider-eval-sexp-at-point
+              (kbd "C-c d n")   'cider-toggle-trace-ns
+              (kbd "C-c d v")   'cider-toggle-trace-var
+              (kbd "C-c i a")   'lsp-clojure-add-missing-libspec
+              (kbd "C-c i o")   'lsp-organize-imports
+              (kbd "C-c n f")   'cider-browse-ns
+              (kbd "C-c n r")   'cider-ns-refresh
+              (kbd "C-c s n")   'cider-repl-set-ns
+              (kbd "C-c s r")   'my/cider-insert-last-sexp-in-repl
+              (kbd "C-c k")     'paredit-kill
+              (kbd "C-c l r")   'lsp-rename
+              (kbd "C-c j")     'paredit-C-j
+              (kbd "C-c t a")   'lsp-clojure-unwind-all
+              (kbd "C-c t u")   'lsp-clojure-unwind-thread
+              (kbd "C-c t f")   'lsp-clojure-thread-first
+              (kbd "C-c t S-f") 'lsp-clojure-thread-first
+              (kbd "C-c t l")   'lsp-clojure-thread-last
+              (kbd "C-c t S-l") 'lsp-clojure-thread-last-all
+              (kbd "> )")       'paredit-forward-slurp-sexp
+              (kbd "< (")       'paredit-backward-slurp-sexp
+              (kbd "< )")       'paredit-forward-barf-sexp
+              (kbd "> (")       'paredit-backward-barf-sexp
               )
             ;;refactor
             (require 'clj-refactor)
@@ -354,6 +502,12 @@
               (kbd "C-c C-l r") 'lsp-find-references
               (kbd "C-c C-l d") 'lsp-find-definition)
             (lsp)))
+
+(eval-after-load 'paredit
+  '(progn
+     (define-key paredit-mode-map (kbd "C-j") nil) ;; default paredit-C-j
+     (define-key paredit-mode-map (kbd "C-k") nil) ;; default paredit-kill
+     ))
 
 ;;; clj-refactor
 (setq cljr-warn-on-eval nil)
@@ -398,6 +552,14 @@
 (which-key-mode)
 (setq which-key-idle-delay 1)
 (setq which-key-idle-secondary-delay 0.05)
+
+(setq plantuml-default-exec-mode 'executable)
+(setq plantuml-executable-path
+      (concat
+       (shell-command-to-string "ls -d /nix/store/*plantuml* | grep -ve '.drv$' | grep -v 'plantuml-mode' | head -n1 | tr -d '\n'")
+       "/bin/plantuml"))
+(require 'plantuml-mode)
+(global-set-key (kbd "C-c p") 'plantuml-preview)
 
 (require 'tmux-pane)
 (tmux-pane-mode 1)
@@ -464,11 +626,11 @@
   (defun my-pbcopy ()
     (interactive)
     (let ((deactivate-mark t))
-      (call-process-region (point) (mark) "xclip" nil nil nil "-selection" "c")))
+      (call-process-region (point) (mark) "pbcopy" nil nil nil "-selection" "c")))
 
   (defun my-pbpaste ()
     (interactive)
-    (call-process-region (point) (if mark-active (mark) (point)) "xsel" nil t nil "-b"))
+    (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" nil t nil "-b"))
 
   (defun my-pbcut ()
     (interactive)
@@ -540,7 +702,11 @@
               )
             ))
 ;; elisp editing
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (turn-on-eldoc-mode)
+            (paredit-mode t)
+          ))
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
 
@@ -783,6 +949,7 @@
 (setq scroll-conservatively 200
       scroll-margin 3)
 
+(require 'buffer-move)
 (progn
   (define-key evil-normal-state-map (kbd "C-w k") 'buf-move-up)
   (define-key evil-normal-state-map (kbd "C-w j") 'buf-move-down)

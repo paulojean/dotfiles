@@ -1,7 +1,7 @@
 { lib, inputs, nixpkgs, home-manager, user, ... }:
 
 let
-  system = "x86_64-linux";
+  system = "aarch64-darwin";
   pkgs = nixpkgs.legacyPackages.${system};
   overlays = [
     inputs.neovim-nightly-overlay.overlays.default
@@ -19,7 +19,7 @@ in
       {
         home = {
           username = "${user}";
-          homeDirectory = "/home/${user}";
+          homeDirectory = "/Users/${user}";
           stateVersion = "24.05";
         };
       }

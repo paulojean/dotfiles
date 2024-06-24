@@ -4,7 +4,7 @@
     enable = true;
     historyLimit = 10000;
     plugins = with pkgs.tmuxPlugins; [
-      # sensible # is loaded by default
+      sensible # is loaded by default
       copycat
       gruvbox
       {
@@ -89,10 +89,10 @@
       bind-key -n M-< swap-window -t -1
       bind-key -n M-> swap-window -t +1
 
-      is_bash='echo "#{pane_current_command}" | \
-          grep -iqE "bash"'
+      #is_bash='echo "#{pane_current_command}" | \
+      #    grep -iqE "bash"'
 
-      bind l if-shell "$is_bash" "send-keys C-l"
+      #bind l if-shell "$is_bash" "send-keys C-l"
 
       bind -T copy-mode-vi C-h select-pane -L
       bind -T copy-mode-vi C-j select-pane -D
@@ -110,7 +110,7 @@
       bind -r X kill-pane -a
 
       # necessary only in Mac, to make copy to clipboard to work
-      if-shell "uname | grep -q Darwin" 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"'
+      #if-shell "uname | grep -q Darwin" 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"'
     '';
   };
 }

@@ -40,9 +40,9 @@ in
       [ -f ${suggestions.bash}/share/bash/suggestions.sh ] && . ${suggestions.bash}/share/bash/suggestions.sh
     '';
     shellAliases = {
-      ls="exa --group-directories-first";
-      ll="exa -la --group-directories-first";
-      lt="exa -lT --git-ignore";
+      #ls="ls --group-directories-first";
+      ll="ls -la";
+      lt="ls -lT";
       adbsi="adb shell input text";
       ipup="sudo ip link set wlp2s0 up";
       g = "git";

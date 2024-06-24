@@ -3,7 +3,7 @@ let
   plugins = pkgs.callPackage ./custom-plugins.nix {};
 in
 {
-  services.emacs.enable = true;
+  #services.emacs.enable = true;
   programs.emacs = {
     enable = true;
 
@@ -34,6 +34,7 @@ in
       ibuffer-projectile
       projectile
       counsel-projectile
+      buffer-move
 
       keychain-environment
 
@@ -64,6 +65,7 @@ in
       restclient
 
       # programming
+      bazel
       yaml-mode
       clojure-mode
       clojure-mode-extra-font-locking
@@ -80,6 +82,8 @@ in
       sbt-mode
       vimrc-mode
       cider
+
+      plantuml-mode
 
       # editing
       paredit

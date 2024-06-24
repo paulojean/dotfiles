@@ -8,11 +8,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    darwin = {                                                            # MacOS Package Management
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, ... }:
+  outputs = inputs @ { nixpkgs, home-manager, darwin, ... }:
     let
-      system = "x86_64-linux";
+      system = "aarch64-darwin";
       pkgs = nixpkgs.legacyPackages.${system};
       user = "paulo";
     in {
@@ -20,6 +24,13 @@
         import ./hosts {
           inherit (nixpkgs) lib;
           inherit inputs nixpkgs home-manager user system;
+        }
+      );
+
+      darwinConfigurations = (                                              # Darwin Configurations
+        import ./darwin {
+          inherit (nixpkgs) lib;
+          inherit inputs nixpkgs home-manager darwin;
         }
       );
 

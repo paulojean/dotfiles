@@ -53,7 +53,7 @@ parse_git_branch() {
 [ -f /usr/local/etc/profile.d/bash-preexec.sh ] && . /usr/local/etc/profile.d/bash-preexec.sh
 [ -f ~/.bash-preexec.sh ] && source ~/.bash-preexec.sh
 
-ps aux | grep '[C]aps' 1>/dev/null || xcape -e 'Caps_Lock=Escape'
+# ps aux | grep '[C]aps' 1>/dev/null || xcape -e 'Caps_Lock=Escape'
 
 export NNN_PLUG='l:launch'
 export NNN_COLORS='1234'
