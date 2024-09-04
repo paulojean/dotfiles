@@ -24,8 +24,8 @@
     src = pkgs.fetchFromGitHub {
       owner = "Olical";
       repo = "conjure";
-      rev = "a81977726f726b21d4bd75cea5bbbb7022005507";
-      sha256 = "sha256-Y+RC8XvRYfNEUePQysYYC5E7mameeBS9VCerzgSci5Q=";
+      rev = "6d2bc7f7b24c2c43d54f263bee7b9b08aef5d1a1";
+      sha256 = "sha256-cxA9kzio1bxisse+6TVgxKuajmOWykvL1ZGjz8gS0z0=";
     };
   };
   cmp-conjure = pkgs.vimUtils.buildVimPlugin {
@@ -33,17 +33,17 @@
     src = pkgs.fetchFromGitHub {
       owner = "PaterJason";
       repo = "cmp-conjure";
-      rev = "sha256-uTiXG8p0Cqc4o45ckscRSSv0qGqbfwuryqWBZHEh8Mc=";
+      rev = "8c9a88efedc0e5bf3165baa6af8a407afe29daf6";
       sha256 = "sha256-uTiXG8p0Cqc4o45ckscRSSv0qGqbfwuryqWBZHEh8Mc=";
     };
   };
-  nvim-treesitter-sexp = pkgs.vimUtils.buildVimPlugin {
-    name = "nvim-treesitter-sexp";
-    src = pkgs.fetchFromGitHub {
-      owner = "PaterJason";
-      repo = "cmp-conjure";
-      rev = "32509f4071f9c8ba5655bf2e1ccf1f1cd8447da0";
-      sha256 = "sha256-ehpGvHnY28Ym55B7ituwcvZmGmLt1x92J5M+m8j1ytU=";
-    };
-  };
+  # nvim-treesitter-sexp = pkgs.vimUtils.buildVimPlugin {
+  #   name = "nvim-treesitter-sexp";
+  #   src = pkgs.fetchFromGitHub {
+  #     owner = "PaterJason";
+  #     repo = "cmp-conjure";
+  #     rev = "32509f4071f9c8ba5655bf2e1ccf1f1cd8447da0";
+  #     sha256 = "sha256-ehpGvHnY28Ym55B7ituwcvZmGmLt1x92J5M+m8j1ytU=";
+  #   };
+  # };
 }

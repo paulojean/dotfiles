@@ -36,10 +36,11 @@
     # workstation setup
     plantuml
 
-
     aspell
     aspellDicts.en
     aspellDicts.en-computers
+
+    clojure-lsp
   ];
 
   xdg.configFile."lsp/config.edn".text = "

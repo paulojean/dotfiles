@@ -33,6 +33,10 @@ in {
       lua-language-server
       stylua
 
+      # luarocks
+      lua
+      luajitPackages.luarocks
+
       yaml-language-server
       java-language-server
       bash-language-server
@@ -40,6 +44,11 @@ in {
       # Telescope
       ripgrep
       xclip
+
+      # clojure
+      custom-plugins.conjure
+      custom-plugins.cmp-conjure
+      clojure-lsp
     ];
 
     plugins = with pkgs.vimPlugins; [
@@ -50,7 +59,7 @@ in {
       let
         plugins = with pkgs.vimPlugins; [
           # LazyVim
-          lazy-nvim
+          # lazy-nvim
           LazyVim
           bufferline-nvim
           cmp-buffer
@@ -96,7 +105,7 @@ in {
           # clojure
           custom-plugins.conjure
           custom-plugins.cmp-conjure
-          custom-plugins.nvim-treesitter-sexp
+          # custom-plugins.nvim-treesitter-sexp
 
           which-key-nvim
           { name = "LuaSnip"; path = luasnip; }

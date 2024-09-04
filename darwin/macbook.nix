@@ -76,6 +76,8 @@ cmd - 0x27 : yabai -m window --focus "$(yabai -m query --windows | jq -re "sort_
       fd
 
       silver-searcher
+
+      clojure-lsp
     ];
   };
 
