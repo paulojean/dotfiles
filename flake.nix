@@ -37,22 +37,24 @@
       };
       mkHomeConfiguration =
         { system, homeDirectory }:
-        (import ./nix (commonInherits // {
+        (import ./nix (
+          commonInherits
+          // {
             inherit system homeDirectory;
-          })
-        );
+          }
+        ));
     in
-      {
+    {
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs) lib;
           inherit
-          inputs
-          nixpkgs
-          home-manager
-          user
-          systemLinux
-          ;
+            inputs
+            nixpkgs
+            home-manager
+            user
+            systemLinux
+            ;
         }
       );
       darwinConfigurations = (
@@ -60,11 +62,11 @@
         import ./darwin {
           inherit (nixpkgs) lib;
           inherit
-          inputs
-          nixpkgs
-          home-manager
-          darwin
-          ;
+            inputs
+            nixpkgs
+            home-manager
+            darwin
+            ;
         }
       );
 

@@ -1,35 +1,44 @@
-{ inputs, pkgs, lib, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  custom-plugins = pkgs.callPackage ./custom-plugins.nix {};
-in {
+  custom-plugins = pkgs.callPackage ./custom-plugins.nix { };
+in
+{
   # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
   xdg.configFile."nvim/parser".source =
     let
       parsers = pkgs.symlinkJoin {
         name = "treesitter-parsers";
-        paths = (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: with plugins; [
-          bash 
-          c
-          clojure
-          comment
-          css
-          dockerfile
-          jq
-          json
-          lua
-          make
-          markdown
-          nix
-          regex
-          sql
-          terraform
-          tsx
-          typescript
-          yaml
-        ])).dependencies;
+        paths =
+          (pkgs.vimPlugins.nvim-treesitter.withPlugins (
+            plugins: with plugins; [
+              bash
+              c
+              clojure
+              comment
+              css
+              dockerfile
+              jq
+              json
+              lua
+              make
+              markdown
+              nix
+              regex
+              sql
+              terraform
+              tsx
+              typescript
+              yaml
+            ]
+          )).dependencies;
       };
     in
-      "${parsers}/parser";
+    "${parsers}/parser";
 
   # Normal LazyVim config here, see https://github.com/LazyVim/starter/tree/main/lua
   xdg.configFile."nvim/lua".source = ./lua;
@@ -67,11 +76,16 @@ in {
       custom-plugins.cmp-conjure
       custom-plugins.nvim-treesitter-sexp
       clojure-lsp
+
+      # nix
+      nixd
+
+      # formatters
+      nixfmt-rfc-style
       cljfmt
+      shfmt
 
       lazygit
-
-      shfmt
     ];
 
     plugins = with pkgs.vimPlugins; [
@@ -133,18 +147,46 @@ in {
           custom-plugins.coc-clojure
 
           which-key-nvim
-          { name = "LuaSnip"; path = luasnip; }
-          { name = "catppuccin"; path = catppuccin-nvim; }
-          { name = "mini.ai"; path = mini-nvim; }
-          { name = "mini.bufremove"; path = mini-nvim; }
-          { name = "mini.comment"; path = mini-nvim; }
-          { name = "mini.indentscope"; path = mini-nvim; }
-          { name = "mini.pairs"; path = mini-nvim; }
-          { name = "mini.surround"; path = mini-nvim; }
+          {
+            name = "LuaSnip";
+            path = luasnip;
+          }
+          {
+            name = "catppuccin";
+            path = catppuccin-nvim;
+          }
+          {
+            name = "mini.ai";
+            path = mini-nvim;
+          }
+          {
+            name = "mini.bufremove";
+            path = mini-nvim;
+          }
+          {
+            name = "mini.comment";
+            path = mini-nvim;
+          }
+          {
+            name = "mini.indentscope";
+            path = mini-nvim;
+          }
+          {
+            name = "mini.pairs";
+            path = mini-nvim;
+          }
+          {
+            name = "mini.surround";
+            path = mini-nvim;
+          }
         ];
-        mkEntryFromDrv = drv:
+        mkEntryFromDrv =
+          drv:
           if lib.isDerivation drv then
-            { name = "${lib.getName drv}"; path = drv; }
+            {
+              name = "${lib.getName drv}";
+              path = drv;
+            }
           else
             drv;
         lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
