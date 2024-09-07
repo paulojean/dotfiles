@@ -124,6 +124,10 @@
                       "--interactive"]}
       }}
   '';
+  xdg.configFile."clojure-lsp/config.edn".text = ''
+    {:clean {:ns-inner-blocks-indentation :same-line
+     :sort                        {:refer {:max-line-length 160}}}}
+  '';
 
   programs.fzf = {
     enable = true;

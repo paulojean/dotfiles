@@ -1,13 +1,27 @@
 return {
-	{ "Olical/conjure" },
+	{
+		"Olical/conjure",
+		event = "LazyFile",
+		lazy = true,
+		dependencies = {
+			"PaterJason/cmp-conjure",
+		},
+		init = function()
+			-- prefer LSP for jump-to-definition and symbol-doc, and use conjure
+			-- alternatives with <localleader>K and <localleader>gd
+			vim.g["conjure#mapping#doc_word"] = "K"
+			vim.g["conjure#mapping#def_word"] = "gd"
+		end,
+	},
 	{
 		"PaterJason/cmp-conjure",
-		-- config = function()
-		--    local cmp = require("cmp")
-		--    local config = cmp.get_config()
-		--    table.insert(config.sources, { name = "conjure" })
-		--    return cmp.setup(config)
-		-- end,
+		lazy = true,
+		config = function()
+			local cmp = require("cmp")
+			local config = cmp.get_config()
+			table.insert(config.sources, { name = "conjure" })
+			return cmp.setup(config)
+		end,
 	},
 	{ "PaterJason/nvim-treesitter-sexp" },
 	{

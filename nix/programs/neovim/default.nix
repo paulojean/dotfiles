@@ -1,17 +1,31 @@
 { inputs, pkgs, lib, ... }:
 let
   custom-plugins = pkgs.callPackage ./custom-plugins.nix {};
-
 in {
-
   # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
   xdg.configFile."nvim/parser".source =
     let
       parsers = pkgs.symlinkJoin {
         name = "treesitter-parsers";
         paths = (pkgs.vimPlugins.nvim-treesitter.withPlugins (plugins: with plugins; [
+          bash 
           c
+          clojure
+          comment
+          css
+          dockerfile
+          jq
+          json
           lua
+          make
+          markdown
+          nix
+          regex
+          sql
+          terraform
+          tsx
+          typescript
+          yaml
         ])).dependencies;
       };
     in
@@ -29,9 +43,12 @@ in {
     # withRuby = false;
 
     extraPackages = with pkgs; [
-      # LazyVim
+      #  LazyVim
       lua-language-server
       stylua
+
+      # linter
+      clj-kondo
 
       # luarocks
       lua
@@ -48,7 +65,13 @@ in {
       # clojure
       custom-plugins.conjure
       custom-plugins.cmp-conjure
+      custom-plugins.nvim-treesitter-sexp
       clojure-lsp
+      cljfmt
+
+      lazygit
+
+      shfmt
     ];
 
     plugins = with pkgs.vimPlugins; [
@@ -59,7 +82,7 @@ in {
       let
         plugins = with pkgs.vimPlugins; [
           # LazyVim
-          # lazy-nvim
+          lazy-nvim
           LazyVim
           bufferline-nvim
           cmp-buffer
@@ -105,7 +128,9 @@ in {
           # clojure
           custom-plugins.conjure
           custom-plugins.cmp-conjure
-          # custom-plugins.nvim-treesitter-sexp
+          custom-plugins.nvim-treesitter-sexp
+          coc-nvim
+          custom-plugins.coc-clojure
 
           which-key-nvim
           { name = "LuaSnip"; path = luasnip; }
@@ -157,79 +182,5 @@ in {
           },
         })
       '';
-
-    # plugins = {
-
-    #   lazy.enable = true;
-
-    #   tmux-navigator.enable = true;
-
-
-    #   # clojure
-    #   conjure.enable = true;
-
-    #   lsp = {
-    #     enable = true;
-    #   };
-
-    #   treesitter = {
-    #     enable = true;
-    #     indent = true;
-    #     folding = true;
-    #   };
-    #   treesitter-context = {
-    #     enable = true;
-    #   };
-    #   treesitter-refactor = {
-    #     enable = true;
-    #   };
-    #   treesitter-textobjects = {
-    #     enable = true;
-    #   };
-
-    #   undotree.enable = true;
-
-    #   vim-slime.enable = true;
-
-    #   # which-key.enable = true;
-    # };
-
-
-
-    # plugins = with pkgs.vimPlugins; [
-    #   lazy-nvim
-    # ];
-
-    # plugins =  with plugins; [
-    #   fzf-vim
-    #   undotree
-    #   ncm2
-    #   ack-vim
-    #   vim-easymotion
-
-    #   ale
-    #   lightline-vim
-    #   lightline-ale
-    #   lightline-bufferline
-
-    #   vim-tmux
-    #   tmux-navigator
-
-    #   nvim-contabs
-
-    #   # ui
-    #   rainbow_parentheses
-    #   gruvbox-nvim
-
-    # ];
-    # extraConfig = builtins.concatStringsSep "\n" [
-    #   ''
-    #     lua << EOF
-    #     ${pkgs.lib.strings.fileContents ./config.lua}
-    #     EOF
-    #   ''
-
-    #   (pkgs.lib.strings.fileContents ./config.vim)
-    # ];
   };
 }

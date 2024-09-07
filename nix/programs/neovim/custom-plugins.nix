@@ -37,13 +37,22 @@
       sha256 = "sha256-uTiXG8p0Cqc4o45ckscRSSv0qGqbfwuryqWBZHEh8Mc=";
     };
   };
-  # nvim-treesitter-sexp = pkgs.vimUtils.buildVimPlugin {
-  #   name = "nvim-treesitter-sexp";
-  #   src = pkgs.fetchFromGitHub {
-  #     owner = "PaterJason";
-  #     repo = "cmp-conjure";
-  #     rev = "32509f4071f9c8ba5655bf2e1ccf1f1cd8447da0";
-  #     sha256 = "sha256-ehpGvHnY28Ym55B7ituwcvZmGmLt1x92J5M+m8j1ytU=";
-  #   };
-  # };
+  nvim-treesitter-sexp = pkgs.vimUtils.buildVimPlugin {
+    name = "nvim-treesitter-sexp";
+    src = pkgs.fetchFromGitHub {
+      owner = "PaterJason";
+      repo = "nvim-treesitter-sexp";
+      rev = "32509f4071f9c8ba5655bf2e1ccf1f1cd8447da0";
+      sha256 = "sha256-ehpGvHnY28Ym55B7ituwcvZmGmLt1x92J5M+m8j1ytU=";
+    };
+  };
+  coc-clojure = pkgs.vimUtils.buildVimPlugin {
+    name = "coc-clojure";
+    src = pkgs.fetchFromGitHub {
+      owner = "NoahTheDuke";
+      repo = "coc-clojure";
+      rev = "effa179688234e91526249f4ffd2163e91271014";
+      sha256 = "sha256-z+wp+MfCzaA8l8RHK8vo1EMcrQnQVrDVbP+DqvrBMOk=";
+    };
+  };
 }
