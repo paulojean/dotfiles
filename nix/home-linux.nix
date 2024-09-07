@@ -1,31 +1,21 @@
-{ pkgs, ... }:
-{
-  imports = [
-    ./programs/bash
-    ./programs/git
-    ./programs/neovim
-    ./programs/emacs
-    ./programs/tmux
-    ./programs/alacritty
-    #./programs/rofi.nix
-    ./programs/kitty
-    #./programs/i3
-    #./programs/dunst
-    #./programs/eww
+{ pkgs, commonImports, ... }:
+(import ./home-shared.nix { inherit pkgs commonImports; })
+// {
+  imports = commonImports ++ [
+    ./programs/rofi.nix
+    ./programs/i3
+    ./programs/dunst
+    ./programs/eww
   ];
 
-  #systemd.user.startServices = true;
-  # home = {
-  #   username = "paulo";
-  #   homeDirectory = "/home/paulo";
-  # };
+  systemd.user.startServices = true;
   programs.home-manager = {
     enable = true;
   };
-  # home.stateVersion = "23.05";
+  # home.stateVersion = "24.05";
 
   fonts.fontconfig.enable = true;
-  home.packages = with pkgs;[
+  home.packages = with pkgs; [
     # (pkgs.nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
     powerline-fonts
     nerdfonts
@@ -33,7 +23,6 @@
     fd
     silver-searcher
 
-    # workstation setup
     plantuml
 
     aspell
@@ -94,12 +83,11 @@
       # POWERLEVEL9K_VI_MODE_INSERT_BACKGROUND = "grey";
       # POWERLEVEL9K_VI_MODE_INSERT_FOREGROUND = "red";
 
-
     };
 
     shellAliases = {
       ll = "ls -l";
-      lt="ls -lT";
+      lt = "ls -lT";
       vi = "nvim";
       vim = "nvim";
       n = "nvim";
@@ -108,13 +96,12 @@
     };
   };
 
-  # xdg.configFile."rofi" = {
-  #   recursive = true;
-  #   source = ./rofi;
-  # };
+  xdg.configFile."rofi" = {
+    recursive = true;
+    source = ./rofi;
+  };
 
-
-  xdg.configFile."clojure/deps.edn".text =''
+  xdg.configFile."clojure/deps.edn".text = ''
     {:aliases
      {:repl/conjure
         {:extra-deps {nrepl/nrepl       {:mvn/version "1.0.0"}
@@ -135,15 +122,15 @@
     defaultCommand = ''ag -s --hidden --ignore .git -g ""'';
     fileWidgetOptions = [
       ''
---preview-window wrap --preview '
-if [[ -f {} ]]; then
-    file --mime {} | grep -q \"text\/.*;\" && bat --color \"always\" {} || (tput setaf 1; file --mime {})
-elif [[ -d {} ]]; then
-    exa -l --color always {}
-else
-    tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
-fi'
-    ''
+        --preview-window wrap --preview '
+        if [[ -f {} ]]; then
+            file --mime {} | grep -q \"text\/.*;\" && bat --color \"always\" {} || (tput setaf 1; file --mime {})
+        elif [[ -d {} ]]; then
+            exa -l --color always {}
+        else
+            tput setaf 1; echo YOU ARE NOT SUPPOSED TO SEE THIS!
+        fi'
+      ''
     ];
   };
 }

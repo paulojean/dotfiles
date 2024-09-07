@@ -8,37 +8,79 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    darwin = {                                                            # MacOS Package Management
+    darwin = {
+      # MacOS Package Management
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs @ { nixpkgs, home-manager, darwin, ... }:
+  outputs =
+    inputs@{
+      nixpkgs,
+      home-manager,
+      darwin,
+      ...
+    }:
     let
-      system = "aarch64-darwin";
-      pkgs = nixpkgs.legacyPackages.${system};
+      systemMacos = "aarch64-darwin";
+      systemLinux = "x86_64-linux";
       user = "paulo";
-    in {
+      commonInherits = {
+        inherit (nixpkgs) lib;
+        inherit
+          inputs
+          nixpkgs
+          home-manager
+          user
+          ;
+      };
+      mkHomeConfiguration =
+        { system, homeDirectory }:
+        (import ./nix (commonInherits // {
+            inherit system homeDirectory;
+          })
+        );
+    in
+      {
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs home-manager user system;
+          inherit
+          inputs
+          nixpkgs
+          home-manager
+          user
+          systemLinux
+          ;
         }
       );
-
-      darwinConfigurations = (                                              # Darwin Configurations
+      darwinConfigurations = (
+        # Darwin Configurations
         import ./darwin {
           inherit (nixpkgs) lib;
-          inherit inputs nixpkgs home-manager darwin;
+          inherit
+          inputs
+          nixpkgs
+          home-manager
+          darwin
+          ;
         }
       );
 
-      homeConfigurations = (
-        import ./nix {
-          inherit (nixpkgs) lib;
-          inherit inputs nixpkgs home-manager user;
-        }
-      );
+      homeConfigurations = {
+        # macos
+        aiur =
+          (mkHomeConfiguration {
+            system = systemMacos;
+            homeDirectory = "/Users/${user}";
+          }).macos;
+        # linux
+        valinor =
+          (mkHomeConfiguration {
+            system = systemLinux;
+            homeDirectory = "/home/${user}";
+          }).linux;
+      };
     };
 }
