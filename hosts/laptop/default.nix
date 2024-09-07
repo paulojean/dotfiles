@@ -66,11 +66,7 @@ in
   # };
 
   # Enable OpenGL
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
+  hardware.graphics.enable = true;
 
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
@@ -172,7 +168,7 @@ in
     stack visualvm perl shellcheck
     scala_2_13 sbt
     clojure leiningen boot clojure-lsp babashka
-    transmission transmission-gtk
+    transmission_4 transmission_4-gtk
     networkmanagerapplet arandr
     openvpn gnome.networkmanager-openvpn
     rofi
@@ -186,7 +182,7 @@ in
     feh
     xdotool
     xorg.xev
-    zathura azpainter mcomix3
+    zathura azpainter
     spotify
     gimp
     wine winetricks vulkan-tools
@@ -209,7 +205,7 @@ in
     sxhkd socat
     xorg.xwininfo
 
-    # nvidia-offload
+    nvidia-offload
 
     packages.sxhkd-statusd
     packages.teiler
@@ -265,14 +261,12 @@ in
   # services.printing.enable = true;
 
   services.blueman.enable = true;
-  # Enable sound.
-  sound.enable = true;
+  services.pipewire.alsa.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver =  {
     enable = true;
 
-    displayManager.autoLogin.enable = false;
     displayManager.lightdm = {
       enable = true;
     };
@@ -302,17 +296,19 @@ in
     # videoDrivers = [ "displaylink" "modesetting" ];
     # videoDrivers = [ "modesetting" ];
     videoDrivers = ["nvidia"];
+  };
 
-    # Enable touchpad support.
-    libinput = {
-      enable = true;
-      touchpad = {
-        accelSpeed = "0.9";
-        clickMethod = "clickfinger";
-        # disableWhileTyping = true;
-        # naturalScrolling = true;
-        tapping = true;
-      };
+  services.displayManager.autoLogin.enable = false;
+
+  # Enable touchpad support.
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      accelSpeed = "0.9";
+      clickMethod = "clickfinger";
+      # disableWhileTyping = true;
+      # naturalScrolling = true;
+      tapping = true;
     };
   };
 

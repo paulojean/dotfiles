@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$(eww windows | grep calendar)" == "*calendar" ]]; then
+if [[ "$(eww active-windows | grep calendar)" == "calendar: calendar" ]]; then
   eww close calendar
 else
   eww open calendar
