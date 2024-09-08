@@ -1,14 +1,13 @@
 { pkgs, ... }:
 {
   # https://jeppesen.io/git-commit-sign-nix-home-manager-ssh/
-  home.file.".ssh/allowed_signers".text =
-    "* ${builtins.readFile /Users/paulo/.ssh/id_ed25519.pub}";
+  home.file.".ssh/allowed_signers".text = "* ${builtins.readFile ~/.ssh/id_ed25519.pub}";
 
   programs.git = {
     package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "Paulo Sousa";
-    userEmail = "paulo" + "@" + "griffin.com";
+    userEmail = "pauloj10" + "@" + "gmail.com";
     aliases = {
       br = "branch";
       bd = "branch -D";
@@ -41,7 +40,7 @@
       commit.gpgsign = true;
       gpg.format = "ssh";
       gpg.ssh.allowedSignersFile = "~/.ssh/allowed_signers";
-      user.signingKey = "/Users/paulo/.ssh/id_ed25519.pub";
+      user.signingKey = "~/.ssh/id_ed25519.pub";
     };
     ignores = [
       "*.elc"

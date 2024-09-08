@@ -53,8 +53,8 @@
             nixpkgs
             home-manager
             user
-            systemLinux
             ;
+          system = systemLinux;
         }
       );
       darwinConfigurations = (

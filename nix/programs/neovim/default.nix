@@ -1,11 +1,50 @@
 {
-  inputs,
   pkgs,
   lib,
+  nvim-package,
   ...
 }:
 let
   custom-plugins = pkgs.callPackage ./custom-plugins.nix { };
+  extraPackages = with pkgs; [
+    #  LazyVim
+    lua-language-server
+    stylua
+
+    # luarocks
+    lua
+    luajitPackages.luarocks
+
+    yaml-language-server
+    java-language-server
+    bash-language-server
+
+    # Telescope
+    ripgrep
+    xclip
+
+    # clojure
+    custom-plugins.conjure
+    custom-plugins.cmp-conjure
+    custom-plugins.nvim-treesitter-sexp
+    clojure-lsp
+
+    # nix
+    nixd
+
+    # linter
+    clj-kondo
+
+    # formatters
+    nixfmt-rfc-style
+    alejandra
+    cljfmt
+    shfmt
+    zprint
+
+    lazygit
+  ];
+  extraPackagesPaths = builtins.foldl' (acc: pkg: acc + ":${pkg}/bin") "" extraPackages;
 in
 {
   # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
@@ -45,48 +84,13 @@ in
 
   programs.neovim = {
     enable = true;
-    # package = pkgs.neovim;
+    package = nvim-package;
     vimAlias = true;
     vimdiffAlias = true;
     withNodeJs = true;
     # withRuby = false;
 
-    extraPackages = with pkgs; [
-      #  LazyVim
-      lua-language-server
-      stylua
-
-      # linter
-      clj-kondo
-
-      # luarocks
-      lua
-      luajitPackages.luarocks
-
-      yaml-language-server
-      java-language-server
-      bash-language-server
-
-      # Telescope
-      ripgrep
-      xclip
-
-      # clojure
-      custom-plugins.conjure
-      custom-plugins.cmp-conjure
-      custom-plugins.nvim-treesitter-sexp
-      clojure-lsp
-
-      # nix
-      nixd
-
-      # formatters
-      nixfmt-rfc-style
-      cljfmt
-      shfmt
-
-      lazygit
-    ];
+    extraPackages = extraPackages;
 
     plugins = with pkgs.vimPlugins; [
       lazy-nvim
@@ -192,6 +196,8 @@ in
         lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
       in
       ''
+        vim.env.PATH = vim.env.PATH .. "${extraPackagesPaths}"
+
         vim.opt.rtp:prepend("${lazyPath}/lazy.nvim")
         require("lazy").setup({
           defaults = {

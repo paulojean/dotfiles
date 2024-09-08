@@ -77,9 +77,9 @@
     shellAliases = {
       ll = "ls -l";
       lt = "ls -lT";
-      vi = "nvim";
-      vim = "nvim";
-      n = "nvim";
+      # vi = "nvim";
+      # vim = "nvim";
+      # n = "nvim";
       e = "emacsclient --alternate-editor \"\" --tty";
       dev = "tmux -2 new-session -A -s stuffs";
     };
@@ -91,7 +91,8 @@
   # };
 
   xdg.configFile."clojure/deps.edn".text = ''
-    {:aliases
+    {:deps {cljfmt {:mvn/version "0.5.1"}}
+     :aliases
      {:repl/conjure
         {:extra-deps {nrepl/nrepl       {:mvn/version "1.0.0"}
                       cider/cider-nrepl {:mvn/version "0.42.1"}}

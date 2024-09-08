@@ -1,4 +1,5 @@
 {
+  lib,
   inputs,
   nixpkgs,
   home-manager,
@@ -15,11 +16,14 @@ let
   commonImports = [
     ./programs/bash
     ./programs/git
-    ./programs/neovim
     ./programs/emacs
     ./programs/tmux
     ./programs/alacritty
     ./programs/kitty
+    (import ./programs/neovim {
+      inherit lib pkgs;
+      nvim-package = inputs.neovim-nightly-overlay.packages.${system}.neovim;
+    })
   ];
 in
 {
@@ -37,7 +41,7 @@ in
         home = {
           username = "${user}";
           homeDirectory = homeDirectory;
-          stateVersion = "24.05";
+          stateVersion = "24.11";
         };
       }
     ];
@@ -48,17 +52,15 @@ in
       inherit inputs user;
     };
     modules = [
-      (import ./home-linux.nix { inherit commonImports; })
       {
-        nixpkgs.overlays = overlays;
-      }
-      {
+        nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlays.default ];
         home = {
           username = "${user}";
           homeDirectory = "/home/${user}";
-          stateVersion = "24.05";
+          stateVersion = "24.11";
         };
       }
+      (import ./home-linux.nix { inherit pkgs commonImports; })
     ];
   };
 }
