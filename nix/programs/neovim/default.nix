@@ -140,6 +140,7 @@ in
           trouble-nvim
           vim-illuminate
           vim-startuptime
+          gruvbox-nvim
 
           custom-plugins.nvim-tmux-navigation
 

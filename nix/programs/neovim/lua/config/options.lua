@@ -17,28 +17,4 @@ return {
       colorscheme = "gruvbox",
     },
   },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      vim.list_extend(opts.ensure_installed, {
-        "bash",
-        "clojure",
-        "diff",
-        "html",
-        "javascript",
-        "json",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "query",
-        "regex",
-        "tsx",
-        "typescript",
-        "typescript",
-        "vim",
-        "yaml",
-      })
-    end,
-  },
 }

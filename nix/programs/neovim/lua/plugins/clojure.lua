@@ -15,7 +15,7 @@ return {
   },
   {
     "PaterJason/cmp-conjure",
-    lazy = true,
+    event = "LazyFile",
     config = function()
       local cmp = require("cmp")
       local config = cmp.get_config()
@@ -27,7 +27,7 @@ return {
   { "venantius/vim-cljfmt" },
   {
     "hrsh7th/nvim-cmp",
-    optional = true,
+    event = "LazyFile",
     dependencies = {
       "PaterJason/cmp-conjure",
     },
