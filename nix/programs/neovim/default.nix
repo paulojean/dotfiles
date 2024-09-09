@@ -84,7 +84,7 @@ in
 
   programs.neovim = {
     enable = true;
-    package = nvim-package;
+    # package = nvim-package;
     vimAlias = true;
     vimdiffAlias = true;
     withNodeJs = true;
@@ -125,9 +125,9 @@ in
           nvim-lspconfig
           nvim-notify
           nvim-spectre
-          nvim-treesitter
-          nvim-treesitter-context
-          nvim-treesitter-textobjects
+          custom-plugins.nvim-treesitter
+          custom-plugins.nvim-treesitter-context
+          custom-plugins.nvim-treesitter-textobjects
           nvim-ts-autotag
           nvim-ts-context-commentstring
           nvim-web-devicons

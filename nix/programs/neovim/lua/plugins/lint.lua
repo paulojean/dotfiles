@@ -18,7 +18,7 @@ return {
     opts = {
       formatters_by_ft = {
         ["*"] = { "trim_whitespace", "trim_newlines" },
-        clojure = { "zprint", "cljfmt" },
+        clojure = { "zprint" },
         nix = { "alejandra" },
       },
     },

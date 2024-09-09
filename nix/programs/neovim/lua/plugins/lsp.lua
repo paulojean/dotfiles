@@ -1,4 +1,4 @@
-function is_conjure_log(buf)
+local function is_conjure_log(buf)
   local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
   return string.sub(bufname, 1, 12) == "conjure-log-"
 end
@@ -54,10 +54,11 @@ return {
       local on_attach = function(client, bufnr)
         if is_conjure_log(bufnr) then
           vim.lsp.buf_detach_client(bufnr, client.id)
+          vim.diagnostic.enable(false)
         end
 
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true })
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true })
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true })
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { noremap = true })
         vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>ld", "<cmd>lua vim.lsp.buf.declaration()<CR>",
           { noremap = true })
         vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lt", "<cmd>lua vim.lsp.buf.type_definition()<CR>",
@@ -72,26 +73,23 @@ return {
           { noremap = true })
         vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lf", "<cmd>lua vim.lsp.buf.format()<CR>",
           { noremap = true })
-        -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lj", "<cmd>lua vim.diagnostic.goto_next()<CR>", {
-        --   noremap = true })
-        -- vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lk", "<cmd>lua vim.diagnostic.goto_prev()<CR>", {
-        --   noremap = true })
         vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>la", "<cmd>lua vim.lsp.buf.code_action()<CR>", {
           noremap =
               true
         })
         vim.api.nvim_buf_set_keymap(bufnr, "v", "<localleader>la", "<cmd>lua vim.lsp.buf.range_code_action()<CR> ",
           { noremap = true })
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lw", ":lua require('telescope.builtin').diagnostics()<cr>",
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lw",
+          "<cmd>lua require('telescope.builtin').diagnostics()<cr>",
           { noremap = true })
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lr",
-          ":lua require('telescope.builtin').lsp_references()<cr>",
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>cr",
+          "<cmd>lua require('telescope.builtin').lsp_references()<cr>",
           { noremap = true })
-        vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>li",
-          ":lua require('telescope.builtin').lsp_implementations()<cr>", { noremap = true })
+        vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>ci",
+          "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>", { noremap = true })
 
         vim.api.nvim_buf_set_keymap(bufnr, "n", "<localleader>lo",
-          ':lua callback = vim.lsp.buf.code_action({ filter = function(code_action) return string.find(code_action.title, "Clean namespace") end, apply = true, })<cr>',
+          '<cmd>lua vim.lsp.buf.code_action({ filter = function(code_action) return string.find(code_action.title, "Clean namespace") end, apply = true, })<cr>',
           { noremap = true })
       end
 

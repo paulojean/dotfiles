@@ -37,6 +37,33 @@
       sha256 = "sha256-uTiXG8p0Cqc4o45ckscRSSv0qGqbfwuryqWBZHEh8Mc=";
     };
   };
+  nvim-treesitter = pkgs.vimUtils.buildVimPlugin {
+    name = "nvim-treesitter";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter";
+      rev = "c436d45eeeeb78e5482cb28b59de1d7a77c93d86";
+      sha256 = "sha256-NknG9Log3GMU67yAoSrs4rX5JEV+wCssPA6VYxoFrHg=";
+    };
+  };
+  nvim-treesitter-context = pkgs.vimUtils.buildVimPlugin {
+    name = "nvim-treesitter-context";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter-context";
+      rev = "e6cc783b74606d97ca9eff6494e3f5c2ca603a50";
+      sha256 = "sha256-wDRd6qFbfHYwWNCfc7Ixg/aUkGUVRTt/TEBvrTn+IEg=";
+    };
+  };
+  nvim-treesitter-textobjects = pkgs.vimUtils.buildVimPlugin {
+    name = "nvim-treesitter-textobjects";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter-textobjects";
+      rev = "bf8d2ad35d1d1a687eae6c065c3d524f7ab61b23";
+      sha256 = "sha256-qDk74rGr9uO/WdSoMZMr8i4bxjlkGDRwpJKaQA+MdgE=";
+    };
+  };
   nvim-treesitter-sexp = pkgs.vimUtils.buildVimPlugin {
     name = "nvim-treesitter-sexp";
     src = pkgs.fetchFromGitHub {
@@ -44,6 +71,25 @@
       repo = "nvim-treesitter-sexp";
       rev = "32509f4071f9c8ba5655bf2e1ccf1f1cd8447da0";
       sha256 = "sha256-ehpGvHnY28Ym55B7ituwcvZmGmLt1x92J5M+m8j1ytU=";
+    };
+  };
+  # https://gitlab.com/HiPhish/rainbow-delimiters.nvim
+  rainbow-delimiters = pkgs.vimUtils.buildVimPlugin {
+    name = "rainbow-delimiters";
+    src = pkgs.fetchFromGitLab {
+      owner = "HiPhish";
+      repo = "rainbow-delimiters.nvim";
+      rev = "5f73b24aeb94f5274c218955573153c69ce4d1ee";
+      sha256 = "0qwlq6h2skpppn2aai7d9qhfk6cwfl8zz3lj7llyid0y8qqig41z";
+    };
+  };
+  nvim-listchars = pkgs.vimUtils.buildVimPlugin {
+    name = "nvim-listchars";
+    src = pkgs.fetchFromGitLab {
+      owner = "0xfraso";
+      repo = "nvim-listchars";
+      rev = "40b05e8375af11253434376154a9e6b3e9400747";
+      sha256 = "sha256-SQPe1c3EzVdqpU41FqwR2owfstDqSLjNlrpJuaLZXNE=";
     };
   };
   coc-clojure = pkgs.vimUtils.buildVimPlugin {
