@@ -7,6 +7,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     darwin = {
       # MacOS Package Management
@@ -43,10 +44,9 @@
             inherit system homeDirectory;
           }
         ));
-    in
-    {
-      nixosConfigurations = (
-        import ./hosts {
+      mkNixosConfiguration =
+        { }:
+        (import ./hosts {
           inherit (nixpkgs) lib;
           inherit
             inputs
@@ -55,8 +55,13 @@
             user
             ;
           system = systemLinux;
-        }
-      );
+        });
+    in
+    {
+      nixosConfigurations = {
+        wsl = (mkNixosConfiguration { }).wsl;
+        linux = (mkNixosConfiguration { }).linux;
+      };
       darwinConfigurations = (
         # Darwin Configurations
         import ./darwin {

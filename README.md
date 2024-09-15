@@ -3,7 +3,9 @@
 ## NixOS build
 
 ```
-sudo nixos-rebuild switch --flake .#laptop
+sudo nixos-rebuild switch --flake .#linux
+# or
+sudo nixos-rebuild switch --flake .#wsl
 ```
 
 ## Home-manager build

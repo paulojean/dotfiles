@@ -7,7 +7,7 @@
     package = pkgs.gitAndTools.gitFull;
     enable = true;
     userName = "Paulo Sousa";
-    userEmail = "pauloj10" + "@" + "gmail.com";
+    userEmail = "paulo" + "@" + "paulosousa.net";
     aliases = {
       br = "branch";
       bd = "branch -D";
