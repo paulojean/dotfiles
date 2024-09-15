@@ -2,10 +2,16 @@
   pkgs,
   lib,
   nvim-package,
+  nvim-plugins,
   ...
 }:
 let
-  custom-plugins = pkgs.callPackage ./custom-plugins.nix { };
+  build-plugin =
+    name: src:
+    pkgs.vimUtils.buildVimPlugin {
+      name = name;
+      src = src;
+    };
   extraPackages = with pkgs; [
     #  LazyVim
     lua-language-server
@@ -24,9 +30,6 @@ let
     xclip
 
     # clojure
-    custom-plugins.conjure
-    custom-plugins.cmp-conjure
-    custom-plugins.nvim-treesitter-sexp
     clojure-lsp
 
     # nix
@@ -125,9 +128,11 @@ in
           nvim-lspconfig
           nvim-notify
           nvim-spectre
-          custom-plugins.nvim-treesitter
-          custom-plugins.nvim-treesitter-context
-          custom-plugins.nvim-treesitter-textobjects
+          (build-plugin "nvim-treesitter" nvim-plugins.nvim-treesitter)
+          (build-plugin "nvim-treesitter-context" 
+                        nvim-plugins.nvim-treesitter-context)
+          (build-plugin "nvim-treesitter-textobjects" 
+                        nvim-plugins.nvim-treesitter-textobjects)
           nvim-ts-autotag
           nvim-ts-context-commentstring
           nvim-web-devicons
@@ -142,14 +147,14 @@ in
           vim-startuptime
           gruvbox-nvim
 
-          custom-plugins.nvim-tmux-navigation
+          (build-plugin "nvim-tmux-navigation"
+                        nvim-plugins.nvim-tmux-navigation)
 
           # clojure
-          custom-plugins.conjure
-          custom-plugins.cmp-conjure
-          custom-plugins.nvim-treesitter-sexp
-          coc-nvim
-          custom-plugins.coc-clojure
+          (build-plugin "conjure" nvim-plugins.conjure)
+          (build-plugin "cmp-conjure" nvim-plugins.cmp-conjure)
+          (build-plugin "nvim-treesitter-sexp" 
+                        nvim-plugins.nvim-treesitter-sexp)
 
           which-key-nvim
           {

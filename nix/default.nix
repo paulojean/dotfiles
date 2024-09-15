@@ -6,6 +6,7 @@
   user,
   system,
   homeDirectory,
+  nvim-plugins,
   ...
 }:
 let
@@ -21,7 +22,7 @@ let
     ./programs/alacritty
     ./programs/kitty
     (import ./programs/neovim {
-      inherit lib pkgs;
+      inherit lib pkgs nvim-plugins;
       nvim-package = inputs.neovim-nightly-overlay.packages.${system}.neovim;
     })
   ];

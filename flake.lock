@@ -1,5 +1,37 @@
 {
   "nodes": {
+    "cmp-conjure": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1704203318,
+        "narHash": "sha256-uTiXG8p0Cqc4o45ckscRSSv0qGqbfwuryqWBZHEh8Mc=",
+        "owner": "PaterJason",
+        "repo": "cmp-conjure",
+        "rev": "8c9a88efedc0e5bf3165baa6af8a407afe29daf6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "PaterJason",
+        "repo": "cmp-conjure",
+        "type": "github"
+      }
+    },
+    "conjure": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723213874,
+        "narHash": "sha256-cxA9kzio1bxisse+6TVgxKuajmOWykvL1ZGjz8gS0z0=",
+        "owner": "Olical",
+        "repo": "conjure",
+        "rev": "6d2bc7f7b24c2c43d54f263bee7b9b08aef5d1a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Olical",
+        "repo": "conjure",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -314,11 +346,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1726365531,
-        "narHash": "sha256-luAKNxWZ+ZN0kaHchx1OdLQ71n81Y31ryNPWP1YRDZc=",
+        "lastModified": 1726396940,
+        "narHash": "sha256-EpiSl9nSINTmIW6MG6CulGwNAa6sHrBt8gQdyHUXzR4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9299cdf978e15f448cf82667b0ffdd480b44ee48",
+        "rev": "76d7694a3f681b0b750c01783df5d2177ef39fe7",
         "type": "github"
       },
       "original": {
@@ -328,13 +360,100 @@
         "type": "github"
       }
     },
+    "nvim-tmux-navigation": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1707171454,
+        "narHash": "sha256-CxAgQSbOrg/SsQXupwCv8cyZXIB7tkWO+Y6FDtoR8xk=",
+        "owner": "alexghergh",
+        "repo": "nvim-tmux-navigation",
+        "rev": "4898c98702954439233fdaf764c39636681e2861",
+        "type": "github"
+      },
+      "original": {
+        "owner": "alexghergh",
+        "repo": "nvim-tmux-navigation",
+        "type": "github"
+      }
+    },
+    "nvim-treesitter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1726382990,
+        "narHash": "sha256-SvqbLwHtRdUe0YNIY7wMt1ZLY/cOP1KNUINW3vy/97s=",
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter",
+        "rev": "b7160e87aadbb3f5f6ee87ce139406fe3433044e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter",
+        "type": "github"
+      }
+    },
+    "nvim-treesitter-context": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1726348823,
+        "narHash": "sha256-pbxDEMcMvVUA/KUfxDNIsB3yNGrtZs5ngg5quovLY0w=",
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter-context",
+        "rev": "7f7eeaa99e5a9beab518f502292871ae5f20de6f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter-context",
+        "type": "github"
+      }
+    },
+    "nvim-treesitter-sexp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1717754405,
+        "narHash": "sha256-ehpGvHnY28Ym55B7ituwcvZmGmLt1x92J5M+m8j1ytU=",
+        "owner": "PaterJason",
+        "repo": "nvim-treesitter-sexp",
+        "rev": "32509f4071f9c8ba5655bf2e1ccf1f1cd8447da0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "PaterJason",
+        "repo": "nvim-treesitter-sexp",
+        "type": "github"
+      }
+    },
+    "nvim-treesitter-textobjects": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1725783758,
+        "narHash": "sha256-qDk74rGr9uO/WdSoMZMr8i4bxjlkGDRwpJKaQA+MdgE=",
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter-textobjects",
+        "rev": "bf8d2ad35d1d1a687eae6c065c3d524f7ab61b23",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-treesitter",
+        "repo": "nvim-treesitter-textobjects",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "cmp-conjure": "cmp-conjure",
+        "conjure": "conjure",
         "darwin": "darwin",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nixos-wsl": "nixos-wsl",
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_3",
+        "nvim-tmux-navigation": "nvim-tmux-navigation",
+        "nvim-treesitter": "nvim-treesitter",
+        "nvim-treesitter-context": "nvim-treesitter-context",
+        "nvim-treesitter-sexp": "nvim-treesitter-sexp",
+        "nvim-treesitter-textobjects": "nvim-treesitter-textobjects"
       }
     },
     "systems": {

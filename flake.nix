@@ -14,6 +14,22 @@
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # nvim packages
+    cmp-conjure.flake = false;
+    cmp-conjure.url = "github:PaterJason/cmp-conjure";
+    conjure.flake = false;
+    conjure.url = "github:Olical/conjure";
+    nvim-tmux-navigation.flake = false;
+    nvim-tmux-navigation.url = "github:alexghergh/nvim-tmux-navigation";
+    nvim-treesitter-context.flake = false;
+    nvim-treesitter-context.url = "github:nvim-treesitter/nvim-treesitter-context";
+    nvim-treesitter-sexp.flake = false;
+    nvim-treesitter-sexp.url = "github:PaterJason/nvim-treesitter-sexp";
+    nvim-treesitter-textobjects.flake = false;
+    nvim-treesitter-textobjects.url = "github:nvim-treesitter/nvim-treesitter-textobjects";
+    nvim-treesitter.flake = false;
+    nvim-treesitter.url = "github:nvim-treesitter/nvim-treesitter";
   };
 
   outputs =
@@ -27,6 +43,15 @@
       systemMacos = "aarch64-darwin";
       systemLinux = "x86_64-linux";
       user = "paulo";
+      nvim-plugins = {
+        cmp-conjure = inputs.cmp-conjure;
+        conjure = inputs.conjure;
+        nvim-tmux-navigation = inputs.nvim-tmux-navigation;
+        nvim-treesitter = inputs.nvim-treesitter;
+        nvim-treesitter-context = inputs.nvim-treesitter-context;
+        nvim-treesitter-sexp = inputs.nvim-treesitter-sexp;
+        nvim-treesitter-textobjects = inputs.nvim-treesitter-textobjects;
+      };
       commonInherits = {
         inherit (nixpkgs) lib;
         inherit
@@ -34,6 +59,7 @@
           nixpkgs
           home-manager
           user
+          nvim-plugins
           ;
       };
       mkHomeConfiguration =

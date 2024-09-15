@@ -6,6 +6,8 @@ vim.opt.listchars:append({ space = '⋅', tab = '▷⋅' })
 
 vim.g.maplocalleader = ","
 
+vim.opt.colorcolumn = "80"
+
 return {
   -- add gruvbox
   { "ellisonleao/gruvbox.nvim" },
