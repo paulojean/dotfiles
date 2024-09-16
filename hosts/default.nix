@@ -52,7 +52,7 @@ in
         environment.systemPackages = with pkgs; [
           clojure
           babashka
-          java
+          jdk22
 
           keychain
           entr
@@ -63,6 +63,7 @@ in
           # - tmux-fzf
           bc
         ];
+
         fonts.packages = with pkgs; [
           powerline-fonts
           font-awesome # icons
@@ -73,6 +74,11 @@ in
             ];
           })
         ];
+
+        programs.zsh.enable = true;
+        users.users.paulo = {
+          shell = pkgs.zsh;
+        };
 
         security.pam.services.gdm.enableGnomeKeyring = true;
         services.gnome.gnome-keyring.enable = true;

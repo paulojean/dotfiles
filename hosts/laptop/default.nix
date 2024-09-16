@@ -1,6 +1,11 @@
-{ config, pkgs, user, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 let
-  packages = pkgs.callPackage ./packages { inherit pkgs; } ;
+  packages = pkgs.callPackage ./packages { inherit pkgs; };
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -10,11 +15,11 @@ let
   '';
 in
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./network/hosts.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./network/hosts.nix
+  ];
 
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 10d";
@@ -25,7 +30,9 @@ in
   hardware.bluetooth = {
     enable = true;
     settings = {
-      General = { Enable = "Source,Sink,Media,Socket"; };
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+      };
     };
   };
 
@@ -68,7 +75,6 @@ in
   # Enable OpenGL
   hardware.graphics.enable = true;
 
-
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -79,7 +85,8 @@ in
 
     # avoid hard block on susped
     # https://askubuntu.com/a/1057793
-    "quiet" "splash"
+    "quiet"
+    "splash"
 
     "intel_pstate=disable"
   ];
@@ -95,22 +102,29 @@ in
   networking.enableIPv6 = false;
 
   # Fixing IPv6 bug, see https://github.com/NixOS/nixpkgs/issues/87802#issuecomment-628536317
-  networking.networkmanager.dispatcherScripts = [{
-    source = pkgs.writeText "upHook" ''
-      if [ "$2" != "up" ]; then
-      logger "exit: event $2 != up"
-      exit
-      fi
-      echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
-    '';
-    type = "basic";
-  }];
+  networking.networkmanager.dispatcherScripts = [
+    {
+      source = pkgs.writeText "upHook" ''
+        if [ "$2" != "up" ]; then
+        logger "exit: event $2 != up"
+        exit
+        fi
+        echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
+      '';
+      type = "basic";
+    }
+  ];
 
   # chromecastSupport
   networking.firewall.allowedTCPPorts = [
     8010 # chromecastSupport
   ];
-  networking.firewall.allowedUDPPortRanges = [ { from = 32768; to = 60999; } ];
+  networking.firewall.allowedUDPPortRanges = [
+    {
+      from = 32768;
+      to = 60999;
+    }
+  ];
   networking.nameservers = [
     # nordvpn dns servers, from https://support.nordvpn.com/Other/1047409702/What-are-your-DNS-server-addresses.htm
     # "103.86.96.100" "103.86.99.100"
@@ -138,26 +152,62 @@ in
 
   environment.pathsToLink = [ "/libexec" ];
   environment.systemPackages = with pkgs; [
-    jdk11 jdk17 jdt-language-server
+    jdk22
+    jdt-language-server
     metals
     blueman
     keychain
-    jq killall acpi tlp
-    bash wget
-    neovim vimPlugins.vim-plug
+    jq
+    killall
+    acpi
+    tlp
+    bash
+    wget
+    neovim
+    vimPlugins.vim-plug
     # emacs
-    curl whois kitty
+    curl
+    whois
+    kitty
     harfbuzzFull
     # bash-completion
-    eza lsd bat ack silver-searcher fd gnugrep pstree bottom
-    openssl wireshark
-    udiskie usbutils ipad_charge
-    firefox chromium bitwarden vlc # tmux
-    keynav xsel xclip xcape htop sqlite
-    git gitAndTools.diff-so-fancy
+    eza
+    lsd
+    bat
+    ack
+    silver-searcher
+    fd
+    gnugrep
+    pstree
+    bottom
+    openssl
+    wireshark
+    udiskie
+    usbutils
+    ipad_charge
+    firefox
+    chromium
+    bitwarden
+    vlc # tmux
+    keynav
+    xsel
+    xclip
+    xcape
+    htop
+    sqlite
+    git
+    gitAndTools.diff-so-fancy
     docker-compose
-    lsof pciutils zip unzip unrar bind cacert
-    fzf file nnn
+    lsof
+    pciutils
+    zip
+    unzip
+    unrar
+    bind
+    cacert
+    fzf
+    file
+    nnn
     libreoffice-fresh
     nodejs
 
@@ -165,14 +215,26 @@ in
 
     terraform-lsp
 
-    stack visualvm perl shellcheck
-    scala_2_13 sbt
-    clojure leiningen boot clojure-lsp babashka
-    transmission_4 transmission_4-gtk
-    networkmanagerapplet arandr
-    openvpn gnome.networkmanager-openvpn
+    stack
+    visualvm
+    perl
+    shellcheck
+    scala_2_13
+    sbt
+    clojure
+    leiningen
+    boot
+    clojure-lsp
+    babashka
+    transmission_4
+    transmission_4-gtk
+    networkmanagerapplet
+    arandr
+    openvpn
+    gnome.networkmanager-openvpn
     rofi
-    gnumake cmake
+    gnumake
+    cmake
     entr
     unclutter
     patchelf
@@ -182,11 +244,16 @@ in
     feh
     xdotool
     xorg.xev
-    zathura azpainter
+    zathura
+    azpainter
     spotify
     gimp
-    wine winetricks vulkan-tools
-    gnutls libinput-gestures libgpgerror
+    wine
+    winetricks
+    vulkan-tools
+    gnutls
+    libinput-gestures
+    libgpgerror
 
     parsec-bin
 
@@ -199,10 +266,10 @@ in
     playerctl
     wirelesstools
 
-
     # - bspwm
     i3lock-fancy
-    sxhkd socat
+    sxhkd
+    socat
     xorg.xwininfo
 
     nvidia-offload
@@ -216,28 +283,21 @@ in
 
     # - tmux-fzf
     bc
-
-
-    # - kubernets
-    # kompose
-    # kubectl
-    # kubernetes
-
-    kind
-    kubectl
   ];
 
   programs = {
     light.enable = true;
     adb.enable = true;
     steam.enable = true;
+    zsh.enable = true;
   };
   programs.nm-applet.enable = true;
 
   fonts.packages = with pkgs; [
     powerline-fonts
-    font-awesome             # icons
-    (nerdfonts.override {    # Nerdfont Icons override
+    font-awesome # icons
+    (nerdfonts.override {
+      # Nerdfont Icons override
       fonts = [
         "FiraCode"
       ];
@@ -264,7 +324,7 @@ in
   services.pipewire.alsa.enable = true;
 
   # Enable the X11 windowing system.
-  services.xserver =  {
+  services.xserver = {
     enable = true;
 
     displayManager.lightdm = {
@@ -279,11 +339,11 @@ in
       enable = true;
       package = pkgs.i3-gaps;
       extraPackages = with pkgs; [
-        dmenu #application launcher most people use
-        i3lock #default i3 screen locker
-        i3blocks #if you are planning on using i3blocks over i3status
+        dmenu # application launcher most people use
+        i3lock # default i3 screen locker
+        i3blocks # if you are planning on using i3blocks over i3status
         polybar
-     ];
+      ];
     };
 
     xkb = {
@@ -295,7 +355,7 @@ in
     # "displaylink" to make nix recognize HDMI entry
     # videoDrivers = [ "displaylink" "modesetting" ];
     # videoDrivers = [ "modesetting" ];
-    videoDrivers = ["nvidia"];
+    videoDrivers = [ "nvidia" ];
   };
 
   services.displayManager.autoLogin.enable = false;
@@ -311,7 +371,6 @@ in
       tapping = true;
     };
   };
-
 
   hardware.nvidia = {
 
@@ -366,17 +425,6 @@ in
   #   HandleLidSwitch=hibernate
   # '';
 
-  # services.picom = {
-  #   enable = true;
-  #   inactiveOpacity = 0.9;
-  #   opacityRules = [
-  #     "100:class_g = 'Rofi'"
-  #     "100:class_g = 'Firefox'"
-  #     "100:class_g = 'i3lock'"
-  #     "100:class_g = 'i3lock-fancy'"
-  #   ];
-  # };
-
   environment.etc = {
     "modprobe.d/blacklist-nouveau.conf".text = ''
       blacklist nouveau
@@ -400,77 +448,6 @@ in
     DefaultTimeoutStartSec=30s
     DefaultTimeoutStopSec=30s
   '';
-
-  # systemd.packages = [ packages.nordvpn ];
-  # systemd.services.nordvpn = {
-  #   description = "NordVPN Daemon";
-  #   serviceConfig = {
-  #     ExecStart="${packages.nordvpn}/bin/nordvpn";
-  #     NonBlocking = true;
-  #     Restart = "on-failure";
-  #     RestartSec = 5;
-  #     RuntimeDirectory = "nordvpn";
-  #     RuntimeDirectoryMode = "0770";
-  #     Group = "wheel"; #"nordvpn";
-  #   };
-  #   unitConfig = {
-  #     StartLimitInterval = "30s";
-  #   };
-  #   wantedBy = [ "multi-user.target" ];
-  #   wants = [ "network-online.target" ];
-  #   after = [ "network.target" "network-online.target" ];
-  #   requires = [ "nordvpn.socket" ];
-  # };
-
-  # systemd.sockets.nordvpn = {
-  #   description = "NordVPN Daemon Socket";
-  #   wantedBy = [ "sockets.target" ];
-  #   socketConfig = {
-  #     ListenStream = "/run/nordvpnd.sock";
-  #     # ListenStream = "/run/nordvpn/nordvpnd.sock";
-  #     NoDelay = true;
-  #     SocketMode = "0770";
-  #     User = "paulo"; #"nordvpn";
-  #     SocketGroup = "wheel"; #"nordvpn";
-  #     Service = "nordvpn.service";
-  #   };
-  #   unitConfig = {
-  #     StartLimitInterval = "30s";
-  #   };
-  # };
-
-  # services.kubernetes = {
-  #   roles = [ "master" "node" ];
-  #   masterAddress = "localhost";
-  #   apiserverAddress = "https://localhost:6443";
-  #   easyCerts = true;
-  #   apiserver = {
-  #     securePort = 6443;
-  #     advertiseAddress = "10.0.0.5";
-  #   };
-  # };
-  # systemd.services.etcd.preStart = ''${pkgs.writeShellScript "etcd-wait" ''
-  #   while [ ! -f /var/lib/kubernetes/secrets/etcd.pem ]; do sleep 1; done
-  # ''}'';
-  # services.kubernetes = {
-  #   roles = ["master" "node"];
-  #   masterAddress = "localhost";
-  #   apiserverAddress = "https://localhost:6443";
-  #   easyCerts = true;
-  #   pki.enable = true;
-  #   apiserver = {
-  #     securePort = 6443;
-  #     advertiseAddress = "10.1.1.2";
-  #   };
-
-  #   addons.dashboard.enable = true;
-
-  #   # use coredns
-  #   addons.dns.enable = true;
-
-  #   # needed if you use swap
-  #   kubelet.extraOpts = "--fail-swap-on=false";
-  # };
 
   virtualisation = {
     docker.enable = true;
@@ -500,11 +477,26 @@ in
   # testing ihp
   # nix.trustedUsers = [ "root" "paulo" ];
 
-  users.groups.nordvpn = {};
+  users.groups.nordvpn = { };
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "video" "audio" "networkmanager" "kvm" "render" "sddm" "lightdm" "light" "usbmux" "adbusers" "nordvpn" ];
+    shell = pkgs.zsh;
+    extraGroups = [
+      "wheel"
+      "docker"
+      "video"
+      "audio"
+      "networkmanager"
+      "kvm"
+      "render"
+      "sddm"
+      "lightdm"
+      "light"
+      "usbmux"
+      "adbusers"
+      "nordvpn"
+    ];
   };
   # virtualbox
   users.extraGroups.vboxusers.members = [ "${user}" ];
