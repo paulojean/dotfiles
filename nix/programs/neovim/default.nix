@@ -46,6 +46,7 @@ let
     zprint
 
     lazygit
+    nerdfonts
   ];
   extraPackagesPaths = builtins.foldl' (acc: pkg: acc + ":${pkg}/bin") "" extraPackages;
 in
@@ -83,7 +84,7 @@ in
     "${parsers}/parser";
 
   # Normal LazyVim config here, see https://github.com/LazyVim/starter/tree/main/lua
-  xdg.configFile."nvim/lua".source = ./lua;
+  # xdg.configFile."nvim/lua".source = ./lua;
 
   programs.neovim = {
     enable = true;
@@ -104,7 +105,9 @@ in
         plugins = with pkgs.vimPlugins; [
           # LazyVim
           lazy-nvim
-          LazyVim
+          # LazyVim
+          lazydev-nvim
+          luvit-meta
           bufferline-nvim
           cmp-buffer
           cmp-nvim-lsp
@@ -126,13 +129,14 @@ in
           nvim-cmp
           nvim-lint
           nvim-lspconfig
+          # TODO: keep only one notification plugin
           nvim-notify
+          fidget-nvim
+
           nvim-spectre
           (build-plugin "nvim-treesitter" nvim-plugins.nvim-treesitter)
-          (build-plugin "nvim-treesitter-context" 
-                        nvim-plugins.nvim-treesitter-context)
-          (build-plugin "nvim-treesitter-textobjects" 
-                        nvim-plugins.nvim-treesitter-textobjects)
+          (build-plugin "nvim-treesitter-context" nvim-plugins.nvim-treesitter-context)
+          (build-plugin "nvim-treesitter-textobjects" nvim-plugins.nvim-treesitter-textobjects)
           nvim-ts-autotag
           nvim-ts-context-commentstring
           nvim-web-devicons
@@ -140,6 +144,7 @@ in
           plenary-nvim
           telescope-fzf-native-nvim
           telescope-nvim
+          telescope-ui-select-nvim
           todo-comments-nvim
           tokyonight-nvim
           trouble-nvim
@@ -147,14 +152,14 @@ in
           vim-startuptime
           gruvbox-nvim
 
-          (build-plugin "nvim-tmux-navigation"
-                        nvim-plugins.nvim-tmux-navigation)
+          (build-plugin "nvim-tmux-navigation" nvim-plugins.nvim-tmux-navigation)
 
           # clojure
           (build-plugin "conjure" nvim-plugins.conjure)
           (build-plugin "cmp-conjure" nvim-plugins.cmp-conjure)
-          (build-plugin "nvim-treesitter-sexp" 
-                        nvim-plugins.nvim-treesitter-sexp)
+          (build-plugin "nvim-treesitter-sexp" nvim-plugins.nvim-treesitter-sexp)
+
+          vim-sleuth
 
           which-key-nvim
           {
@@ -189,6 +194,10 @@ in
             name = "mini.surround";
             path = mini-nvim;
           }
+          {
+            name = "mini.statusline";
+            path = mini-nvim;
+          }
         ];
         mkEntryFromDrv =
           drv:
@@ -200,41 +209,12 @@ in
           else
             drv;
         lazyPath = pkgs.linkFarm "lazy-plugins" (builtins.map mkEntryFromDrv plugins);
+        lua-config = pkgs.substituteAll {
+          src = ./init.lua;
+          extraPackagesPaths = extraPackagesPaths;
+          lazyPath = lazyPath;
+        };
       in
-      ''
-        vim.env.PATH = vim.env.PATH .. "${extraPackagesPaths}"
-
-        vim.opt.rtp:prepend("${lazyPath}/lazy.nvim")
-        require("lazy").setup({
-          defaults = {
-            lazy = true,
-          },
-          dev = {
-            -- reuse files from pkgs.vimPlugins.*
-            path = "${lazyPath}",
-            patterns = { "." },
-            -- fallback to download
-            fallback = true,
-          },
-          spec = {
-            { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-            -- The following configs are needed for fixing lazyvim on nix
-            -- force enable telescope-fzf-native.nvim
-            { "nvim-telescope/telescope-fzf-native.nvim", enabled = true },
-            -- disable mason.nvim, use programs.neovim.extraPackages
-            { "williamboman/mason-lspconfig.nvim", enabled = false },
-            { "williamboman/mason.nvim", enabled = false },
-            -- import/override with your plugins
-            { import = "plugins" },
-            -- treesitter handled by xdg.configFile."nvim/parser", put this line at the end of spec to clear ensure_installed
-            { "nvim-treesitter/nvim-treesitter",
-               opts = function(_, opts)
-                opts.ensure_installed = {}
-              end,
-            },
-
-          },
-        })
-      '';
+      builtins.readFile lua-config.out;
   };
 }
