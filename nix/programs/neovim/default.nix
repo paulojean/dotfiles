@@ -84,7 +84,8 @@ in {
   in "${parsers}/parser";
 
   # Normal LazyVim config here, see https://github.com/LazyVim/starter/tree/main/lua
-  # xdg.configFile."nvim/lua".source = ./lua;
+  xdg.configFile."nvim/lua".source = ./lua;
+
   xdg.configFile."stylua/stylua.toml".text = ''
     column_width = 120
     line_endings = "Unix"
