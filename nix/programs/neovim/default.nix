@@ -43,6 +43,9 @@
     shfmt
     zprint
 
+    # treesitter
+    clang
+
     lazygit
     nerdfonts
   ];
@@ -159,6 +162,9 @@ in {
         vim-illuminate
         vim-startuptime
         gruvbox-nvim
+        dashboard-nvim
+        telescope-project-nvim
+        telescope-file-browser-nvim
 
         neogit
         diffview-nvim

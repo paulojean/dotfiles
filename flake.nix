@@ -32,88 +32,86 @@
     nvim-treesitter.url = "github:nvim-treesitter/nvim-treesitter";
   };
 
-  outputs =
-    inputs@{
-      nixpkgs,
-      home-manager,
-      darwin,
-      ...
-    }:
-    let
-      systemMacos = "aarch64-darwin";
-      systemLinux = "x86_64-linux";
-      user = "paulo";
-      nvim-plugins = {
-        cmp-conjure = inputs.cmp-conjure;
-        conjure = inputs.conjure;
-        nvim-tmux-navigation = inputs.nvim-tmux-navigation;
-        nvim-treesitter = inputs.nvim-treesitter;
-        nvim-treesitter-context = inputs.nvim-treesitter-context;
-        nvim-treesitter-sexp = inputs.nvim-treesitter-sexp;
-        nvim-treesitter-textobjects = inputs.nvim-treesitter-textobjects;
-      };
-      commonInherits = {
+  outputs = inputs @ {
+    nixpkgs,
+    home-manager,
+    darwin,
+    ...
+  }: let
+    systemMacos = "aarch64-darwin";
+    systemLinux = "x86_64-linux";
+    user = "paulo";
+    nvim-plugins = {
+      cmp-conjure = inputs.cmp-conjure;
+      conjure = inputs.conjure;
+      nvim-tmux-navigation = inputs.nvim-tmux-navigation;
+      nvim-treesitter = inputs.nvim-treesitter;
+      nvim-treesitter-context = inputs.nvim-treesitter-context;
+      nvim-treesitter-sexp = inputs.nvim-treesitter-sexp;
+      nvim-treesitter-textobjects = inputs.nvim-treesitter-textobjects;
+    };
+    commonInherits = {
+      inherit (nixpkgs) lib;
+      inherit
+        inputs
+        nixpkgs
+        home-manager
+        user
+        nvim-plugins
+        ;
+    };
+    mkHomeConfiguration = {
+      system,
+      homeDirectory,
+    }: (import ./nix (
+      commonInherits
+      // {
+        inherit system homeDirectory;
+      }
+    ));
+    mkNixosConfiguration = {}: (import ./hosts {
+      inherit (nixpkgs) lib;
+      inherit
+        inputs
+        nixpkgs
+        home-manager
+        user
+        ;
+      system = systemLinux;
+    });
+  in {
+    nixosConfigurations = {
+      wsl = (mkNixosConfiguration {}).wsl;
+      linux = (mkNixosConfiguration {}).linux;
+    };
+    darwinConfigurations = (
+      # Darwin Configurations
+      import ./darwin {
         inherit (nixpkgs) lib;
         inherit
           inputs
           nixpkgs
           home-manager
-          user
-          nvim-plugins
+          darwin
           ;
-      };
-      mkHomeConfiguration =
-        { system, homeDirectory }:
-        (import ./nix (
-          commonInherits
-          // {
-            inherit system homeDirectory;
-          }
-        ));
-      mkNixosConfiguration =
-        { }:
-        (import ./hosts {
-          inherit (nixpkgs) lib;
-          inherit
-            inputs
-            nixpkgs
-            home-manager
-            user
-            ;
-          system = systemLinux;
-        });
-    in
-    {
-      nixosConfigurations = {
-        wsl = (mkNixosConfiguration { }).wsl;
-        linux = (mkNixosConfiguration { }).linux;
-      };
-      darwinConfigurations = (
-        # Darwin Configurations
-        import ./darwin {
-          inherit (nixpkgs) lib;
-          inherit
-            inputs
-            nixpkgs
-            home-manager
-            darwin
-            ;
-        }
-      );
+      }
+    );
 
-      homeConfigurations = {
-        # macos
-        aiur =
-          (mkHomeConfiguration {
-            system = systemMacos;
-            homeDirectory = "/Users/${user}";
-          }).macos;
-        # linux
-        valinor =
-          (mkHomeConfiguration {
-            system = systemLinux;
-            homeDirectory = "/home/${user}";
-          }).linux;
-      };
+    homeConfigurations = {
+      # macos
+      aiur =
+        (mkHomeConfiguration {
+          system = systemMacos;
+          homeDirectory = "/Users/${user}";
+        })
+        .macos;
+      # linux
+      valinor =
+        (mkHomeConfiguration {
+          system = systemLinux;
+          homeDirectory = "/home/${user}";
+        })
+        .linux;
     };
+  };
 }

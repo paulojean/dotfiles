@@ -109,6 +109,14 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Move to previous buffer" })
+vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Move to previous buffer" })
+
+vim.keymap.set("n", "<leader>vh", "<cmd>split<cr>", { desc = "Split window [H]orizontally" })
+vim.keymap.set("n", "<leader>vs", "<cmd>vsplit<cr>", { desc = "Split window [V]ertically" })
+
+vim.keymap.set("n", "<leader>wt", "<cmd>tabnew<cr>", { desc = "[W] New [T]ab" })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -264,10 +272,7 @@ require("lazy").setup({
         "nvim-lua/plenary.nvim",
         "sindrets/diffview.nvim",
 
-        -- Only one of these is needed.
         "nvim-telescope/telescope.nvim",
-        "ibhagwan/fzf-lua",
-        "echasnovski/mini.pick",
       },
       config = true,
       keys = {
@@ -280,7 +285,11 @@ require("lazy").setup({
       main = "ibl",
       ---@module "ibl"
       ---@type ibl.config
-      opts = {},
+      opts = {
+        exclude = {
+          filetypes = { "dashboard" },
+        },
+      },
       init = function()
         -- toggle blanklines
         vim.keymap.set("n", "<leader>uB", function()
@@ -358,6 +367,7 @@ require("lazy").setup({
           { "<leader>s", group = "[S]earch" },
           { "<leader>w", group = "[W]orkspace" },
           { "<leader>t", group = "[T]oggle" },
+          { "<leader>v", group = "[V]iew" },
           { "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
         },
       },
@@ -379,12 +389,6 @@ require("lazy").setup({
           "nvim-telescope/telescope-fzf-native.nvim",
         },
         { "nvim-telescope/telescope-ui-select.nvim" },
-
-        -- Useful for getting pretty icons, but requires a Nerd Font.
-        {
-          "nvim-tree/nvim-web-devicons",
-          enabled = vim.g.have_nerd_font,
-        },
       },
       config = function()
         -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -415,6 +419,13 @@ require("lazy").setup({
             ["ui-select"] = {
               require("telescope.themes").get_dropdown(),
             },
+            ["project"] = {
+              base_dirs = {
+                "~/code",
+                "~/stash",
+              },
+            },
+            ["file_browser"] = {},
           },
         })
 
@@ -457,6 +468,28 @@ require("lazy").setup({
         vim.keymap.set("n", "<leader>sn", function()
           builtin.find_files({ cwd = vim.fn.stdpath("config") })
         end, { desc = "[S]earch [N]eovim files" })
+      end,
+    },
+    {
+      "nvim-telescope/telescope-project.nvim",
+      event = "VimEnter",
+      config = function()
+        require("telescope").load_extension("project")
+
+        vim.keymap.set("n", "<leader>wp", "<cmd>Telescope project<cr>", { noremap = true, silent = true })
+      end,
+    },
+    {
+      "nvim-telescope/telescope-file-browser.nvim",
+      event = "VimEnter",
+      dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+      config = function()
+        vim.keymap.set(
+          "n",
+          "<leader>fb",
+          "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>",
+          { noremap = true, silent = true }
+        )
       end,
     },
 
@@ -755,7 +788,29 @@ require("lazy").setup({
       end,
     },
 
-    { -- Autoformat
+    ---
+    -- Formatting
+    ---
+    {
+      "mfussenegger/nvim-lint",
+      event = { "BufReadPre", "BufNewFile" },
+      config = function()
+        local lint = require("lint")
+        lint.linters_by_ft["clojure"] = { "clj-kondo" }
+        lint.linters_by_ft["nix"] = { "nix" }
+
+        -- Create autocommand which carries out the actual linting
+        -- on the specified events.
+        local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+        vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+          group = lint_augroup,
+          callback = function()
+            lint.try_lint()
+          end,
+        })
+      end,
+    },
+    {
       "stevearc/conform.nvim",
       event = { "BufWritePre" },
       cmd = { "ConformInfo" },
@@ -902,6 +957,43 @@ require("lazy").setup({
       end,
     },
 
+    {
+      "nvimdev/dashboard-nvim",
+      event = "VimEnter",
+      config = function()
+        require("dashboard").setup({
+          config = {
+            week_header = { enable = true },
+            shortcut = {
+              {
+                desc = "[R]ecent files",
+                group = "@project",
+                key = "r",
+                action = "Telescope oldfiles",
+              },
+              {
+                desc = "[F]ind files",
+                group = "@project",
+                key = "f",
+                action = "Telescope find_files",
+              },
+              {
+                desc = "[G]rep current files",
+                group = "@project",
+                key = "g",
+                action = "Telescope live_grep",
+              },
+              {
+                desc = "[Q]uit Nvim",
+                group = "@misc",
+                key = "q",
+                action = "qa",
+              },
+            },
+          },
+        })
+      end,
+    },
     { -- You can easily change to a different colorscheme.
       -- Change the name of the colorscheme plugin below, and then
       -- change the command in the config to whatever the name of that colorscheme is.
@@ -920,6 +1012,13 @@ require("lazy").setup({
         vim.cmd.hi("Comment gui=none")
       end,
     },
+    {
+      -- required by: telescope, dashboard, neo-tree
+      "nvim-tree/nvim-web-devicons",
+      priority = 1000,
+      enabled = true,
+      -- enabled = vim.g.have_nerd_font,
+    },
 
     -- Highlight todo, notes, etc in comments
     {
@@ -930,6 +1029,7 @@ require("lazy").setup({
     },
     { -- Collection of various small independent plugins/modules
       "echasnovski/mini.nvim",
+      event = "VimEnter",
       config = function()
         -- Better Around/Inside textobjects
         --
@@ -950,7 +1050,7 @@ require("lazy").setup({
         --  and try some other statusline plugin
         local statusline = require("mini.statusline")
         -- set use_icons to true if you have a Nerd Font
-        statusline.setup({ use_icons = vim.g.have_nerd_font })
+        statusline.setup({ use_icons = true, set_vim_settings = true })
 
         -- You can configure sections in the statusline by overriding their
         -- default behavior. For example, here we set the section for
@@ -1047,7 +1147,9 @@ require("lazy").setup({
       keys = {
         { "<space>fe", "<cmd>Neotree toggle=true<cr>", { desc = "[F] Toggl[E] Neotree" } },
       },
-      dependencies = { "MunifTanjim/nui.nvim" },
+      dependencies = {
+        "MunifTanjim/nui.nvim",
+      },
       opts = {
         filesystem = {
           filtered_items = {
@@ -1172,6 +1274,8 @@ require("lazy").setup({
     },
   },
 })
+
+vim.api.nvim_set_keymap("n", "n", "n", { noremap = true })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
