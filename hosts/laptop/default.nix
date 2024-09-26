@@ -3,9 +3,8 @@
   pkgs,
   user,
   ...
-}:
-let
-  packages = pkgs.callPackage ./packages { inherit pkgs; };
+}: let
+  packages = pkgs.callPackage ./packages {inherit pkgs;};
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -13,8 +12,7 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec -a "$0" "$@"
   '';
-in
-{
+in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -75,7 +73,7 @@ in
   # Enable OpenGL
   hardware.graphics.enable = true;
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -150,7 +148,7 @@ in
   # Set your time zone.
   time.timeZone = "Europe/Stockholm";
 
-  environment.pathsToLink = [ "/libexec" ];
+  environment.pathsToLink = ["/libexec"];
   environment.systemPackages = with pkgs; [
     jdk22
     jdt-language-server
@@ -355,7 +353,7 @@ in
     # "displaylink" to make nix recognize HDMI entry
     # videoDrivers = [ "displaylink" "modesetting" ];
     # videoDrivers = [ "modesetting" ];
-    videoDrivers = [ "nvidia" ];
+    videoDrivers = ["nvidia"];
   };
 
   services.displayManager.autoLogin.enable = false;
@@ -373,7 +371,6 @@ in
   };
 
   hardware.nvidia = {
-
     # Modesetting is required.
     modesetting.enable = true;
 
@@ -461,14 +458,14 @@ in
       commands = [
         {
           command = "${pkgs.light}/bin/light";
-          options = [ "NOPASSWD" ];
+          options = ["NOPASSWD"];
         }
         {
           command = "${pkgs.tlp}/bin/bluetooth";
-          options = [ "NOPASSWD" ];
+          options = ["NOPASSWD"];
         }
       ];
-      groups = [ "wheel" ];
+      groups = ["wheel"];
     }
   ];
 
@@ -477,7 +474,7 @@ in
   # testing ihp
   # nix.trustedUsers = [ "root" "paulo" ];
 
-  users.groups.nordvpn = { };
+  users.groups.nordvpn = {};
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
     isNormalUser = true;
@@ -499,7 +496,7 @@ in
     ];
   };
   # virtualbox
-  users.extraGroups.vboxusers.members = [ "${user}" ];
+  users.extraGroups.vboxusers.members = ["${user}"];
 
   # nixpkgs.overlays = [ (self: super: {
   #   polybar = super.polybar.override {
@@ -516,5 +513,4 @@ in
   # servers. You should change this only after NixOS release notes say you
   # should.
   system.stateVersion = "24.05"; # Did you read the comment?
-
 }
