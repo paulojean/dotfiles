@@ -49,7 +49,85 @@
     lazygit
     nerdfonts
   ];
+  plugins = with pkgs.vimPlugins; [
+    # LazyVim
+    lazy-nvim
+    # LazyVim
+    lazydev-nvim
+    luvit-meta
+    bufferline-nvim
+    cmp-buffer
+    cmp-nvim-lsp
+    cmp-path
+    cmp_luasnip
+    conform-nvim
+    dashboard-nvim
+    dressing-nvim
+    flash-nvim
+    friendly-snippets
+    gitsigns-nvim
+    indent-blankline-nvim
+    lualine-nvim
+    neo-tree-nvim
+    neoconf-nvim
+    neodev-nvim
+    noice-nvim
+    nui-nvim
+    nvim-cmp
+    nvim-lint
+    nvim-lspconfig
+    # TODO: keep only one notification plugin
+    nvim-notify
+    fidget-nvim
+
+    nvim-spectre
+    (build-plugin "nvim-treesitter" nvim-plugins.nvim-treesitter)
+    (build-plugin "nvim-treesitter-context" nvim-plugins.nvim-treesitter-context)
+    (build-plugin "nvim-treesitter-textobjects" nvim-plugins.nvim-treesitter-textobjects)
+    nvim-ts-autotag
+    nvim-ts-context-commentstring
+    nvim-web-devicons
+    persistence-nvim
+    plenary-nvim
+    telescope-fzf-native-nvim
+    telescope-nvim
+    telescope-ui-select-nvim
+    todo-comments-nvim
+    tokyonight-nvim
+    trouble-nvim
+    vim-illuminate
+    vim-startuptime
+    gruvbox-nvim
+    dashboard-nvim
+    telescope-project-nvim
+    telescope-file-browser-nvim
+
+    neogit
+    diffview-nvim
+    fzf-lua
+    toggleterm-nvim
+
+    (build-plugin "nvim-tmux-navigation" nvim-plugins.nvim-tmux-navigation)
+
+    # clojure
+    (build-plugin "conjure" nvim-plugins.conjure)
+    (build-plugin "cmp-conjure" nvim-plugins.cmp-conjure)
+    (build-plugin "nvim-treesitter-sexp" nvim-plugins.nvim-treesitter-sexp)
+
+    vim-sleuth
+
+    mini-pick
+
+    which-key-nvim
+
+    luasnip
+
+    catppuccin-nvim
+
+    mini-nvim
+  ];
   extraPackagesPaths = builtins.foldl' (acc: pkg: acc + ":${pkg}/bin") "" extraPackages;
+  };
 in {
   # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
   xdg.configFile."nvim/parser".source = let
@@ -101,7 +179,7 @@ in {
 
   programs.neovim = {
     enable = true;
-    # package = nvim-package;
+    # package = neovim-package;
     vimAlias = true;
     vimdiffAlias = true;
     withNodeJs = true;
@@ -109,9 +187,11 @@ in {
 
     extraPackages = extraPackages;
 
-    plugins = with pkgs.vimPlugins; [
-      lazy-nvim
-    ];
+    plugins = with pkgs.vimPlugins;
+      [
+        lazy-nvim
+      ]
+      ++ plugins;
 
     extraLuaConfig = let
       plugins = with pkgs.vimPlugins; [
