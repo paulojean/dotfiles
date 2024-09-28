@@ -62,7 +62,7 @@ vim.opt.splitbelow = true
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.opt.listchars = { tab = "»-", space = "·", trail = "·", nbsp = "␣" }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
@@ -88,11 +88,16 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 vim.api.nvim_set_keymap("n", "<C-s>", ":w<CR>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-q>", ":q<CR>", { noremap = true })
 
-vim.keymap.set({ "n", "v" }, "<leader>p", '"_dp', { noremap = true })
-vim.keymap.set({ "n", "v" }, "<leader>P", '"_dP', { noremap = true })
-vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { noremap = true })
-vim.keymap.set({ "n", "v" }, "<leader>D", '"_D', { noremap = true })
-vim.keymap.set({ "n", "v" }, "<leader>C", '"_C', { noremap = true })
+vim.keymap.set({ "v" }, "p", '"_dp', { noremap = true })
+vim.keymap.set({ "v" }, "P", '"_dP', { noremap = true })
+vim.keymap.set({ "n", "v" }, "D", '"_D', { noremap = true })
+vim.keymap.set({ "n", "v" }, "d", '"_d', { noremap = true })
+vim.keymap.set({ "n", "v" }, "C", '"_C', { noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>p", "p", { noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>P", "P", { noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>d", "d", { noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>D", "D", { noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>C", "C", { noremap = true })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -135,34 +140,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- @extraPackagesPaths@ is provided by `./default.nix`
 vim.env.PATH = vim.env.PATH .. "@extraPackagesPaths@"
-
--- @lazyPath@ is provided by `./default.nix`
-local lazyPath = "@lazyPath@"
-vim.opt.rtp:prepend(lazyPath .. "/lazy.nvim")
--- TODO: remove, lazy is imported in `default.nix`
--- -- [[ Install `lazy.nvim` plugin manager ]]
--- --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
--- local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
--- if not (vim.uv or vim.loop).fs_stat(lazypath) then
---   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
---   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
---   if vim.v.shell_error ~= 0 then
---     error('Error cloning lazy.nvim:\n' .. out)
---   end
--- end ---@diagnostic disable-next-line: undefined-field
--- vim.opt.rtp:prepend(lazypath)
-
--- [[ Configure and install plugins ]]
---
---  To check the current status of your plugins, run
---    :Lazy
---
---  You can press `?` in this menu for help. Use `:q` to close the window
---
---  To update plugins you can run
---    :Lazy update
---
--- NOTE: Here is where you install your plugins.
 
 -- Helper functions
 function IS_CONJURE_LOG(buf)
@@ -210,6 +187,28 @@ require("dashboard").setup({
     },
   },
 })
+
+require("noice").setup({
+  lsp = {
+    override = {
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+    },
+  },
+  presets = {
+    bottom_search = false, -- use a classic bottom cmdline for search
+    command_palette = true, -- position the cmdline and popupmenu together
+    long_message_to_split = true, -- long messages will be sent to a split
+    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+    lsp_doc_border = false, -- add a border to hover docs and signature help
+  },
+})
+
+vim.keymap.set("n", "<leader>sna", "<cmd>NoiceAll<cr>", { desc = "[n]oice [a]ll" })
+vim.keymap.set("n", "<leader>snd", "<cmd>NoiceDismiss<cr>", { desc = "[n]oice [d]ismiss" })
+vim.keymap.set("n", "<leader>snf", "<cmd>NoiceFzf<cr>", { desc = "[n]oice [f]zf" })
+vim.keymap.set("n", "<leader>snl", "<cmd>NoiceLast<cr>", { desc = "[n]oice [l]ast message" })
 
 require("plugins.git")
 
@@ -276,7 +275,7 @@ WK.setup({
     { "<leader>w", group = "[W]orkspace" },
     { "<leader>t", group = "[T]oggle" },
     { "<leader>v", group = "[V]iew" },
-    { "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+    { "<leader>g", group = "[G]it", mode = { "n", "v" } },
   },
 })
 
@@ -306,6 +305,12 @@ require("mini.ai").setup({ n_lines = 500 })
 -- - sr)'  - [S]urround [R]eplace [)] [']
 require("mini.surround").setup()
 
+require("pairs"):setup({
+  enter = {
+    enable_mapping = false,
+  },
+})
+
 -- Simple and easy statusline.
 --  You could remove this setup call if you don't like it,
 --  and try some other statusline plugin
@@ -332,6 +337,7 @@ require("nvim-treesitter.configs").setup({
     --  If you are experiencing weird indenting issues, add the language to
     --  the list of additional_vim_regex_highlighting and disabled languages for indent.
     -- additional_vim_regex_highlighting = { 'ruby' },
+    additional_vim_regex_highlighting = false,
   },
   indent = {
     enable = true,

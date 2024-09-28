@@ -9,7 +9,7 @@ require("fidget").setup({})
 
 local luasnip = require("luasnip")
 
-cmp = require("cmp")
+local cmp = require("cmp")
 cmp.setup({
   sources = {
     {
@@ -207,7 +207,7 @@ local on_attach = function(client, bufnr)
     "n",
     "<localleader>lh",
     "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-    { noremap = true, "[L] Signature [H]elp" }
+    { noremap = true, desc = "[L] Signature [H]elp" }
   )
   vim.api.nvim_buf_set_keymap(
     bufnr,
@@ -252,21 +252,21 @@ local on_attach = function(client, bufnr)
     "n",
     "<localleader>lw",
     "<cmd>lua require('telescope.builtin').diagnostics()<cr>",
-    { noremap = true }
+    { noremap = true, desc = "[l]ist diagnostics [w]" }
   )
   vim.api.nvim_buf_set_keymap(
     bufnr,
     "n",
     "<localleader>cr",
     "<cmd>lua require('telescope.builtin').lsp_references()<cr>",
-    { noremap = true }
+    { noremap = true, desc = "[c]ode [r]eference" }
   )
   vim.api.nvim_buf_set_keymap(
     bufnr,
     "n",
     "<localleader>ci",
     "<cmd>lua require('telescope.builtin').lsp_implementations()<cr>",
-    { noremap = true }
+    { noremap = true, desc = "[c]ode [i]mplementations" }
   )
 
   vim.api.nvim_buf_set_keymap(
@@ -274,7 +274,7 @@ local on_attach = function(client, bufnr)
     "n",
     "<localleader>lo",
     '<cmd>lua vim.lsp.buf.code_action({ filter = function(code_action) return string.find(code_action.title, "Clean namespace") end, apply = true, })<cr>',
-    { noremap = true }
+    { noremap = true, desc = "C[l]ean namespace imp[o]rts" }
   )
 end
 

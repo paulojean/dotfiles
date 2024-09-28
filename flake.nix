@@ -30,6 +30,12 @@
     nvim-treesitter-textobjects.url = "github:nvim-treesitter/nvim-treesitter-textobjects";
     nvim-treesitter.flake = false;
     nvim-treesitter.url = "github:nvim-treesitter/nvim-treesitter";
+    mini-surround.flake = false;
+    mini-surround.url = "github:echasnovski/mini.surround";
+    mini-ai.flake = false;
+    mini-ai.url = "github:echasnovski/mini.ai";
+    smart-pairs.flake = false;
+    smart-pairs.url = "github:ZhiyuanLck/smart-pairs";
   };
 
   outputs = inputs @ {
@@ -49,6 +55,9 @@
       nvim-treesitter-context = inputs.nvim-treesitter-context;
       nvim-treesitter-sexp = inputs.nvim-treesitter-sexp;
       nvim-treesitter-textobjects = inputs.nvim-treesitter-textobjects;
+      mini-surround = inputs.mini-surround;
+      mini-ai = inputs.mini-ai;
+      smart-pairs = inputs.smart-pairs;
     };
     commonInherits = {
       inherit (nixpkgs) lib;

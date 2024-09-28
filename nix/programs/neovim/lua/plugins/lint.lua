@@ -27,7 +27,7 @@ require("conform").setup({
   formatters_by_ft = {
     ["*"] = { "trim_whitespace", "trim_newlines" },
     lua = { "stylua" },
-    clojure = { "zprint" },
+    clojure = { "cljfmt" },
     nix = { "alejandra" },
     -- You can use 'stop_after_first' to run the first available formatter from the list
     -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -51,4 +51,4 @@ vim.api.nvim_create_user_command("Format", function(args)
   require("conform").format({ async = true, lsp_format = "fallback", range = range })
 end, { range = true })
 
-vim.keymap.set("n", "<leader>ef", "<cmd>ToggleAutoFormat<cr>", { desc = "Toggl[E] [F]ormat on save" })
+vim.keymap.set("n", "<leader>tf", "<cmd>ToggleAutoFormat<cr>", { desc = "[t]oggle [f]ormat on save" })
