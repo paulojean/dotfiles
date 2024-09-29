@@ -28,7 +28,9 @@ require("conform").setup({
     ["*"] = { "trim_whitespace", "trim_newlines" },
     lua = { "stylua" },
     clojure = { "cljfmt" },
+    fennel = { "fnlfmt" },
     nix = { "alejandra" },
+    sh = { "shellcheck" },
     -- You can use 'stop_after_first' to run the first available formatter from the list
     -- javascript = { "prettierd", "prettier", stop_after_first = true },
   },

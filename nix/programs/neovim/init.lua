@@ -1,4 +1,4 @@
-local treesitter_parsers_path = "~/.config/nvim"
+TREESITTER_PARSERS_PATH = "~/.config/nvim"
 -- vim.opt.runtimepath:prepend(treesitter_parsers_path)
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -92,11 +92,13 @@ vim.keymap.set({ "v" }, "p", '"_dp', { noremap = true })
 vim.keymap.set({ "v" }, "P", '"_dP', { noremap = true })
 vim.keymap.set({ "n", "v" }, "D", '"_D', { noremap = true })
 vim.keymap.set({ "n", "v" }, "d", '"_d', { noremap = true })
+vim.keymap.set({ "n", "v" }, "c", '"_c', { noremap = true })
 vim.keymap.set({ "n", "v" }, "C", '"_C', { noremap = true })
 vim.keymap.set({ "n", "v" }, "<leader>p", "p", { noremap = true })
 vim.keymap.set({ "n", "v" }, "<leader>P", "P", { noremap = true })
 vim.keymap.set({ "n", "v" }, "<leader>d", "d", { noremap = true })
 vim.keymap.set({ "n", "v" }, "<leader>D", "D", { noremap = true })
+vim.keymap.set({ "n", "v" }, "<leader>c", "c", { noremap = true })
 vim.keymap.set({ "n", "v" }, "<leader>C", "C", { noremap = true })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -137,9 +139,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank()
   end,
 })
-
--- @extraPackagesPaths@ is provided by `./default.nix`
-vim.env.PATH = vim.env.PATH .. "@extraPackagesPaths@"
 
 -- Helper functions
 function IS_CONJURE_LOG(buf)
@@ -188,8 +187,22 @@ require("dashboard").setup({
   },
 })
 
+local a = 10
+
 require("noice").setup({
+  routes = {
+    -- hide `written` message
+    {
+      filter = {
+        event = "msg_show",
+        kind = "",
+        find = "written",
+      },
+      opts = { skip = true },
+    },
+  },
   lsp = {
+    progress = { enabled = false },
     override = {
       ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
       ["vim.lsp.util.stylize_markdown"] = true,
@@ -311,80 +324,53 @@ require("pairs"):setup({
   },
 })
 
--- Simple and easy statusline.
---  You could remove this setup call if you don't like it,
---  and try some other statusline plugin
-local statusline = require("mini.statusline")
--- set use_icons to true if you have a Nerd Font
-statusline.setup({ use_icons = true, set_vim_settings = true })
-
--- You can configure sections in the statusline by overriding their
--- default behavior. For example, here we set the section for
--- cursor location to LINE:COLUMN
----@diagnostic disable-next-line: duplicate-set-field
-statusline.section_location = function()
-  return "%2l:%-2v"
+local function diff_source()
+  local gitsigns = vim.b.gitsigns_status_dict
+  if gitsigns then
+    return {
+      added = gitsigns.added,
+      modified = gitsigns.changed,
+      removed = gitsigns.removed,
+    }
+  end
 end
 
-require("nvim-treesitter.configs").setup({
-  parser_install_dir = treesitter_parsers_path,
-  highlight = {
-    enable = true,
-    disable = function(lang, buf)
-      return IS_CONJURE_LOG(buf)
-    end,
-    -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-    --  If you are experiencing weird indenting issues, add the language to
-    --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-    -- additional_vim_regex_highlighting = { 'ruby' },
-    additional_vim_regex_highlighting = false,
+require("lualine").setup({
+  options = {
+    icons_enabled = true,
+    theme = "gruvbox_dark",
   },
-  indent = {
-    enable = true,
-    disable = function(lang, buf)
-      return IS_CONJURE_LOG(buf)
-    end,
-  },
-  ensure_installed = {},
-})
-
-vim.keymap.set("n", "<space>fe", "<cmd>Neotree toggle=true<cr>", { desc = "[F] Toggl[E] Neotree" })
-
-require("neo-tree").setup({
-  filesystem = {
-    filtered_items = {
-      visible = true,
-      hide_by_name = {
-        ".git",
-        ".DS_Store",
-        "thumbs.db",
-        "node_modules",
-      },
-      never_show = { ".git" },
-    },
-    follow_current_file = {
-      enabled = true,
-    },
-  },
-  window = {
-    mappings = {
-      ["l"] = "open",
-      ["<cr>"] = "focus_preview",
+  sections = {
+    lualine_b = { { "diff", source = diff_source } },
+    lualine_x = {
+      "lsp_progress",
+      "encoding",
+      "fileformat",
+      "filetype",
     },
   },
 })
 
-local nvim_tmux_nav = require("nvim-tmux-navigation")
-nvim_tmux_nav.setup({
-  disable_when_zoomed = true,
-})
+-- -- Simple and easy statusline.
+-- --  You could remove this setup call if you don't like it,
+-- --  and try some other statusline plugin
+-- local statusline = require("mini.statusline")
+-- -- set use_icons to true if you have a Nerd Font
+-- statusline.setup({ use_icons = true, set_vim_settings = true })
+--
+-- -- You can configure sections in the statusline by overriding their
+-- -- default behavior. For example, here we set the section for
+-- -- cursor location to LINE:COLUMN
+-- ---@diagnostic disable-next-line: duplicate-set-field
+-- statusline.section_location = function()
+--   return "%2l:%-2v"
+-- end
 
-vim.keymap.set("n", "<C-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
-vim.keymap.set("n", "<C-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
-vim.keymap.set("n", "<C-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
-vim.keymap.set("n", "<C-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
-vim.keymap.set("n", "<C-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
-vim.keymap.set("n", "<C-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
+require("plugins.treesitter")
+
+require("plugins.neo-tree")
+
+require("plugins.tmux")
 
 require("toggleterm").setup()
 vim.keymap.set({ "n", "i" }, "<c-_>", "<cmd>ToggleTerm<cr>")

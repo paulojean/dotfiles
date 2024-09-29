@@ -10,79 +10,7 @@
       name = name;
       src = src;
     };
-  extraPackages = with pkgs; [
-    #  LazyVim
-    lua-language-server
-    stylua
-
-    # luarocks
-    lua
-    luajitPackages.luarocks
-
-    yaml-language-server
-    java-language-server
-    bash-language-server
-
-    # Telescope
-    ripgrep
-    xclip
-
-    # clojure
-    clojure-lsp
-
-    # nix
-    nixd
-
-    # linter
-    clj-kondo
-
-    # formatters
-    nixfmt-rfc-style
-    alejandra
-    cljfmt
-    shfmt
-
-    # treesitter
-    clang
-
-    lazygit
-    nerdfonts
-  ];
-  extraPackagesPaths = builtins.foldl' (acc: pkg: acc + ":${pkg}/bin") "" extraPackages;
 in {
-  # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
-  xdg.configFile."nvim/parser".source = let
-    parsers = pkgs.symlinkJoin {
-      name = "treesitter-parsers";
-      paths =
-        (pkgs.vimPlugins.nvim-treesitter.withPlugins (
-          plugins:
-            with plugins; [
-              bash
-              c
-              clojure
-              comment
-              css
-              dockerfile
-              jq
-              json
-              lua
-              make
-              markdown
-              nix
-              regex
-              sql
-              terraform
-              tsx
-              typescript
-              yaml
-            ]
-        ))
-        .dependencies;
-    };
-  in "${parsers}/parser";
-
-  xdg.configFile."nvim/lua".source = ./lua;
   xdg.configFile."clj-kondo/config.edn".text = ''
     {:output {:exclude-files ["conjure-log-.*\\.cljc"]}}
   '';
@@ -100,6 +28,17 @@ in {
     enabled = true
   '';
 
+  # https://github.com/nvim-treesitter/nvim-treesitter#i-get-query-error-invalid-node-type-at-position
+  xdg.configFile."nvim/parser".source = let
+    parsers = pkgs.symlinkJoin {
+      name = "treesitter-parsers";
+      paths =
+        pkgs.vimPlugins.nvim-treesitter.withAllGrammars.dependencies;
+    };
+  in "${parsers}/parser";
+
+  xdg.configFile."nvim/lua".source = ./lua;
+
   programs.neovim = {
     enable = true;
     # package = neovim-package;
@@ -108,7 +47,56 @@ in {
     withNodeJs = true;
     # withRuby = false;
 
-    extraPackages = extraPackages;
+    extraPackages = with pkgs; [
+      #  lsp
+      fswatch
+
+      stylua
+
+      # luarocks
+      lua
+      luajitPackages.luarocks
+
+      lua-language-server
+      yaml-language-server
+      java-language-server
+      bash-language-server
+
+      python3
+
+      # Telescope
+      ripgrep
+      xclip
+
+      # clojure
+      clojure-lsp
+      leiningen
+      boot
+
+      # fennel
+      fennel
+      fennel-ls
+
+      # nix
+      nixd
+
+      # linter
+      clj-kondo
+      shellcheck
+
+      # formatters
+      nixfmt-rfc-style
+      alejandra
+      cljfmt
+      shfmt
+      fnlfmt
+
+      # treesitter
+      clang
+
+      lazygit
+      nerdfonts
+    ];
 
     plugins = with pkgs.vimPlugins; [
       lazydev-nvim
@@ -126,6 +114,7 @@ in {
       gitsigns-nvim
       indent-blankline-nvim
       lualine-nvim
+      lualine-lsp-progress
       neo-tree-nvim
       neoconf-nvim
       neodev-nvim
@@ -188,12 +177,6 @@ in {
       (build-plugin "mini.ai" nvim-plugins.mini-ai)
     ];
 
-    extraLuaConfig = let
-      lua-config = pkgs.substituteAll {
-        src = ./init.lua;
-        extraPackagesPaths = extraPackagesPaths;
-      };
-    in
-      builtins.readFile lua-config.out;
+    extraLuaConfig = builtins.readFile ./init.lua;
   };
 }

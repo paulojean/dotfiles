@@ -339,6 +339,13 @@ lsp.clojure_lsp.setup({
   end,
 })
 
+lsp.fennel_ls.setup({
+  on_attach = on_attach,
+  handlers = handlers,
+  capabilities = capabilities,
+  before_init = before_init,
+})
+
 lsp.nixd.setup({
   on_attach = on_attach,
   handlers = handlers,
