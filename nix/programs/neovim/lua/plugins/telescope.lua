@@ -6,17 +6,22 @@ telescope.setup({
     ["ui-select"] = {
       require("telescope.themes").get_dropdown(),
     },
-    ["project"] = {
+    project = {
       base_dirs = {
         "~/code",
         -- "~/stash",
       },
     },
-    ["file_browser"] = {},
+    file_browser = {},
+    undo = {
+      use_delta = false,
+    },
   },
 })
 telescope.load_extension("project")
 telescope.load_extension("fzf")
+telescope.load_extension("undo")
+telescope.load_extension("neoclip")
 
 -- Enable Telescope extensions if they are installed
 pcall(require("telescope").load_extension, "fzf")
@@ -107,4 +112,11 @@ vim.keymap.set(
   "<leader>bf",
   "<cmd>Telescope file_browser path=%:p:h select_buffer=true<cr>",
   { noremap = true, silent = true, desc = "[b]rowse [f]iles" }
+)
+
+vim.keymap.set(
+  "n",
+  "<leader>hu",
+  "<cmd>Telescope undo<cr>",
+  { noremap = true, silent = true, desc = "[h]istory [u]ndo" }
 )

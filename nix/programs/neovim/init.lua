@@ -351,20 +351,36 @@ require("lualine").setup({
   },
 })
 
--- -- Simple and easy statusline.
--- --  You could remove this setup call if you don't like it,
--- --  and try some other statusline plugin
--- local statusline = require("mini.statusline")
--- -- set use_icons to true if you have a Nerd Font
--- statusline.setup({ use_icons = true, set_vim_settings = true })
---
--- -- You can configure sections in the statusline by overriding their
--- -- default behavior. For example, here we set the section for
--- -- cursor location to LINE:COLUMN
--- ---@diagnostic disable-next-line: duplicate-set-field
--- statusline.section_location = function()
---   return "%2l:%-2v"
--- end
+local function is_whitespace(line)
+  return vim.fn.match(line, [[^\s*$]]) ~= -1
+end
+
+local function all(tbl, check)
+  for _, entry in ipairs(tbl) do
+    if not check(entry) then
+      return false
+    end
+  end
+  return true
+end
+
+require("neoclip").setup({
+  history = 1000,
+  filter = function(data)
+    print(vim.inspect(data))
+    return not all(data.event.regcontents, is_whitespace)
+  end,
+  keys = {
+    telescope = {
+      i = {
+        paste = "<c-j>",
+        paste_behind = "<c-k>",
+      },
+    },
+  },
+})
+
+vim.keymap.set("n", "<leader>hc", "<cmd>Telescope neoclip<cr>", { desc = "[h]istory: [c]lipboard" })
 
 require("plugins.treesitter")
 

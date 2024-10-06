@@ -149,6 +149,9 @@ in {
       telescope-project-nvim
       telescope-file-browser-nvim
 
+      telescope-undo-nvim
+      nvim-neoclip-lua
+
       neogit
       diffview-nvim
       fzf-lua
